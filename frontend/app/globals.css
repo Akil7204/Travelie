@@ -2,4 +2,23 @@
 @tailwind components;
 @tailwind utilities;
 
+/* styles/globals.css */
+html,
+body {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  overflow-x: hidden; /* Prevent horizontal scroll */
+  overflow-y: scroll; /* Ensure vertical scroll without showing scrollbar */
+}
 
+/* For webkit browsers */
+::-webkit-scrollbar {
+  width: 0px; /* Remove scrollbar space */
+  background: transparent; /* Optional: just make scrollbar invisible */
+}
+
+/* For Firefox */
+body {
+  scrollbar-width: none; /* Firefox */
+}

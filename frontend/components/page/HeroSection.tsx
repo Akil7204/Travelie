@@ -2,7 +2,7 @@
 const HeroSection: React.FC = () => {
   return (
     <section
-      className="relative w-full h-[500px] bg-cover bg-center"
+      className="relative w-full h-[500px] bg-cover bg-center "
       style={{ backgroundImage: "url(/img/DefaultPhoto.jpg)" }}
     >
       <div className="h-full flex flex-col justify-center items-center bg-black bg-opacity-50 text-white pt-16 px-4 md:px-16 lg:px-32">
