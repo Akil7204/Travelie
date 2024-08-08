@@ -177,7 +177,7 @@ const Register: React.FC = () => {
             </p>
             <p className="text-gray-600">
               Already have an account?{" "}
-              <a href="/signin" className="text-blue-500 hover:text-blue-700">
+              <a href="/login" className="text-blue-500 hover:text-blue-700">
                 Sign in
               </a>
             </p>

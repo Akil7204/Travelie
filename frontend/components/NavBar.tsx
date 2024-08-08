@@ -26,7 +26,7 @@ const Navbar: React.FC = () => {
         <Link href="/signup">
           <span className="px-4 py-2 border border-blue-500 text-blue-500 rounded">Register</span>
         </Link>
-        <Link href="/signin">
+        <Link href="/login">
           <span className="px-4 py-2 bg-blue-500 text-white rounded">Sign In</span>
         </Link>
       </div>
