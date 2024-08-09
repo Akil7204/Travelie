@@ -14,7 +14,9 @@ const Login: React.FC = () => {
     handleSubmit,
     formState: { errors },
   } = useForm<Inputs>();
+
   const onSubmit: SubmitHandler<Inputs> = (data) => {
+    
     console.log("Form submitted", data);
   };
 
