@@ -13,7 +13,7 @@ const UserSchema: Schema<UserModel> = new Schema({
   phone: { type: Number, required: true },
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
-  profileImage: { type: String, required: true },
+  profileImage: { type: String },
   otp: { type: String },
   otpVerified: { type: Boolean, default: false },
 });
@@ -39,16 +39,13 @@ export const updateUser = async (email: string, update: Partial<User>) => {
 
 // Function to find a user by email and password
 export const findUserByEmailAndPassword = async (
-  email: string,
-  password: string
-) => {
-  return UserModel.findOne({ email, password });
-};
-
-// Function to update the user's profile by user ID
-export const updateUserProfile = async (
-  userId: string,
-  update: Partial<User>
-) => {
-  return UserModel.findByIdAndUpdate(userId, update, { new: true });
-};
+    email: string,
+    password: string
+  ) => {
+    return UserModel.findOne({ email, password });
+  };
+  
+  // Function to update the user's profile by user ID
+  export const updateUserProfile = async (userId: string, update: Partial<User>) => {
+    return UserModel.findByIdAndUpdate(userId, update, { new: true });
+  };

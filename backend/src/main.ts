@@ -3,6 +3,7 @@ import bodyParser from "body-parser";
 import dotenv from "dotenv";
 import cors from "cors";
 import { connectToDatabase } from "./config";
+import userRoutes from "./presentation/routes/userRoutes"
 
 dotenv.config();
 
@@ -18,6 +19,7 @@ app.use(
 
 app.use(express.json());
 app.use(bodyParser.json());
+app.use('/api/users', userRoutes);
 
 const PORT = process.env.PORT || 4000;
 
