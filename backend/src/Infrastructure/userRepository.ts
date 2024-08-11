@@ -39,13 +39,16 @@ export const updateUser = async (email: string, update: Partial<User>) => {
 
 // Function to find a user by email and password
 export const findUserByEmailAndPassword = async (
-    email: string,
-    password: string
-  ) => {
-    return UserModel.findOne({ email, password });
-  };
-  
-  // Function to update the user's profile by user ID
-  export const updateUserProfile = async (userId: string, update: Partial<User>) => {
-    return UserModel.findByIdAndUpdate(userId, update, { new: true });
-  };
+  email: string,
+  password: string
+) => {
+  return UserModel.findOne({ email, password });
+};
+
+// Function to update the user's profile by user ID
+export const updateUserProfile = async (
+  userId: string,
+  update: Partial<User>
+) => {
+  return UserModel.findByIdAndUpdate(userId, update, { new: true });
+};

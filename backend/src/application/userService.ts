@@ -27,10 +27,20 @@ export const registerUser = async (user: User) => {
     user.password = hashedPassword;
 
     return await createUser(user);
-    
   } catch (error) {
     console.error("Error during user registration:", error);
 
     throw error;
   }
+};
+
+export const verifyAndSaveUser = async (email: string, otp: string) => {
+  const user = await findUserByEmail(email);
+  if (user && user.otp === otp) {
+    user.otp = undefined;
+    user.otpVerified = true;
+    await user.save();
+    return user;
+  }
+  throw new Error("Invalid OTP");
 };
