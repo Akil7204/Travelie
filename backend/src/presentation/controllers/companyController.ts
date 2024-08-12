@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { otpGenerator } from "../../uilts/otpGenerator";
-import { registerCompany, verifyAndSaveCompany } from "../../application/companyService";
+import { loginCompany, registerCompany, verifyAndSaveCompany } from "../../application/companyService";
 import { findCompanyByEmail } from "../../Infrastructure/companyRepository";
 import { sendEmail } from "../../uilts/sendEmail";
 
@@ -61,3 +61,12 @@ export const verifyOtp = async (req: Request, res: Response) => {
 };
 
 
+export const login = async (req: Request, res: Response) => {
+  try {
+    const { email, password } = req.body;
+    const { company, token } = await loginCompany(email, password);
+    res.status(200).json({ company, token });
+  } catch (error: any) {
+    res.status(400).json({ error: error.message });
+  }
+};

@@ -43,3 +43,19 @@ export const verifyAndSaveCompany = async (email: string, otp: string) => {
   }
   throw new Error("Invalid OTP");
 };
+
+// login the user
+export const loginCompany = async (email: string, password: string) => {
+  const company = await findCompanyByEmail(email);
+  if (!company) {
+    throw new Error("Invalid Email/Password");
+  }
+  const isPasswordValid = await bcrypt.compare(password, company.password);
+  if (!isPasswordValid) {
+    throw new Error("Invalid Email/Password");
+  }
+  const token = jwt.sign({ companyId: company._id }, process.env.JWT_SECRET_KEY!, {
+    expiresIn: "1h",
+  });
+  return { company, token };
+};
