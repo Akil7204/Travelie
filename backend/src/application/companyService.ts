@@ -32,3 +32,14 @@ export const registerCompany = async (company: Company) => {
     throw error;
   }
 };
+
+export const verifyAndSaveCompany = async (email: string, otp: string) => {
+  const company = await findCompanyByEmail(email);
+  if (company && company.otp === otp) {
+    company.otp = undefined;
+    company.otpVerified = true;
+    await company.save();
+    return company;
+  }
+  throw new Error("Invalid OTP");
+};

@@ -7,4 +7,5 @@ export interface Company {
     profileImage?: string;
     otp?: string;
     otpVerified?: boolean; 
+    adminVerified?: boolean;
 }

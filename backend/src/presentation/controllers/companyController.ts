@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { otpGenerator } from "../../uilts/otpGenerator";
-import { registerCompany } from "../../application/companyService";
+import { registerCompany, verifyAndSaveCompany } from "../../application/companyService";
 import { findCompanyByEmail } from "../../Infrastructure/companyRepository";
 import { sendEmail } from "../../uilts/sendEmail";
 
@@ -37,3 +37,27 @@ export const register = async (req: Request, res: Response) => {
     res.status(400).json({ error: error.message });
   }
 };
+
+export const verifyOtp = async (req: Request, res: Response) => {
+  try {
+    const { email, otp } = req.body;
+    console.log(email, otp);
+
+    const company = await findCompanyByEmail(email);
+
+    if (!company) {
+      return res.status(404).json({ error: "company not found" });
+    }
+
+    if (company.otp === otp) {
+      await verifyAndSaveCompany(email, otp);
+      res.status(200).json("company registered successfully");
+    } else {
+      res.status(400).json({ error: "Invalid OTP" });
+    }
+  } catch (error: any) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
+

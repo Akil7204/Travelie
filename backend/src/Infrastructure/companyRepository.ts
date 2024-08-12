@@ -14,6 +14,7 @@ const CompanySchema: Schema<CompanyModel> = new Schema({
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
   profileImage: { type: String },
+  adminVerified: { type: Boolean, default: false},
   otp: { type: String },
   otpVerified: { type: Boolean, default: false },
 });
