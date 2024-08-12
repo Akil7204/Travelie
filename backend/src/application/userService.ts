@@ -44,3 +44,22 @@ export const verifyAndSaveUser = async (email: string, otp: string) => {
   }
   throw new Error("Invalid OTP");
 };
+
+
+// login the user
+export const loginUser = async (email: string, password: string) => {
+  const user = await findUserByEmail(email);
+  if (!user) {
+    throw new Error("Invalid Email/Password");
+  }
+  const isPasswordValid = await bcrypt.compare(password, user.password);
+  if (!isPasswordValid) {
+    throw new Error("Invalid Email/Password");
+  }
+  const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET_KEY!, {
+    expiresIn: "1h",
+  });
+  return { user, token };
+};
+
+

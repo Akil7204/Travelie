@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { otpGenerator } from "../../uilts/otpGenerator";
-import { registerUser, verifyAndSaveUser } from "../../application/userService";
+import { loginUser, registerUser, verifyAndSaveUser } from "../../application/userService";
 import { findUserByEmail } from "../../Infrastructure/userRepository";
 import { sendEmail } from "../../uilts/sendEmail";
 
@@ -42,7 +42,7 @@ export const verifyOtp = async (req: Request, res: Response) => {
   try {
     const { email, otp } = req.body;
     console.log(email, otp);
-    
+
     const user = await findUserByEmail(email);
 
     if (!user) {
@@ -55,6 +55,16 @@ export const verifyOtp = async (req: Request, res: Response) => {
     } else {
       res.status(400).json({ error: "Invalid OTP" });
     }
+  } catch (error: any) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
+export const login = async (req: Request, res: Response) => {
+  try {
+    const { email, password } = req.body;
+    const { user, token } = await loginUser(email, password);
+    res.status(200).json({ user, token });
   } catch (error: any) {
     res.status(400).json({ error: error.message });
   }
