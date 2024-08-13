@@ -15,5 +15,5 @@ export const findUserByEmailAdmin = async (
   email: string
 ): Promise<Admin | null> => {
   const admin = await AdminModel.findOne({ email });
-  return admin ? admin.toObject() : null;
+  return admin ? admin : null;
 };

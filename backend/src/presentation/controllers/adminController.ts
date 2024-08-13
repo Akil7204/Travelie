@@ -7,7 +7,7 @@ export const adminlogin = async (req: Request, res: Response, next: NextFunction
   try {
     const result = await loginUser(email, password);
     if (result) {
-      res.json({ token: result.token, user: result.user });
+      res.json({ token: result.token, admin: result.admin });
     } else {
       res.status(401).json({ message: 'Login failed' });
     }
