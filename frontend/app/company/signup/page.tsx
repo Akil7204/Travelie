@@ -1,3 +1,4 @@
+
 "use client";
 
 import React from "react";
@@ -11,7 +12,7 @@ type Inputs = {
   confirmPassword: string;
 };
 
-const Register: React.FC = () => {
+const Signup: React.FC = () => {
   const {
     register,
     handleSubmit,
@@ -166,18 +167,10 @@ const Register: React.FC = () => {
             Continue with Google
           </button>
           <div className="mt-6 text-center">
-            <p className="text-gray-600">
-              You have company?{" "}
-              <a
-                href="/company/signup"
-                className="text-blue-500 hover:text-blue-700"
-              >
-                Sign in
-              </a>
-            </p>
+           
             <p className="text-gray-600">
               Already have an account?{" "}
-              <a href="/login" className="text-blue-500 hover:text-blue-700">
+              <a href="/company/signin" className="text-blue-500 hover:text-blue-700">
                 Sign in
               </a>
             </p>
@@ -188,4 +181,4 @@ const Register: React.FC = () => {
   );
 };
 
-export default Register;
+export default Signup;
