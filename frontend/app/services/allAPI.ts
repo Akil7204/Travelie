@@ -4,7 +4,7 @@ import { SERVER_URL } from "./serverURL";
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: `${SERVER_URL}/api/users`,
+  baseURL: `${SERVER_URL}`,
   headers: {
     "Content-Type": "application/json",
   },
@@ -21,4 +21,9 @@ export const SignUpAPI = async (
 // Login API
 export const LoginAPI = async (reqBody: any) => {
   return await commonAPI("POST", `${SERVER_URL}/login`, reqBody);
+};
+
+// verfy otp Api
+export const verifyOtp = async (data: any) => {
+  return api.post("/verifyOtp", data);
 };

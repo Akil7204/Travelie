@@ -3,6 +3,10 @@
 import React, { useState, useEffect } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import Head from "next/head";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { useRouter, useSearchParams } from "next/navigation";
+import { verifyOtp } from "../services/allAPI";
 
 type OTPFormInputs = {
   otp: string;
@@ -17,10 +21,24 @@ const OTPPage: React.FC = () => {
   const [timeLeft, setTimeLeft] = useState(60); // 1 minute countdown
   const [isResendDisabled, setIsResendDisabled] = useState(true);
 
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
+  const email = searchParams.get("email");
+
   // Handle OTP submission
-  const handleOtpSubmit: SubmitHandler<OTPFormInputs> = (data) => {
-    console.log("OTP Submitted:", data.otp);
-    // Handle OTP verification logic here (e.g., call an API)
+  const handleOtpSubmit: SubmitHandler<OTPFormInputs> = async (data) => {
+    console.log(data, email);
+
+    try {
+      await verifyOtp({ otp: data.otp, email });
+
+      toast.success("please login");
+      router.push("/login");
+    } catch (error) {
+      // console.error(error);
+      toast.error("Invalid otp.");
+    }
   };
 
   // Handle Resend OTP click
@@ -46,6 +64,17 @@ const OTPPage: React.FC = () => {
 
   return (
     <>
+      <ToastContainer
+        position="top-center"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
       <Head>
         <title>OTP Verification - Travelie</title>
       </Head>

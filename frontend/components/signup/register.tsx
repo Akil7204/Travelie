@@ -45,7 +45,7 @@ const Register: React.FC = () => {
         toast.error(result.message);
       } else if (result) {
         toast.success("OTP sent, please check your mail.");
-        router.push("/otp");
+        router.push(`/otp?email=${email}`);
       }
     } catch (err) {
       // console.error('SignUpAPI error:', err); // Debugging line
