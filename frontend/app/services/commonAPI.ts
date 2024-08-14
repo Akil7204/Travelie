@@ -31,7 +31,7 @@ export const commonAPI = async (
     if (err.response) {
       return {
         error: true,
-        message: err.response.data.message || "Request failed",
+        message: err.response.data.error || "Request failed",
         status: err.response.status,
       };
     } else if (err.request) {

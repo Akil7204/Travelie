@@ -1,10 +1,14 @@
 "use client";
 
+import { SignUpAPI } from "@/app/services/allAPI";
 import React from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { useRouter } from "next/navigation";
 
 type Inputs = {
-  name: string;
+  username: string;
   phone: string;
   email: string;
   password: string;
@@ -12,6 +16,7 @@ type Inputs = {
 };
 
 const Register: React.FC = () => {
+  const router = useRouter();
   const {
     register,
     handleSubmit,
@@ -19,138 +24,179 @@ const Register: React.FC = () => {
     formState: { errors },
   } = useForm<Inputs>();
 
-  const onSubmit: SubmitHandler<Inputs> = (data) => console.log(data);
+  const onSubmit: SubmitHandler<Inputs> = async (data) => {
+    const { username, phone, email, password } = data;
+
+    const reqBody = new FormData();
+    reqBody.append("username", username || "");
+    reqBody.append("phone", phone);
+    reqBody.append("email", email);
+    reqBody.append("password", password);
+
+    const reqHeader = {
+      "Content-Type": "application/json",
+    };
+
+    try {
+      const result = await SignUpAPI(reqBody, reqHeader);
+      console.log("SignUpAPI result:", result); // Debugging line
+
+      if (result.error) {
+        toast.error(result.message);
+      } else if (result) {
+        toast.success("OTP sent, please check your mail.");
+        router.push("/otp");
+      }
+    } catch (err) {
+      // console.error('SignUpAPI error:', err); // Debugging line
+      toast.error("An error occurred during signup. Please try again.");
+    }
+  };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-100 pt-16">
-      <div className="bg-white p-8 rounded shadow-md w-full max-w-md">
-        <h1 className="text-2xl font-bold mb-6 text-center">Register</h1>
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <div className="mb-4">
-            <label
-              className="block text-gray-700 text-sm font-bold mb-2"
-              htmlFor="name"
-            >
-              Name
-            </label>
-            <input
-              id="name"
-              type="text"
-              {...register("name", { required: "Name is required" })}
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              placeholder="Name"
-            />
-            {errors.name && (
-              <p className="text-red-500 text-xs italic">
-                {errors.name.message}
-              </p>
-            )}
-          </div>
+    <>
+      <ToastContainer
+        position="top-center"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
+      <div className="flex justify-center items-center min-h-screen bg-gray-100 pt-16">
+        <div className="bg-white p-8 rounded shadow-md w-full max-w-md">
+          <h1 className="text-2xl font-bold mb-6 text-center">Register</h1>
 
-          <div className="mb-4">
-            <label
-              className="block text-gray-700 text-sm font-bold mb-2"
-              htmlFor="phone"
-            >
-              Phone Number
-            </label>
-            <input
-              id="phone"
-              type="text"
-              {...register("phone", { required: "Phone number is required" })}
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              placeholder="Phone Number"
-            />
-            {errors.phone && (
-              <p className="text-red-500 text-xs italic">
-                {errors.phone.message}
-              </p>
-            )}
-          </div>
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <div className="mb-4">
+              <label
+                className="block text-gray-700 text-sm font-bold mb-2"
+                htmlFor="name"
+              >
+                Name
+              </label>
+              <input
+                id="username"
+                type="text"
+                {...register("username", { required: "Name is required" })}
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                placeholder="Name"
+              />
+              {errors.username && (
+                <p className="text-red-500 text-xs italic">
+                  {errors.username.message}
+                </p>
+              )}
+            </div>
 
-          <div className="mb-4">
-            <label
-              className="block text-gray-700 text-sm font-bold mb-2"
-              htmlFor="email"
-            >
-              Email Address
-            </label>
-            <input
-              id="email"
-              type="email"
-              {...register("email", { required: "Email is required" })}
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              placeholder="Email Address"
-            />
-            {errors.email && (
-              <p className="text-red-500 text-xs italic">
-                {errors.email.message}
-              </p>
-            )}
-          </div>
+            <div className="mb-4">
+              <label
+                className="block text-gray-700 text-sm font-bold mb-2"
+                htmlFor="phone"
+              >
+                Phone Number
+              </label>
+              <input
+                id="phone"
+                type="text"
+                {...register("phone", { required: "Phone number is required" })}
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                placeholder="Phone Number"
+              />
+              {errors.phone && (
+                <p className="text-red-500 text-xs italic">
+                  {errors.phone.message}
+                </p>
+              )}
+            </div>
 
-          <div className="mb-4">
-            <label
-              className="block text-gray-700 text-sm font-bold mb-2"
-              htmlFor="password"
-            >
-              Password
-            </label>
-            <input
-              id="password"
-              type="password"
-              {...register("password", {
-                required: "Password is required",
-                pattern: {
-                  value:
-                    /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&*()_+~`|}{[\]:;?><,./-]).{8,}$/,
-                  message:
-                    "Password must contain at least 8 characters, one uppercase letter, one lowercase letter, one number, and one special character",
-                },
-              })}
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              placeholder="Password"
-            />
-            {errors.password && (
-              <p className="text-red-500 text-xs italic">
-                {errors.password.message}
-              </p>
-            )}
-          </div>
+            <div className="mb-4">
+              <label
+                className="block text-gray-700 text-sm font-bold mb-2"
+                htmlFor="email"
+              >
+                Email Address
+              </label>
+              <input
+                id="email"
+                type="email"
+                {...register("email", { required: "Email is required" })}
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                placeholder="Email Address"
+              />
+              {errors.email && (
+                <p className="text-red-500 text-xs italic">
+                  {errors.email.message}
+                </p>
+              )}
+            </div>
 
-          <div className="mb-4">
-            <label
-              className="block text-gray-700 text-sm font-bold mb-2"
-              htmlFor="confirmPassword"
-            >
-              Confirm Password
-            </label>
-            <input
-              id="confirmPassword"
-              type="password"
-              {...register("confirmPassword", {
-                required: "Please confirm your password",
-                validate: (value) => {
-                  const { password } = getValues();
-                  return password === value || "Passwords do not match";
-                },
-              })}
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              placeholder="Confirm Password"
-            />
-            {errors.confirmPassword && (
-              <p className="text-red-500 text-xs italic">
-                {errors.confirmPassword.message}
-              </p>
-            )}
-          </div>
+            <div className="mb-4">
+              <label
+                className="block text-gray-700 text-sm font-bold mb-2"
+                htmlFor="password"
+              >
+                Password
+              </label>
+              <input
+                id="password"
+                type="password"
+                {...register("password", {
+                  required: "Password is required",
+                  pattern: {
+                    value:
+                      /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&*()_+~`|}{[\]:;?><,./-]).{8,}$/,
+                    message:
+                      "Password must contain at least 8 characters, one uppercase letter, one lowercase letter, one number, and one special character",
+                  },
+                })}
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                placeholder="Password"
+              />
+              {errors.password && (
+                <p className="text-red-500 text-xs italic">
+                  {errors.password.message}
+                </p>
+              )}
+            </div>
 
-          <button
-            type="submit"
-            className="w-full bg-blue-500 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline hover:bg-blue-700"
-          >
-            Continue with email
-          </button>
+            <div className="mb-4">
+              <label
+                className="block text-gray-700 text-sm font-bold mb-2"
+                htmlFor="confirmPassword"
+              >
+                Confirm Password
+              </label>
+              <input
+                id="confirmPassword"
+                type="password"
+                {...register("confirmPassword", {
+                  required: "Please confirm your password",
+                  validate: (value) => {
+                    const { password } = getValues();
+                    return password === value || "Passwords do not match";
+                  },
+                })}
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                placeholder="Confirm Password"
+              />
+              {errors.confirmPassword && (
+                <p className="text-red-500 text-xs italic">
+                  {errors.confirmPassword.message}
+                </p>
+              )}
+            </div>
+
+            <button
+              type="submit"
+              className="w-full bg-blue-500 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline hover:bg-blue-700"
+            >
+              Continue with email
+            </button>
+          </form>
           <div className="my-4 text-center text-gray-500">
             or use one of these options
           </div>
@@ -182,9 +228,9 @@ const Register: React.FC = () => {
               </a>
             </p>
           </div>
-        </form>
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 
