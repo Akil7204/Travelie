@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Navbar: React.FC = () => {
   const router = useRouter();
@@ -13,7 +14,9 @@ const Navbar: React.FC = () => {
   useEffect(() => {
     const token = localStorage.getItem("token");
     const userData = localStorage.getItem("user");
+    
     if (token && userData) {
+      const user = JSON.parse(userData)
       setIsAuthorized(true);
     } else {
       setIsAuthorized(false);
