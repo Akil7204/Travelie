@@ -49,10 +49,13 @@ export const verifyAndSaveUser = async (email: string, otp: string) => {
 // login the user
 export const loginUser = async (email: string, password: string) => {
   const user = await findUserByEmail(email);
+  
   if (!user) {
     throw new Error("Invalid Email/Password");
   }
   const isPasswordValid = await bcrypt.compare(password, user.password);
+ 
+  
   if (!isPasswordValid) {
     throw new Error("Invalid Email/Password");
   }
