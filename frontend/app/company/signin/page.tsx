@@ -5,6 +5,9 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import Head from "next/head";
 import Link from "next/link";
 import Navbar from "@/components/NavBar";
+import { LoginAPI } from "@/app/services/companyAPI";
+import { toast, ToastContainer } from "react-toastify";
+import { useRouter } from "next/navigation";
 
 type LoginFormInputs = {
   email: string;
@@ -13,21 +16,54 @@ type LoginFormInputs = {
 };
 
 const Login: React.FC = () => {
+  const router = useRouter();
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<LoginFormInputs>();
 
-  const onSubmit: SubmitHandler<LoginFormInputs> = (data) => {
-    console.log(data);
-    // Handle login logic here (e.g., call an API)
+  const onSubmit: SubmitHandler<LoginFormInputs> = async (data) => {
+    try {
+      const result = await LoginAPI(data);
+      console.log("LoginAPI result:", result); // Debugging line
+
+      if (result && result.company && result.token) {
+        console.log(result.company.adminVerified);
+
+        if (result.company.adminVerified === false) {
+          router.push("/company/approval");
+        } else {
+          localStorage.setItem("token", result.token);
+          localStorage.setItem("company", JSON.stringify(result.company));
+
+          toast.success("Login Successful!");
+          router.push("/company/companyDashboard");
+        }
+      } else {
+        toast.error("Invalid login credentials. Please try again.");
+      }
+    } catch (err) {
+      // console.error('LoginAPI error:', err); // Debugging line
+      toast.error("An error occurred during login. Please try again.");
+    }
   };
 
   return (
     <>
       <Navbar />
       <div className="flex justify-center items-center h-screen">
+        <ToastContainer
+          position="top-center"
+          autoClose={3000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+        />
         <div className="w-full max-w-md space-y-8">
           <div>
             <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
