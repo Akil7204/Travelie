@@ -28,8 +28,7 @@ const Navbar: React.FC = () => {
     localStorage.removeItem("user");
     localStorage.removeItem("token");
     setIsAuthorized(false);
-    router.push("/login");
-    // navigate('/'); // Redirect to the home page or login page
+    router.push('/'); // Redirect to the home page or login page
   };
 
   return (
@@ -45,7 +44,7 @@ const Navbar: React.FC = () => {
         draggable
         pauseOnHover
       />
-      <div className="text-2xl font-bold font-serif">TRAVELIE</div>
+      <div className="text-2xl font-bold font-serif"><Link href="/">TRAVELIE</Link></div>
       <ul className="flex space-x-10 text-lg">
         <li>
           <Link href="/">Home</Link>

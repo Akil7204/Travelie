@@ -1,11 +1,14 @@
 
 "use client";
 
+import { SignUpAPI } from "@/app/services/companyAPI";
+import { useRouter } from "next/navigation";
 import React from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
+import { toast } from "react-toastify";
 
 type Inputs = {
-  name: string;
+  companyname: string;
   phone: string;
   email: string;
   password: string;
@@ -13,6 +16,7 @@ type Inputs = {
 };
 
 const Signup: React.FC = () => {
+  const router = useRouter();
   const {
     register,
     handleSubmit,
@@ -20,7 +24,34 @@ const Signup: React.FC = () => {
     formState: { errors },
   } = useForm<Inputs>();
 
-  const onSubmit: SubmitHandler<Inputs> = (data) => console.log(data);
+  const onSubmit: SubmitHandler<Inputs> = async (data) => {
+    const { companyname, phone, email, password } = data;
+
+    const reqBody = new FormData();
+    reqBody.append("companyname", companyname || "");
+    reqBody.append("phone", phone);
+    reqBody.append("email", email);
+    reqBody.append("password", password);
+
+    const reqHeader = {
+      "Content-Type": "application/json",
+    };
+
+    try {
+      const result = await SignUpAPI(reqBody, reqHeader);
+      console.log("SignUpAPI result:", result); // Debugging line
+
+      if (result.error) {
+        toast.error(result.message);
+      } else if (result) {
+        toast.success("OTP sent, please check your mail.");
+        router.push(`/otp?email=${email}`);
+      }
+    } catch (err) {
+      // console.error('SignUpAPI error:', err); // Debugging line
+      toast.error("An error occurred during signup. Please try again.");
+    }
+  };
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-100 pt-16">
@@ -35,15 +66,15 @@ const Signup: React.FC = () => {
               Name
             </label>
             <input
-              id="name"
+              id="companyname"
               type="text"
-              {...register("name", { required: "Name is required" })}
+              {...register("companyname", { required: "Name is required" })}
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               placeholder="Name"
             />
-            {errors.name && (
+            {errors.companyname && (
               <p className="text-red-500 text-xs italic">
-                {errors.name.message}
+                {errors.companyname.message}
               </p>
             )}
           </div>
