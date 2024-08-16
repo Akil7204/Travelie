@@ -44,6 +44,7 @@ export const verifyOtp = async (req: Request, res: Response) => {
     console.log(email, otp);
 
     const company = await findCompanyByEmail(email);
+    console.log(company);
 
     if (!company) {
       return res.status(404).json({ error: "company not found" });

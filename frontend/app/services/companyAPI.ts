@@ -25,5 +25,7 @@ export const LoginAPI = async (reqBody: any) => {
 
 // verfy otp Api
 export const verifyOtp = async (data: any) => {
+  console.log("comming: " + data);
+  
   return api.post("/verifyOtp", data);
 };

@@ -6,7 +6,7 @@ import Head from "next/head";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useRouter, useSearchParams } from "next/navigation";
-import { verifyOtp } from "../../services/allAPI";
+import { verifyOtp } from "../../services/companyAPI";
 
 type OTPFormInputs = {
   otp: string;
@@ -34,7 +34,7 @@ const OTPPage: React.FC = () => {
       await verifyOtp({ otp: data.otp, email });
 
       toast.success("please login");
-      router.push("/company/login");
+      router.push("/company/signin");
     } catch (error) {
       // console.error(error);
       toast.error("Invalid otp.");
