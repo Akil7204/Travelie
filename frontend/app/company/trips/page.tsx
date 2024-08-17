@@ -35,7 +35,7 @@ const TripList: React.FC = () => {
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-3xl font-semibold">Trip</h2>
           <button className="bg-purple-600 text-white py-2 px-4 rounded-lg flex items-center">
-            + Add Trip
+            <Link href={"/company/addTrip"} > + Add Trip </Link>
           </button>
         </div>
         <div className="bg-white shadow-lg rounded-lg p-6">
