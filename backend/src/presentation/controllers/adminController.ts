@@ -6,6 +6,8 @@ export const adminlogin = async (req: Request, res: Response, next: NextFunction
   const { email, password } = req.body;
   try {
     const result = await loginUser(email, password);
+    console.log(result);
+    
     if (result) {
       res.json({ token: result.token, admin: result.admin });
     } else {
