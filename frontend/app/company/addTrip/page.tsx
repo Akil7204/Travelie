@@ -71,16 +71,27 @@ const AddTrip = () => {
   const handlePhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       const filesArray = Array.from(e.target.files);
+      console.log(filesArray.length);
+
       setPhotos((prevPhotos) => [...prevPhotos, ...filesArray]);
+
+      // Update the form with the new photo list
+      setValue("photos", [...photos, ...filesArray]);
     }
   };
 
   const removePhoto = (index: number) => {
-    setPhotos((prevPhotos) => prevPhotos.filter((_, i) => i !== index));
+    const uploadPhotos =  photos.filter((_, i) => i !== index);
+    setPhotos(uploadPhotos)
+    // Update the form with the updated photo list
+    setValue("photos", uploadPhotos);
+    
   };
 
   const onSubmit: SubmitHandler<FormValues> = (data) => {
     console.log("Form Data:", data);
+    console.log(data.photos.length);
+
     // TODO: Submit the form data to the backend
   };
 
@@ -151,12 +162,12 @@ const AddTrip = () => {
                 <Controller
                   name="photos"
                   control={control}
-                  rules={{ required: "At least one image is required" }}
                   render={({ field }) => (
                     <>
                       <label className="block">
                         <span className="block mb-2">Upload Images</span>
                         <input
+                        id="image"
                           type="file"
                           accept="image/*"
                           onChange={handlePhotoChange}
@@ -207,13 +218,15 @@ const AddTrip = () => {
                         placeholder="Days"
                         {...field}
                         className={`w-full p-2 border rounded ${
-                          errors.days ? "border-red-500" : ""
+                          errors.days || errors.days === 0
+                            ? "border-red-500"
+                            : ""
                         }`}
                       />
                     )}
                     rules={{ required: "Days are required" }}
                   />
-                  {errors.days && (
+                  {(errors.days || errors.days == 0) && (
                     <p className="text-red-500 text-sm mt-1">
                       {errors.days.message}
                     </p>
@@ -326,46 +339,32 @@ const AddTrip = () => {
             <div className="p-4 bg-white rounded-lg shadow-md">
               <h2 className="text-lg font-semibold mb-4">Pricing</h2>
               <div className="grid grid-cols-3 gap-4">
-                <Controller
-                  name="basePrice"
-                  control={control}
-                  render={({ field }) => (
-                    <input
-                      type="number"
-                      placeholder="Base Price"
-                      {...field}
-                      className="w-full p-2 border rounded"
-                    />
+                <div className="col-span-2">
+                  <Controller
+                    name="basePrice"
+                    control={control}
+                    render={({ field }) => (
+                      <input
+                        type="number"
+                        placeholder="Base Price"
+                        {...field}
+                        className="w-full p-2 border rounded"
+                      />
+                    )}
+                    rules={{
+                      required: "Base Price is required",
+                      min: {
+                        value: 0.01,
+                        message: "Base Price must be greater than zero",
+                      },
+                    }}
+                  />
+                  {errors.basePrice && (
+                    <p className="text-red-500 text-sm mt-1">
+                      {errors.basePrice.message}
+                    </p>
                   )}
-                  rules={{ required: "Base Price is required" }}
-                />
-                {errors.basePrice && (
-                  <p className="text-red-500">{errors.basePrice.message}</p>
-                )}
-                <Controller
-                  name="discountPercentage"
-                  control={control}
-                  render={({ field }) => (
-                    <input
-                      type="number"
-                      placeholder="Discount Percentage (%)"
-                      {...field}
-                      className="w-full p-2 border rounded"
-                    />
-                  )}
-                />
-                <Controller
-                  name="discountName"
-                  control={control}
-                  render={({ field }) => (
-                    <input
-                      type="text"
-                      placeholder="Discount Name"
-                      {...field}
-                      className="w-full p-2 border rounded"
-                    />
-                  )}
-                />
+                </div>
               </div>
             </div>
 
