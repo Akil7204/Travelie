@@ -40,25 +40,4 @@ export const updateApproval = async (id: string) => {
   return await updateCompanyFromDB(id);
 }
 
-// export const updateWorkerStatus = async (
-//   userId: string,
-//   status: "approved" | "rejected"
-// ) => {
-//   try {
-//     const worker = await Worker.findOne({ userId });
-//     if (!worker) {
-//       throw new Error("Worker not found");
-//     }
 
-//     const updatedWorker = await Worker.findOneAndUpdate(
-//       { userId },
-//       { status },
-//       { new: true }
-//     );
-
-//     return updatedWorker;
-//   } catch (error: any) {
-//     console.error(`Failed to update worker status: ${error.message}`);
-//     throw new Error(`Failed to update worker status: ${error.message}`);
-//   }
-// };

@@ -41,16 +41,13 @@ export const getCompanyUnapproval = async (
 
 export const updateCompanyApproval = async (req: Request, res: Response) => {
   const { id } = req.params;
-  console.log(id);
   try {
     const updateCompany = await updateApproval(id);
-    console.log(updateCompany);
 
-    res.status(200).json("updated successfully");
-
+    res.status(200).json(updateCompany);
   } catch (error: any) {
     console.log(error);
-    
+
     res.status(500).json({ message: error.message });
   }
 };
