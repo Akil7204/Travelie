@@ -22,4 +22,13 @@ export const getAllUnapprovalAPI = async (token: string) => {
   }
 };
 
+// approval API
+export const approvalAPI = async (companyId: string, token: string) => {
+  return await axios.put(`${server_URL_admin}/approval/${companyId}`, {}, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+};
+
 

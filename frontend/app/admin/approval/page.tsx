@@ -1,6 +1,6 @@
 "use client";
 
-import { getAllUnapprovalAPI } from "@/app/services/adminAPI";
+import { approvalAPI, getAllUnapprovalAPI } from "@/app/services/adminAPI";
 // components/CompanyApproval.tsx
 
 import Layout from "@/components/admin/Layout";
@@ -37,7 +37,26 @@ const CompanyApproval: React.FC = () => {
     fetchCompanies();
   }, []);
 
-  const handleApprove = (id: string) => {
+  const handleApprove = async (companyId : string) => {
+    
+      try {
+        const token = localStorage.getItem("adminToken");
+        if (!token) throw new Error("No token found");
+
+        if (companyId) {
+          await approvalAPI(companyId, token);
+          // toast.success("User unblocked successfully");
+        }
+      } catch (err) {
+        console.error("Failed to update company status: ", err);
+        // setError("Failed to update user status");
+      } finally {
+        handleCompanyApprove(companyId);
+      }
+    
+  };
+
+  const handleCompanyApprove = (id: string) => {
     setCompanies(companies.filter((company) => company._id !== id));
     sendEmail(id, "Approved");
   };
@@ -93,7 +112,7 @@ const CompanyApproval: React.FC = () => {
                           : "bg-red-300"
                       }`}
                     >
-                      Pending
+                      {company.adminVerified === false ? "Pending" : "approved"}
                     </span>
                   </td>
                   <td className="py-3 px-4 flex space-x-2">

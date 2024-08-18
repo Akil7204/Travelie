@@ -1,9 +1,10 @@
+import { error } from "console";
 import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
 
 interface CustomRequest extends Request {
   admin?: string;
-  role?: string;
+  AdminEmail?: string;
 }
 
 const adminJwtMiddleware = (
@@ -12,7 +13,6 @@ const adminJwtMiddleware = (
   next: NextFunction
 ) => {
   const token = req.headers["authorization"]?.split(" ")[1];
-  console.log("kdsanfkj");
 
   if (!token) {
     return res.status(401).json({ error: "No token provided" });
@@ -20,18 +20,19 @@ const adminJwtMiddleware = (
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY as string) as {
-      admin: string;
-      role: string;
+      AdminEmail: string;
     };
-    req.admin = decoded.admin;
-    req.role = decoded.role;
 
-    if (req.role !== "admin") {
+    req.AdminEmail = decoded.AdminEmail;
+
+    if (req.AdminEmail !== process.env.Admin_email) {
       return res.status(403).json({ error: "User is not an admin" });
     }
 
     next();
   } catch (error) {
+    console.log(error);
+
     return res.status(403).json({ error: "Failed to authenticate token" });
   }
 };
