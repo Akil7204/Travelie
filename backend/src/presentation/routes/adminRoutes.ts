@@ -1,10 +1,14 @@
 import express  from "express";
-import { adminlogin } from "../controllers/adminController";
+import { adminlogin, getCompanyUnapproval } from "../controllers/adminController";
 
 
 const router = express.Router();
 
+// Login route for admin
 router.post("/login", adminlogin);
+
+// company approval route
+router.get("/approval", getCompanyUnapproval)
 
 
 

@@ -20,7 +20,7 @@ const CompanySchema: Schema<CompanyModel> = new Schema({
 });
 
 // Create the Mongoose model
-const CompanyModel = mongoose.model<CompanyModel>("Company", CompanySchema);
+export const CompanyModel = mongoose.model<CompanyModel>("Company", CompanySchema);
 
 // Function to create a new user
 export const createCompany = async (company: Company) => {

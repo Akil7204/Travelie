@@ -1,6 +1,6 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import { findUserByEmailAdmin } from "../Infrastructure/adminRepository";
+import { findUserByEmailAdmin, getAllUnapprovalFromDB } from "../Infrastructure/adminRepository";
 import { Admin } from "../domain/admin";
 import { errorHandler } from "../uilts/errorHandler"; // Assuming errorHandler is a utility function
 
@@ -34,4 +34,9 @@ export const loginUser = async (
   );
 
   return { token, admin: email };
+};
+
+// Fetch all Un approval company
+export const getAllUnapprovalCompany = async () => {
+  return await getAllUnapprovalFromDB();
 };
