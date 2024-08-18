@@ -1,11 +1,11 @@
 "use client";
 
 import { approvalAPI, getAllUnapprovalAPI } from "@/app/services/adminAPI";
-// components/CompanyApproval.tsx
-
+import "react-toastify/dist/ReactToastify.css";
 import Layout from "@/components/admin/Layout";
 import Topbar from "@/components/page/topBar";
 import React, { useState, useEffect } from "react";
+import { toast, ToastContainer } from "react-toastify";
 // import { getAllUnapprovalAPI } from "../../services/allAPI"; // Adjust the import path based on your project structure
 
 interface Company {
@@ -37,28 +37,24 @@ const CompanyApproval: React.FC = () => {
     fetchCompanies();
   }, []);
 
-  const handleApprove = async (companyId : string) => {
-    
-      try {
-        const token = localStorage.getItem("adminToken");
-        if (!token) throw new Error("No token found");
+  const handleApprove = async (companyId: string) => {
+    try {
+      const token = localStorage.getItem("adminToken");
+      if (!token) throw new Error("No token found");
 
-        if (companyId) {
-          await approvalAPI(companyId, token);
-          // toast.success("User unblocked successfully");
-        }
-      } catch (err) {
-        console.error("Failed to update company status: ", err);
-        // setError("Failed to update user status");
-      } finally {
+      if (companyId) {
+        await approvalAPI(companyId, token);
         handleCompanyApprove(companyId);
+        toast.success("Company approved successfully");
       }
-    
+    } catch (err) {
+      console.error("Failed to update company status: ", err);
+      // setError("Failed to update user status");
+    }
   };
 
   const handleCompanyApprove = (id: string) => {
     setCompanies(companies.filter((company) => company._id !== id));
-    sendEmail(id, "Approved");
   };
 
   const handleReject = (id: string) => {
@@ -81,6 +77,17 @@ const CompanyApproval: React.FC = () => {
   return (
     <Layout>
       <Topbar />
+      <ToastContainer
+        position="top-center"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
       <div className="mt-9 p-6 bg-white shadow rounded-lg">
         <h2 className="text-2xl font-semibold mb-6">Company Approval</h2>
         <table className="w-full bg-gray-100 rounded-lg">

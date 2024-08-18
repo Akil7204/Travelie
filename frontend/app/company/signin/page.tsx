@@ -38,7 +38,7 @@ const Login: React.FC = () => {
           localStorage.setItem("company", JSON.stringify(result.company));
 
           toast.success("Login Successful!");
-          router.push("/company/companyDashboard");
+          router.push("/company/dashboard");
         }
       } else {
         toast.error("Invalid login credentials. Please try again.");

@@ -1,6 +1,6 @@
 import mongoose, { Schema, Document } from "mongoose";
 import { Admin } from "../domain/admin";
-import {Company} from "../domain/company"
+import { Company } from "../domain/company";
 import { CompanyModel } from "./companyRepository";
 
 // Define the Mongoose schema for the User
@@ -21,6 +21,18 @@ export const findUserByEmailAdmin = async (
 };
 
 export const getAllUnapprovalFromDB = async () => {
- 
-  return await CompanyModel.find({adminVerified: false}).sort({ createdAt: -1 });
+  return await CompanyModel.find({ adminVerified: false }).sort({
+    createdAt: -1,
+  });
+};
+
+export const updateCompanyFromDB = async (id: string) => {
+  return await CompanyModel.findOneAndUpdate(
+    { _id: id }, 
+    { $set: { adminVerified: true } }, 
+    {
+      returnOriginal: false, 
+      upsert: false, 
+    }
+  );
 };
