@@ -29,8 +29,8 @@ const Login: React.FC = () => {
       const result = await LoginAPI(data);
       console.log("LoginAPI result:", result); // Debugging line
 
-      if (result && result.admin && result.token) {
-        localStorage.setItem("token", result.token);
+      if (result && result.admin && result.adminToken) {
+        localStorage.setItem("adminToken", result.adminToken);
         localStorage.setItem("admin", JSON.stringify(result.admin));
 
         toast.success("Login Successful!");

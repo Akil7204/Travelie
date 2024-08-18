@@ -9,7 +9,7 @@ export const adminlogin = async (req: Request, res: Response, next: NextFunction
     console.log(result);
     
     if (result) {
-      res.json({ token: result.token, admin: result.admin });
+      res.json({ adminToken: result.token, admin: result.admin });
     } else {
       res.status(401).json({ message: 'Login failed' });
     }

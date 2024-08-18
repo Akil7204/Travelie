@@ -8,4 +8,18 @@ export const LoginAPI = async (reqBody: any) => {
   return await commonAPI("POST", `${server_URL_admin}/login`, reqBody);
 };
 
+// Get All Users API
+export const getAllUnapprovalAPI = async (token: string) => {
+  try {
+    const response = await commonAPI('GET', `${server_URL_admin}/approval`, undefined, {
+      Authorization: `Bearer ${token}`,
+    });
+    console.log(response);
+    
+    return response 
+  } catch (error) {
+    throw new Error('Failed to fetch users');
+  }
+};
+
 
