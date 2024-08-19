@@ -93,6 +93,7 @@ console.log("from req.body: " + email, username, phone);
       phone,
     })
       .then((loginResult) => {
+        res.cookie("token", loginResult.token)
         res.status(200).json(loginResult);
       })
       .catch((error: any) => {

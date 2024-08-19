@@ -34,5 +34,7 @@ export const verifyOtp = async (data: any) => {
 export const GoogleLoginAPI = async (reqBody: any) => {
   console.log(reqBody);
   
-  return await commonAPI("POST", `${SERVER_URL}/googleLogin`, reqBody);
+  // return await commonAPI("POST", `${SERVER_URL}/googleLogin`, reqBody);
+  const response = await axios.post(`${SERVER_URL}/googleLogin`, reqBody, {withCredentials: true});
+  return response.data
 };

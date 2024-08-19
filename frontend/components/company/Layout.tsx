@@ -26,7 +26,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     toast.success("Logout Successfully");
     localStorage.removeItem("company");
     localStorage.removeItem("token");
-    deleteCookie("token");
+    deleteCookie("companyToken");
     router.push("/company/signin"); // Redirect to the home page or login page
   };
 
