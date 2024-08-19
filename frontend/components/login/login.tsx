@@ -37,6 +37,8 @@ const Login: React.FC = () => {
       } else {
         toast.error("Invalid login credentials. Please try again.");
       }
+
+
     } catch (err) {
       // console.error('LoginAPI error:', err); // Debugging line
       toast.error("An error occurred during login. Please try again.");

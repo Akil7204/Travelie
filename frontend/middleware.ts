@@ -54,7 +54,7 @@ async function verifyToken(
     return false;
   }
 
-  const secret = process.env.JWT_SECRET;
+  const secret = process.env.JWT_SECRET_KEY;
   if (!secret) {
     console.log("JWT secret not found in env");
     return false;
