@@ -1,6 +1,11 @@
 import { Request, Response } from "express";
 import { otpGenerator } from "../../uilts/otpGenerator";
-import { loginUser, registerUser, verifyAndSaveUser } from "../../application/userService";
+import {
+  googleLogin,
+  loginUser,
+  registerUser,
+  verifyAndSaveUser,
+} from "../../application/userService";
 import { findUserByEmail } from "../../Infrastructure/userRepository";
 import { sendEmail } from "../../uilts/sendEmail";
 
@@ -49,10 +54,8 @@ export const verifyOtp = async (req: Request, res: Response) => {
       return res.status(404).json({ error: "User not found" });
     }
     console.log(user.otp, otp);
-    
 
     if (user.otp === otp) {
-      
       await verifyAndSaveUser(email, otp);
       res.status(200).json("User registered successfully");
     } else {
@@ -60,7 +63,7 @@ export const verifyOtp = async (req: Request, res: Response) => {
     }
   } catch (error: any) {
     console.log(error.message);
-    
+
     res.status(400).json({ error: error.message });
   }
 };
@@ -72,5 +75,27 @@ export const login = async (req: Request, res: Response) => {
     res.status(200).json({ user, token });
   } catch (error: any) {
     res.status(400).json({ error: error.message });
+  }
+};
+
+export const googleLoginHandler = async (req: Request, res: Response) => {
+  try {
+    const { email, username, profileImage, phone } = req.body;
+console.log(email, username, phone);
+
+    googleLogin({
+      email,
+      username,
+      phone,
+    })
+      .then((loginResult) => {
+        res.status(200).json(loginResult);
+      })
+      .catch((error: any) => {
+        res.status(500).json({ error: "Failed to handle Google login" });
+      });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Failed to process Google login" });
   }
 };

@@ -45,17 +45,15 @@ export const verifyAndSaveUser = async (email: string, otp: string) => {
   throw new Error("Invalid OTP");
 };
 
-
 // login the user
 export const loginUser = async (email: string, password: string) => {
   const user = await findUserByEmail(email);
-  
+
   if (!user) {
     throw new Error("Invalid Email/Password");
   }
   const isPasswordValid = await bcrypt.compare(password, user.password);
- 
-  
+
   if (!isPasswordValid) {
     throw new Error("Invalid Email/Password");
   }
@@ -65,4 +63,51 @@ export const loginUser = async (email: string, password: string) => {
   return { user, token };
 };
 
+// Function to handle Google login
+export const googleLogin = async ({
+  email,
+  profileImagePath,
+  username,
+  phone,
+}: {
+  email: string;
+  profileImagePath?: string;
+  username: string;
+  phone?: number;
+}) => {
+  try {
+    const existingUser = await findUserByEmail(email);
 
+    if (existingUser) {
+      const token = jwt.sign(
+        { userId: existingUser._id },
+        process.env.JWT_SECRET_KEY!,
+        { expiresIn: "1h" }
+      );
+      return { user: existingUser, token };
+    } else {
+      const newUser: User = {
+        username,
+        email,
+        password: "defaultPassword",
+        profileImage: profileImagePath || "",
+        phone: phone || undefined,
+        otpVerified: true,
+      };
+
+      const hashedPassword = await bcrypt.hash(newUser.password, 10);
+      newUser.password = hashedPassword;
+
+      const createdUser = await createUser(newUser);
+      const token = jwt.sign(
+        { userId: createdUser._id },
+        process.env.JWT_SECRET_KEY!,
+        { expiresIn: "1h" }
+      );
+      return { user: createdUser, token };
+    }
+  } catch (error) {
+    console.error("Error during Google login:", error);
+    throw new Error("Failed to handle Google login");
+  }
+};

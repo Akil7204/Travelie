@@ -78,6 +78,9 @@ const Register: React.FC = () => {
       });
       const googleLoginResult = await GoogleLoginAPI(googleLogin);
 
+      console.log(googleLoginResult);
+      
+
     } catch (error) {
       console.log("could not loggin with google: ", error);
     }

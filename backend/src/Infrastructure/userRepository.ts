@@ -10,7 +10,7 @@ interface UserModel extends User, Document {
 // Define the Mongoose schema for the User
 const UserSchema: Schema<UserModel> = new Schema({
   username: { type: String, required: true },
-  phone: { type: Number, required: true },
+  phone: { type: Number },
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
   profileImage: { type: String },
