@@ -1,5 +1,10 @@
+"use client"
+
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
+import { toast } from 'react-toastify';
+import { deleteCookie } from '@/utils/deleteCookie';
+import { useRouter } from 'next/navigation';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -7,6 +12,7 @@ interface LayoutProps {
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {
   const [activePath, setActivePath] = useState<string | null>(null);
+  const router = useRouter();
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -15,6 +21,14 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   }, []);
 
   const isActive = (path: string) => activePath === path;
+
+  const handleLogoutClick = () => {
+    toast.success("Logout Successfully");
+    localStorage.removeItem("company");
+    localStorage.removeItem("token");
+    deleteCookie("token");
+    router.push("/company/signin"); // Redirect to the home page or login page
+  };
 
   return (
     <div className="min-h-screen flex bg-gray-100">
@@ -56,9 +70,9 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
               </Link>
             </li>
             <li className="px-6 py-3">
-              <Link href="/company/logout" className={`rounded-lg block text-xl p-3 font-semibold ${isActive('/company/logout') ? 'text-blue-700 bg-blue-200' : 'hover:bg-gray-200'}`}>
+              <button type='button' onClick={handleLogoutClick} className={`rounded-lg block text-xl p-3 font-semibold ${isActive('/company/logout') ? 'text-blue-700 bg-blue-200' : 'hover:bg-gray-200'}`}>
                 Logout
-              </Link>
+              </button>
             </li>
           </ul>
         </nav>

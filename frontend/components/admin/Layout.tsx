@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
+import { toast } from "react-toastify";
+import { deleteCookie } from "@/utils/deleteCookie";
+import { useRouter } from "next/navigation";
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -7,6 +10,15 @@ interface LayoutProps {
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {
   const [activePath, setActivePath] = useState<string | null>(null);
+  const router = useRouter();
+
+  const handleLogoutClick = () => {
+    toast.success("Logout Successfully");
+    localStorage.removeItem("admin");
+    localStorage.removeItem("adminToken");
+    deleteCookie("adminToken");
+    router.push("/admin/login"); // Redirect to the home page or login page
+  };
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -98,8 +110,9 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
               </Link>
             </li>
             <li className="px-6 py-3 mt-12">
-              <Link
-                href="/admin/logout"
+              <button
+                type="button"
+                onClick={handleLogoutClick}
                 className={`rounded-lg block text-xl p-3 font-semibold ${
                   isActive("/admin/logout")
                     ? "bg-blue-700 text-white"
@@ -107,7 +120,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                 }`}
               >
                 Logout
-              </Link>
+              </button>
             </li>
           </ul>
         </nav>
