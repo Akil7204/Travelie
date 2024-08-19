@@ -253,13 +253,18 @@ const Register: React.FC = () => {
           <button
             type="button"
             onClick={handleGoogleClick}
-            className="w-full bg-white border border-gray-300 text-gray-700 font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline hover:bg-gray-100"
+            className="w-full flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50"
           >
-            <img
-              src="#"
-              alt="Google"
-              className="inline-block w-5 h-5 mr-2"
-            />
+            <svg
+              className="w-5 h-5 mr-2"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+            >
+              <path d="M21.35 11.1h-9.6v1.9h5.75c-.3 1.57-1.22 2.9-2.58 3.75v3.1h4.15c2.43-2.24 3.84-5.54 3.84-9.4 0-.7-.07-1.37-.18-2z" />
+              <path d="M12.75 21.6c3.22 0 5.92-1.08 7.9-2.88l-4.15-3.1c-1.18.8-2.7 1.27-4.3 1.27-3.3 0-6.1-2.2-7.1-5.25h-4.3v3.3c1.98 3.88 6.13 6.65 10.95 6.65z" />
+              <path d="M5.65 14.4c-.2-.55-.35-1.15-.35-1.75s.1-1.2.35-1.75v-3.3h-4.3c-.75 1.5-1.15 3.18-1.15 5s.4 3.5 1.15 5z" />
+              <path d="M12.75 7.35c1.45 0 2.75.5 3.75 1.35l2.8-2.8c-1.8-1.7-4.5-2.75-7.55-2.75-4.82 0-8.97 2.77-10.95 6.65l4.3 3.3c1-3.05 3.8-5.25 7.1-5.25z" />
+            </svg>
             Continue with Google
           </button>
           <div className="mt-6 text-center">
