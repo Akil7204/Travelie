@@ -27,3 +27,8 @@ export const LoginAPI = async (reqBody: any) => {
 export const verifyOtp = async (data: any) => {
   return api.post("/verifyOtp", data);
 };
+
+// Google Api
+export const GoogleLoginAPI = async (reqBody: any) => {
+  return await commonAPI("POST", `${SERVER_URL}/googleLogin`, reqBody);
+};

@@ -1,11 +1,13 @@
 "use client";
 
-import { SignUpAPI } from "@/app/services/allAPI";
-import React from "react";
+import { GoogleLoginAPI, SignUpAPI } from "@/app/services/allAPI";
+import React, { useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useRouter } from "next/navigation";
+import { GoogleAuthProvider, signInWithPopup, getAuth } from "firebase/auth";
+import { app } from "@/firebase/firebase";
 
 type Inputs = {
   username: string;
@@ -23,6 +25,14 @@ const Register: React.FC = () => {
     getValues,
     formState: { errors },
   } = useForm<Inputs>();
+
+  const [googleLogin, setGoogleLogin] = useState({
+    username: "",
+    email: "",
+    password: "",
+    profileImage: "",
+    phone:"",
+  });
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     const { username, phone, email, password } = data;
@@ -50,6 +60,26 @@ const Register: React.FC = () => {
     } catch (err) {
       // console.error('SignUpAPI error:', err); // Debugging line
       toast.error("An error occurred during signup. Please try again.");
+    }
+  };
+
+  const handleGoogleClick = async () => {
+    try {
+      const provider = new GoogleAuthProvider();
+      const auth = getAuth(app);
+      const result = await signInWithPopup(auth, provider);
+      console.log(result);
+      setGoogleLogin({
+        email: result.user.email!,
+        username: result.user.displayName!,
+        profileImage: result.user.photoURL!,
+        password: "",
+        phone: result.user.phoneNumber || '',
+      });
+      const googleLoginResult = await GoogleLoginAPI(googleLogin);
+
+    } catch (error) {
+      console.log("could not loggin with google: ", error);
     }
   };
 
@@ -202,6 +232,7 @@ const Register: React.FC = () => {
           </div>
           <button
             type="button"
+            onClick={handleGoogleClick}
             className="w-full bg-white border border-gray-300 text-gray-700 font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline hover:bg-gray-100"
           >
             <img
