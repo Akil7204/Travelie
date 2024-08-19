@@ -81,7 +81,7 @@ export const login = async (req: Request, res: Response) => {
 export const googleLoginHandler = async (req: Request, res: Response) => {
   try {
     const { email, username, profileImage, phone } = req.body;
-console.log(email, username, phone);
+console.log("from req.body: " + email, username, phone);
 
     googleLogin({
       email,

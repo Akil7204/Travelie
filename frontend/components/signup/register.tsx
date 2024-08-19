@@ -76,7 +76,14 @@ const Register: React.FC = () => {
         password: "",
         phone: result.user.phoneNumber || "",
       });
-      const googleLoginResult = await GoogleLoginAPI(googleLogin);
+
+      const googleLoginResult = await GoogleLoginAPI({
+        email: result.user.email!,
+        username: result.user.displayName!,
+        profileImage: result.user.photoURL!,
+        password: "",
+        phone: result.user.phoneNumber || "",
+      });
       console.log(googleLoginResult);
       if (
         googleLoginResult &&
