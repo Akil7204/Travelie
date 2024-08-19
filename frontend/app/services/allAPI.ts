@@ -20,7 +20,7 @@ export const SignUpAPI = async (
 
 // Login API
 export const LoginAPI = async (reqBody: any) => {
-  return await commonAPI("POST", `${SERVER_URL}/login`, reqBody);
+  return await commonAPI("POST", `${SERVER_URL}/login`, reqBody, { credentials: 'include' });
 };
 
 // verfy otp Api

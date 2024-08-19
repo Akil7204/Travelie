@@ -60,6 +60,13 @@ export const loginUser = async (email: string, password: string) => {
   const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET_KEY!, {
     expiresIn: "1h",
   });
+  
+  // const secret: string | undefined = process.env.JWT_SECRET;
+  // if (!secret) throw new Error("JWT Secret not found");
+  // const data = { user, role: "travelie-user" };
+  // const token = jwt.sign(data, secret, {
+  //   expiresIn: "1h",
+  // });
   return { user, token };
 };
 

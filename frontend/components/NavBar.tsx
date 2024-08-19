@@ -1,5 +1,8 @@
 "use client";
 
+import { deleteCookie } from "@/utils/deleteCookie";
+import getUserData from "@/utils/getUserData";
+import { unstable_noStore } from "next/cache";
 // components/Navbar.tsx
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -14,7 +17,7 @@ const Navbar: React.FC = () => {
   useEffect(() => {
     const token = localStorage.getItem("token");
     const userData = localStorage.getItem("user");
-    
+
     if (token && userData) {
       const user = JSON.parse(userData)
       setIsAuthorized(true);
@@ -27,8 +30,9 @@ const Navbar: React.FC = () => {
     toast.success("Logout Successfully");
     localStorage.removeItem("user");
     localStorage.removeItem("token");
+    deleteCookie("token");
     setIsAuthorized(false);
-    router.push('/'); // Redirect to the home page or login page
+    router.push("/"); // Redirect to the home page or login page
   };
 
   return (
@@ -44,7 +48,9 @@ const Navbar: React.FC = () => {
         draggable
         pauseOnHover
       />
-      <div className="text-2xl font-bold font-serif"><Link href="/">TRAVELIE</Link></div>
+      <div className="text-2xl font-bold font-serif">
+        <Link href="/">TRAVELIE</Link>
+      </div>
       <ul className="flex space-x-10 text-lg">
         <li>
           <Link href="/">Home</Link>
