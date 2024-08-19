@@ -20,7 +20,9 @@ export const SignUpAPI = async (
 
 // Login API
 export const LoginAPI = async (reqBody: any) => {
-  return await commonAPI("POST", `${SERVER_URL_COMPANY}/login`, reqBody);
+  // return await commonAPI("POST", `${SERVER_URL_COMPANY}/login`, reqBody);
+  const response = await axios.post(`${SERVER_URL_COMPANY}/login`, reqBody, {withCredentials: true});
+  return response.data
 };
 
 // verfy otp Api

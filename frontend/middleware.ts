@@ -3,8 +3,10 @@ import type { NextRequest } from "next/server";
 import { jwtVerify } from "jose";
 import {
   isProtectedAdminRoute,
+  isProtectedCompanyRoute,
   isProtectedRoute,
   toBeRedirectedAdminRoutes,
+  toBeRedirectedCompanyRoutes,
   toBeRedirectedRoutes,
 } from "./utils/routes";
 
@@ -29,6 +31,21 @@ export async function middleware(req: NextRequest) {
       const feedUrl = new URL("/admin/dashboard", req.url);
       return NextResponse.redirect(feedUrl);
     }
+
+    const CompanyTokenVerified = await verifyToken("companyToken", req);
+
+    const isProtectedCompany = isProtectedCompanyRoute(pathname);
+    if(isProtectedCompany && !CompanyTokenVerified){
+      const loginUrl = new URL("/company/signin", req.url);
+      return NextResponse.redirect(loginUrl);
+    }
+
+    const toBeRedirectedCompany = toBeRedirectedCompanyRoutes(pathname);
+    if(toBeRedirectedCompany && CompanyTokenVerified){
+      const feedUrl = new URL("/company/dashboard", req.url);
+      return NextResponse.redirect(feedUrl);
+    }
+
 
 
   const tokenVerified = await verifyToken("token", req);

@@ -28,7 +28,7 @@ const Login: React.FC = () => {
       const result = await LoginAPI(data);
       console.log("LoginAPI result:", result); // Debugging line
 
-      if (result && result.company && result.token) {
+      if (result && result.company && result.companyToken) {
         console.log(result.company.adminVerified);
 
         if (result.company.adminVerified === false) {

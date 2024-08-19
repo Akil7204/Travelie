@@ -65,8 +65,9 @@ export const verifyOtp = async (req: Request, res: Response) => {
 export const login = async (req: Request, res: Response) => {
   try {
     const { email, password } = req.body;
-    const { company, token } = await loginCompany(email, password);
-    res.status(200).json({ company, token });
+    const { company, companyToken } = await loginCompany(email, password);
+    res.cookie("companyToken", companyToken);
+    res.status(200).json({ company, companyToken });
   } catch (error: any) {
     res.status(400).json({ error: error.message });
   }
