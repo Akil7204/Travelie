@@ -31,7 +31,7 @@ const Register: React.FC = () => {
     email: "",
     password: "",
     profileImage: "",
-    phone:"",
+    phone: "",
   });
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
@@ -74,13 +74,23 @@ const Register: React.FC = () => {
         username: result.user.displayName!,
         profileImage: result.user.photoURL!,
         password: "",
-        phone: result.user.phoneNumber || '',
+        phone: result.user.phoneNumber || "",
       });
       const googleLoginResult = await GoogleLoginAPI(googleLogin);
-
       console.log(googleLoginResult);
-      
+      if (
+        googleLoginResult &&
+        googleLoginResult.user &&
+        googleLoginResult.token
+      ) {
+        localStorage.setItem("token", googleLoginResult.token);
+        localStorage.setItem("user", JSON.stringify(googleLoginResult.user));
+        toast.success("Login Successful!");
 
+        router.push("/");
+      } else {
+        toast.error("Google authentication failed. Please try again.");
+      }
     } catch (error) {
       console.log("could not loggin with google: ", error);
     }
