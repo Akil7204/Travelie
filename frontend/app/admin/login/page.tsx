@@ -34,7 +34,7 @@ const Login: React.FC = () => {
         localStorage.setItem("admin", JSON.stringify(result.admin));
 
         toast.success("Login Successful!");
-          router.push("/admin/dashboard");
+          router.replace("/admin/dashboard");
       } else {
         toast.error("Invalid login credentials. Please try again.");
       }

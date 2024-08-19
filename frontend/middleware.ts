@@ -16,6 +16,21 @@ export async function middleware(req: NextRequest) {
     return NextResponse.next();
   }
 
+    const adminTokenVerified = await verifyToken("adminToken", req);
+
+    const isProtectedAdmin = isProtectedAdminRoute(pathname);
+    if (isProtectedAdmin && !adminTokenVerified) {
+      const loginUrl = new URL("/admin/login", req.url);
+      return NextResponse.redirect(loginUrl);
+    }
+
+    const toBeRedirectedAdmin = toBeRedirectedAdminRoutes(pathname);
+    if (toBeRedirectedAdmin && adminTokenVerified) {
+      const feedUrl = new URL("/admin/dashboard", req.url);
+      return NextResponse.redirect(feedUrl);
+    }
+
+
   const tokenVerified = await verifyToken("token", req);
 
   // Protected Routes logic - redirect to login if it doesn't have token in localstorage
@@ -48,8 +63,8 @@ async function verifyToken(
   req: NextRequest
 ): Promise<boolean> {
   const token = req.cookies.get(tokenName);
-  console.log({token});
-  
+  console.log({ token });
+
   if (!token?.value) {
     return false;
   }

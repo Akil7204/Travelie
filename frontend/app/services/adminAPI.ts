@@ -5,7 +5,9 @@ import axios from "axios";
 
 // Login API
 export const LoginAPI = async (reqBody: any) => {
-  return await commonAPI("POST", `${server_URL_admin}/login`, reqBody);
+  // return await commonAPI("POST", `${server_URL_admin}/login`, reqBody);
+  const response = await axios.post(`${server_URL_admin}/login`, reqBody, {withCredentials: true});
+  return response.data
 };
 
 // Get All Users API

@@ -11,7 +11,7 @@ import { errorHandler } from "../uilts/errorHandler"; // Assuming errorHandler i
 export const loginUser = async (
   email: string,
   password: string
-): Promise<{ token: string; admin: string } | null> => {
+): Promise<{ adminToken: string; admin: string } | null> => {
 
   if (process.env.Admin_email !== email) {
     throw errorHandler(404, "User not found");
@@ -20,7 +20,7 @@ export const loginUser = async (
     throw errorHandler(401, "Wrong credentials");
   }
 
-  const token = jwt.sign(
+  const adminToken = jwt.sign(
     {
       AdminEmail: email,
     },
@@ -28,7 +28,7 @@ export const loginUser = async (
     { expiresIn: "1h" }
   );
 
-  return { token, admin: email };
+  return { adminToken, admin: email };
 };
 
 // Fetch all Un approval company

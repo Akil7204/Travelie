@@ -22,11 +22,11 @@ const changeToAdminDashboardRoutes = new Set([
 ]);
 
 export function isProtectedAdminRoute(pathname: string): boolean {
-  return !changeToAdminDashboardRoutes.has(pathname);
+  return changeToAdminDashboardRoutes.has(pathname);
 }
 
 export function toBeRedirectedAdminRoutes(pathname: string): boolean {
-  return changeToAdminDashboardRoutes.has(pathname);
+  return !changeToAdminDashboardRoutes.has(pathname);
 }
 
 
