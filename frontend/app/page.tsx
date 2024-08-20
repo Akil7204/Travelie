@@ -2,6 +2,7 @@ import Footer from "@/components/Footer";
 import Navbar from "@/components/NavBar";
 import HeroSection from "@/components/page/HeroSection";
 import ServiceSection from "@/components/page/ServiceSection";
+import TopSection from "@/components/page/TopSection";
 
 
 export default function Home() {
@@ -10,6 +11,7 @@ export default function Home() {
       <Navbar />
       <HeroSection />
       <ServiceSection />
+      <TopSection />
       <Footer />
     </div>
     
