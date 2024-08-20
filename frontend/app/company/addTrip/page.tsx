@@ -418,9 +418,9 @@ const AddTrip = () => {
                 render={({ field }) => (
                   <select {...field} className="w-full p-2 border rounded">
                     <option value="">Select Category</option>
-                    <option value="Adventure">Adventure</option>
-                    <option value="Relaxation">Relaxation</option>
-                    <option value="Culture">Culture</option>
+                    <option value="Adventure">bus</option>
+                    <option value="Relaxation">Traveller</option>
+                    <option value="Culture">Jeep</option>
                   </select>
                 )}
                 rules={{ required: "Category is required" }}
