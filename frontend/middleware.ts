@@ -59,10 +59,8 @@ export async function middleware(req: NextRequest) {
 
   // ToBeRedirected Routes logic - redirect to feed if it has token in localstorage
   const toBeRedirected = toBeRedirectedRoutes(pathname);
-  console.log({ toBeRedirected, tokenVerified });
 
   if (toBeRedirected && tokenVerified) {
-    console.log(toBeRedirected, tokenVerified);
 
     const homeUrl = new URL("/", req.url);
     return NextResponse.redirect(homeUrl);
@@ -80,7 +78,6 @@ async function verifyToken(
   req: NextRequest
 ): Promise<boolean> {
   const token = req.cookies.get(tokenName);
-  console.log({ token });
 
   if (!token?.value) {
     return false;

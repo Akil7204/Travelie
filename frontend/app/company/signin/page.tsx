@@ -28,18 +28,18 @@ const Login: React.FC = () => {
       const result = await LoginAPI(data);
       console.log("LoginAPI result:", result); // Debugging line
 
+      if (result && !result.company.adminVerified) {
+        router.push("/company/approval");
+      }
+
       if (result && result.company && result.companyToken) {
         console.log(result.company.adminVerified);
+        
+        localStorage.setItem("token", result.token);
+        localStorage.setItem("company", JSON.stringify(result.company));
 
-        if (result.company.adminVerified === false) {
-          router.push("/company/approval");
-        } else {
-          localStorage.setItem("token", result.token);
-          localStorage.setItem("company", JSON.stringify(result.company));
-
-          toast.success("Login Successful!");
-          router.push("/company/dashboard");
-        }
+        toast.success("Login Successful!");
+        router.push("/company/dashboard");
       } else {
         toast.error("Invalid login credentials. Please try again.");
       }

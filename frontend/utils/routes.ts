@@ -7,9 +7,6 @@ export function isProtectedRoute(pathname: string): boolean {
 }
 
 export function toBeRedirectedRoutes(pathname: string): boolean {
-  console.log({pathname  , changeToHomeRoutes, res: changeToHomeRoutes.has(pathname) });
-
-  
   
   return changeToHomeRoutes.has(pathname);
 }
@@ -32,7 +29,7 @@ export function toBeRedirectedAdminRoutes(pathname: string): boolean {
 
 // Company side; 
 
-const changeToCompanyDashboardRoutes = new Set(["/company/dashboard", "/company/addtrip", "/company/trips"]);
+const changeToCompanyDashboardRoutes = new Set(["/company/dashboard", "/company/addTrip", "/company/trips"]);
 
 export function isProtectedCompanyRoute(pathname: string): boolean {
   return changeToCompanyDashboardRoutes.has(pathname);
