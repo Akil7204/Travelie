@@ -67,7 +67,7 @@ const Login: React.FC = () => {
         <div className="w-full max-w-md space-y-8">
           <div>
             <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-              Sign in
+              Company Sign in
             </h2>
           </div>
           <form

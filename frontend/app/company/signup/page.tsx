@@ -68,7 +68,7 @@ const Signup: React.FC = () => {
       />
       <div className="flex justify-center items-center min-h-screen bg-gray-100 pt-16">
         <div className="bg-white p-8 rounded shadow-md w-full max-w-md">
-          <h1 className="text-2xl font-bold mb-6 text-center">Register</h1>
+          <h1 className="text-2xl font-bold mb-6 text-center">Company Register</h1>
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className="mb-4">
               <label
