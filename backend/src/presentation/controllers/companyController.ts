@@ -8,6 +8,10 @@ import {
 import { findCompanyByEmail } from "../../Infrastructure/companyRepository";
 import { sendEmail } from "../../uilts/sendEmail";
 
+interface CustomRequest extends Request {
+  companyId?: string;
+}
+
 // register the Company
 export const register = async (req: Request, res: Response) => {
   try {
@@ -79,3 +83,14 @@ export const login = async (req: Request, res: Response) => {
     res.status(400).json({ error: error.message });
   }
 };
+
+export const addTrip = async (req: any, res: Response): Promise<void> => {
+  try {
+
+    const {} = req.body;
+    const {} = req.files;
+    
+  } catch (error) {
+    
+  }
+}
