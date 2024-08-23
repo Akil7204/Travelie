@@ -5,7 +5,7 @@ import { initializeApp } from "firebase/app";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyBxnD9cU1s2W5nlPF-SSR7Nf2RY-kukrEU",
+  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
   authDomain: "travelie-auth.firebaseapp.com",
   projectId: "travelie-auth",
   storageBucket: "travelie-auth.appspot.com",
