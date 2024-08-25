@@ -86,7 +86,10 @@ export const login = async (req: Request, res: Response) => {
 
 export const addTrip = async (req: any, res: Response): Promise<void> => {
   try {
-
+    console.log(req.body);
+    console.log(req.files);
+    
+    
     const {} = req.body;
     const {} = req.files;
     

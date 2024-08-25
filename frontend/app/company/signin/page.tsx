@@ -7,6 +7,7 @@ import Link from "next/link";
 import Navbar from "@/components/NavBar";
 import { LoginAPI } from "@/app/services/companyAPI";
 import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { useRouter } from "next/navigation";
 
 type LoginFormInputs = {
@@ -30,12 +31,10 @@ const Login: React.FC = () => {
 
       if (result && !result.company.adminVerified) {
         router.push("/company/approval");
-      }
-
-      if (result && result.company && result.companyToken) {
+      } else if (result && result.company && result.companyToken) {
         console.log(result.company.adminVerified);
-        
-        localStorage.setItem("token", result.token);
+
+        localStorage.setItem("companyToken", result.companyToken);
         localStorage.setItem("company", JSON.stringify(result.company));
 
         toast.success("Login Successful!");
@@ -43,6 +42,18 @@ const Login: React.FC = () => {
       } else {
         toast.error("Invalid login credentials. Please try again.");
       }
+
+      // if (result && result.company && result.companyToken) {
+      //   console.log(result.company.adminVerified);
+
+      //   localStorage.setItem("companyToken", result.companyToken);
+      //   localStorage.setItem("company", JSON.stringify(result.company));
+
+      //   toast.success("Login Successful!");
+      //   router.push("/company/dashboard");
+      // } else {
+      //   toast.error("Invalid login credentials. Please try again.");
+      // }
     } catch (err) {
       // console.error('LoginAPI error:', err); // Debugging line
       toast.error("An error occurred during login. Please try again.");

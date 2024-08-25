@@ -4,6 +4,7 @@ import React from 'react';
 import Layout from '../../../components/company/Layout';
 
 const Dashboard: React.FC = () => {
+  
   return (
     <Layout>
       <h1 className="text-3xl font-semibold mb-8">Dashboard</h1>

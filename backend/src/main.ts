@@ -21,7 +21,8 @@ app.use(
 );
 
 app.use(express.json());
-app.use(bodyParser.json());
+// app.use(bodyParser.json());
+
 app.use('/api/users', userRoutes);
 app.use('/api/company', companyRoutes);
 app.use('/api/admin', adminRoutes)

@@ -12,7 +12,7 @@ import {
 type FormValues = {
   tripName: string;
   description: string;
-  photos: File[];
+  images: File[];
   days: number;
   startingFrom: string;
   endingAt: string;
@@ -40,7 +40,7 @@ const AddTrip = () => {
     defaultValues: {
       tripName: "",
       description: "",
-      photos: [],
+      images: [],
       days: 0,
       startingFrom: "",
       endingAt: "",
@@ -76,7 +76,7 @@ const AddTrip = () => {
       setPhotos((prevPhotos) => [...prevPhotos, ...filesArray]);
 
       // Update the form with the new photo list
-      setValue("photos", [...photos, ...filesArray]);
+      setValue("images", [...photos, ...filesArray]);
     }
   };
 
@@ -84,13 +84,13 @@ const AddTrip = () => {
     const uploadPhotos =  photos.filter((_, i) => i !== index);
     setPhotos(uploadPhotos)
     // Update the form with the updated photo list
-    setValue("photos", uploadPhotos);
+    setValue("images", uploadPhotos);
     
   };
 
   const onSubmit: SubmitHandler<FormValues> = (data) => {
     console.log("Form Data:", data);
-    console.log(data.photos.length);
+    console.log(data.images.length);
 
     // TODO: Submit the form data to the backend
   };
@@ -160,14 +160,14 @@ const AddTrip = () => {
               <h2 className="text-lg font-semibold mb-4">Media</h2>
               <div className="space-y-4">
                 <Controller
-                  name="photos"
+                  name="images"
                   control={control}
                   render={({ field }) => (
                     <>
                       <label className="block">
                         <span className="block mb-2">Upload Images</span>
                         <input
-                        id="image"
+                        id="images"
                           type="file"
                           accept="image/*"
                           onChange={handlePhotoChange}
@@ -175,9 +175,9 @@ const AddTrip = () => {
                           multiple
                         />
                       </label>
-                      {errors.photos && (
+                      {errors.images && (
                         <p className="text-red-500 text-sm mt-1">
-                          {errors.photos.message}
+                          {errors.images.message}
                         </p>
                       )}
                     </>

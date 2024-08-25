@@ -74,16 +74,17 @@ export const config = {
 };
 
 async function verifyToken(
-  tokenName: string,
+  companyToken: string,
   req: NextRequest
 ): Promise<boolean> {
-  const token = req.cookies.get(tokenName);
+  const token = req.cookies.get(companyToken);
 
   if (!token?.value) {
     return false;
   }
 
   const secret = process.env.JWT_SECRET_KEY;
+  
   if (!secret) {
     console.log("JWT secret not found in env");
     return false;
@@ -96,12 +97,13 @@ async function verifyToken(
     );
 
     if (payload) {
+      // console.log(payload);
+      
     } else {
     }
-
     return Boolean(payload);
   } catch (err: any) {
-    console.log(`failed to verify ${tokenName}`, err.message);
+    console.log(`failed to verify ${companyToken}`, err.message);
     return false;
   }
 }
