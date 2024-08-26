@@ -1,5 +1,6 @@
 "use client";
 
+import { addTripAPI } from "@/app/services/companyAPI";
 import Layout from "@/components/company/Layout";
 import { useState } from "react";
 import {
@@ -81,16 +82,18 @@ const AddTrip = () => {
   };
 
   const removePhoto = (index: number) => {
-    const uploadPhotos =  photos.filter((_, i) => i !== index);
-    setPhotos(uploadPhotos)
+    const uploadPhotos = photos.filter((_, i) => i !== index);
+    setPhotos(uploadPhotos);
     // Update the form with the updated photo list
     setValue("images", uploadPhotos);
-    
   };
 
-  const onSubmit: SubmitHandler<FormValues> = (data) => {
+  const onSubmit: SubmitHandler<FormValues> = async (data) => {
     console.log("Form Data:", data);
     console.log(data.images.length);
+
+    const result = await addTripAPI(data);
+
 
     // TODO: Submit the form data to the backend
   };
@@ -167,7 +170,7 @@ const AddTrip = () => {
                       <label className="block">
                         <span className="block mb-2">Upload Images</span>
                         <input
-                        id="images"
+                          id="images"
                           type="file"
                           accept="image/*"
                           onChange={handlePhotoChange}

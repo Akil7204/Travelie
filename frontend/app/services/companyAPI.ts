@@ -31,3 +31,8 @@ export const verifyOtp = async (data: any) => {
   
   return api.post("/verifyOtp", data);
 };
+
+
+export const addTripAPI = async (data: any) => {
+  return await axios.post(`${SERVER_URL_COMPANY}/addTrip`, data, {withCredentials: true});
+}
