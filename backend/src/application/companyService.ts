@@ -6,6 +6,8 @@ import {
   updateCompany,
 } from "../Infrastructure/companyRepository";
 import { Company } from "../domain/company";
+import { uploadToS3Bucket } from "../uilts/s3bucket";
+import { IMulterFile } from "../types/types"
 
 // registerUser new Company
 export const registerCompany = async (company: Company) => {
@@ -59,3 +61,19 @@ export const loginCompany = async (email: string, password: string) => {
   });
   return { company, companyToken };
 };
+
+
+export const uploadImage = async  (file: any): Promise<any> => {
+  try {
+    console.log("came");
+    
+    const result = await uploadToS3Bucket([file]);
+    console.log(result);
+    
+    return result
+    // return await postsRepository.uploadImage(imageFile);
+
+  } catch (error: any) {
+    throw new Error(error.message);
+  }
+}

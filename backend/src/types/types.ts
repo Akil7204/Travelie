@@ -1,5 +1,11 @@
+import { ReadStream } from 'fs';
+
 export interface IMulterFile {
-  originalname: string;
-  buffer: Buffer;
-  mimetype: string;
+    fieldname: string;
+    originalname: string;
+    encoding: string;
+    mimetype: string;
+    size: number;
+    buffer: Buffer; // For memory storage
+    stream?: ReadStream; // Optional, used with disk storage
 }

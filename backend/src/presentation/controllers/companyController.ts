@@ -3,10 +3,12 @@ import { otpGenerator } from "../../uilts/otpGenerator";
 import {
   loginCompany,
   registerCompany,
+  uploadImage,
   verifyAndSaveCompany,
 } from "../../application/companyService";
 import { findCompanyByEmail } from "../../Infrastructure/companyRepository";
 import { sendEmail } from "../../uilts/sendEmail";
+import { IMulterFile } from "../../types/types";
 
 interface CustomRequest extends Request {
   companyId?: string;
@@ -87,7 +89,7 @@ export const login = async (req: Request, res: Response) => {
 export const addTrip = async (req: any, res: Response): Promise<void> => {
   try {
     const { body, files} = req
-    console.log({body, files});
+    console.log({body});
     const {
       images,
       tripName,
@@ -105,6 +107,12 @@ export const addTrip = async (req: any, res: Response): Promise<void> => {
       status,
     } = req.body;
 
+    const file = req.files as IMulterFile[];
+    console.log({file});
+    
+    const imageUrl = await uploadImage(file);
+
+    console.log(imageUrl);
     
 
 
