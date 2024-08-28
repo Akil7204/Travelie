@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "aws-sdk": "^2.1684.0",
     "bcrypt": "^5.1.1",
     "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
@@ -11,6 +12,7 @@
     "nodemailer": "^6.9.14"
   },
   "devDependencies": {
+    "@types/aws-sdk": "^2.7.0",
     "@types/bcrypt": "^5.0.2",
     "@types/bcryptjs": "^2.4.6",
     "@types/cors": "^2.8.17",
