@@ -20,8 +20,6 @@ type FormValues = {
   startingDate: string;
   endingDate: string;
   basePrice: number;
-  discountPercentage?: number;
-  discountName?: string;
   locations: { location: string }[];
   tripLocation: string;
   category: string;
@@ -48,8 +46,6 @@ const AddTrip = () => {
       startingDate: "",
       endingDate: "",
       basePrice: 0,
-      discountPercentage: undefined,
-      discountName: "",
       locations: [{ location: "" }],
       tripLocation: "",
       category: "",
@@ -92,8 +88,42 @@ const AddTrip = () => {
     console.log("Form Data:", data);
     console.log(data.images.length);
 
-    const result = await addTripAPI(data);
+    // Create a new FormData object
+    const formData = new FormData();
 
+    formData.append("tripName", data.tripName);
+    formData.append("description", data.description);
+    formData.append("days", data.days.toString());
+    formData.append("startingFrom", data.startingFrom);
+    formData.append("endingAt", data.endingAt);
+    formData.append("startingDate", data.startingDate);
+    formData.append("endingDate", data.endingDate);
+    formData.append("basePrice", data.basePrice.toString());
+    // data.locations.forEach((loc, index) => {
+    //   formData.append(`locations[${index}]`, loc.location);
+    // });
+    formData.append("locations", JSON.stringify(data.locations));
+    formData.append("category", data.category);
+    formData.append("seats", data.seats);
+    formData.append("status", data.status);
+
+    // // Append images to formData
+    // data.images.forEach((image, index) => {
+    //   formData.append(`images[${index}]`, image);
+    // });
+
+      // Append other form data
+  // formData.append('fieldName', data.fieldName);
+  // Append images
+  if (data.images) {
+    data.images.forEach((image, index) => {
+      formData.append(`images`, image, image.name);
+    });
+  }
+
+
+
+    const result = await addTripAPI(formData);
 
     // TODO: Submit the form data to the backend
   };
@@ -171,6 +201,7 @@ const AddTrip = () => {
                         <span className="block mb-2">Upload Images</span>
                         <input
                           id="images"
+                          name="images"
                           type="file"
                           accept="image/*"
                           onChange={handlePhotoChange}

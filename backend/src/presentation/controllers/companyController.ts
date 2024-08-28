@@ -77,7 +77,7 @@ export const login = async (req: Request, res: Response) => {
       res.cookie("companyToken", companyToken);
       res.status(200).json({ company, companyToken });
     } else {
-      res.status(200).json({company})
+      res.status(200).json({ company });
     }
   } catch (error: any) {
     res.status(400).json({ error: error.message });
@@ -86,14 +86,32 @@ export const login = async (req: Request, res: Response) => {
 
 export const addTrip = async (req: any, res: Response): Promise<void> => {
   try {
-    console.log(req.body);
-    console.log(req.files);
+    const { body, files} = req
+    console.log({body, files});
+    const {
+      images,
+      tripName,
+      description,
+      days,
+      startingFrom,
+      endingAt,
+      startingDate,
+      endingDate,
+      basePrice,
+      locations,
+      tripLocation,
+      category,
+      seats,
+      status,
+    } = req.body;
+
     
+
+
     
-    const {} = req.body;
-    const {} = req.files;
-    
-  } catch (error) {
-    
-  }
-}
+
+    if (images) {
+
+    }
+  } catch (error) {}
+};

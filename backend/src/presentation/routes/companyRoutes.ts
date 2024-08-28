@@ -9,7 +9,7 @@ router.post("/signup", register);
 router.post("/verifyOtp", verifyOtp);
 
 router.post("/login", login);
-router.post("/addTrip", upload.single("photos"), addTrip);
+router.post("/addTrip", upload.array("images"), addTrip);
 
 
 export default router;
