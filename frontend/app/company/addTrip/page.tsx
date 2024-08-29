@@ -21,7 +21,6 @@ type FormValues = {
   endingDate: string;
   basePrice: number;
   locations: { location: string }[];
-  tripLocation: string;
   category: string;
   seats: string;
   status: string;
@@ -47,7 +46,6 @@ const AddTrip = () => {
       endingDate: "",
       basePrice: 0,
       locations: [{ location: "" }],
-      tripLocation: "",
       category: "",
       seats: "",
       status: "Upcoming",
@@ -501,26 +499,7 @@ const AddTrip = () => {
               )}
             </div>
 
-            {/* Trip Location */}
-            <div className="p-4 bg-white rounded-lg shadow-md">
-              <h2 className="text-lg font-semibold mb-4">Trip Location</h2>
-              <Controller
-                name="tripLocation"
-                control={control}
-                render={({ field }) => (
-                  <input
-                    type="text"
-                    placeholder="Trip Location"
-                    {...field}
-                    className="w-full p-2 border rounded"
-                  />
-                )}
-                rules={{ required: "Trip Location is required" }}
-              />
-              {errors.tripLocation && (
-                <p className="text-red-500">{errors.tripLocation.message}</p>
-              )}
-            </div>
+            
           </div>
         </form>
       </div>
