@@ -7,7 +7,7 @@ export async function uploadToS3Bucket(files: IMulterFile | IMulterFile[]): Prom
     // const filesArray = files as IMulterFile[];
     const filesArray = Array.isArray(files) ? files.flat(Infinity) : [files];
 
-    console.log(filesArray);
+    // console.log(filesArray);
     
     if (filesArray.length === 0) {
       throw new Error("No files uploaded");
@@ -23,7 +23,7 @@ export async function uploadToS3Bucket(files: IMulterFile | IMulterFile[]): Prom
 
     const uploadedUrls = await Promise.all(
       filesArray.map(async (file) => {
-        console.log(file.originalname);
+        // console.log(file.originalname);
         
         const params = {
           Bucket: process.env.S3_BUCKET_NAME!,

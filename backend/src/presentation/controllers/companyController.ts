@@ -93,7 +93,7 @@ export const addTrip = async (req: any, res: Response): Promise<void> => {
     const body = req.body
     const companyId = req.companyId
     
-    console.log({companyId});
+    // console.log({companyId});
 
     const file = req.files as IMulterFile[];
     // console.log({file});
@@ -101,8 +101,8 @@ export const addTrip = async (req: any, res: Response): Promise<void> => {
     const imageUrl = await uploadImage(file);
     // console.log(imageUrl);
 
-    
-    const tripData = await uploadTrip(body, imageUrl, companyId);
+
+    const tripData = await uploadTrip(companyId, body, imageUrl);
 
 
     

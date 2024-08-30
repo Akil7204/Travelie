@@ -100,7 +100,10 @@ const AddTrip = () => {
     // data.locations.forEach((loc, index) => {
     //   formData.append(`locations[${index}]`, loc.location);
     // });
-    formData.append("locations", JSON.stringify(data.locations));
+    let location = data.locations.map((val)=>val.location)
+    console.log('form data',data.locations);
+    console.log(location);
+    formData.append("locations", JSON.stringify(location));
     formData.append("category", data.category);
     formData.append("seats", data.seats);
     formData.append("status", data.status);

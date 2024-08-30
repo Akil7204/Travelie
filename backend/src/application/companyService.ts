@@ -78,7 +78,22 @@ export const uploadImage = async (file: any): Promise<any> => {
   }
 };
 
-export const uploadTrip = async (companyId: string, data: Trip, images : string[]) => {
+export const uploadTrip = async (
+  companyId: string,
+  data: Trip,
+  images: string[]
+) => {
   console.log("came");
-  
+  try {
+    const TripData = { companyId, data, images };
+    console.log("companyID : ",companyId);
+    console.log("data : ",data);
+    console.log("images : ",images);
+
+
+    TripData.data.seats = Number(TripData?.data?.seats)
+    
+    return await Trips.create(TripData);
+
+  } catch (error) {}
 };

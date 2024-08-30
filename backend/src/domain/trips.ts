@@ -17,7 +17,7 @@ interface Trip extends Document {
     status: string,
     companyId: mongoose.Schema.Types.ObjectId,
     category: string,
-    totalSeats: number,
+    seats: number,
     bookedSeats?: number,
 }
 
@@ -75,7 +75,7 @@ const tripSchema = new Schema<Trip>({
         type: String,
         required: true,
     },
-    totalSeats: {
+    seats: {
         type: Number,
         required: true,
     },
