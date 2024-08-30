@@ -18,7 +18,7 @@ interface Trip extends Document {
     companyId: mongoose.Schema.Types.ObjectId,
     category: string,
     totalSeats: number,
-    bookedSeats: number,
+    bookedSeats?: number,
 }
 
 const tripSchema = new Schema<Trip>({
@@ -85,4 +85,5 @@ const tripSchema = new Schema<Trip>({
 }, {timestamps: true});
 
 
-export const Trips = mongoose.model<Trip>("Trips", tripSchema)
+export const Trips = mongoose.model<Trip>("Trips", tripSchema);
+export type {Trip};

@@ -4,6 +4,7 @@ import {
   loginCompany,
   registerCompany,
   uploadImage,
+  uploadTrip,
   verifyAndSaveCompany,
 } from "../../application/companyService";
 import { findCompanyByEmail } from "../../Infrastructure/companyRepository";
@@ -88,38 +89,30 @@ export const login = async (req: Request, res: Response) => {
 
 export const addTrip = async (req: any, res: Response): Promise<void> => {
   try {
-    const { body, files} = req
-    console.log({body});
-    const {
-      images,
-      tripName,
-      description,
-      days,
-      startingFrom,
-      endingAt,
-      startingDate,
-      endingDate,
-      basePrice,
-      locations,
-      tripLocation,
-      category,
-      seats,
-      status,
-    } = req.body;
+    // const { body, files} = req
+    const body = req.body
+    const companyId = req.companyId
+    
+    console.log({companyId});
 
     const file = req.files as IMulterFile[];
-    console.log({file});
+    // console.log({file});
     
     const imageUrl = await uploadImage(file);
+    // console.log(imageUrl);
 
-    console.log(imageUrl);
+    
+    const tripData = await uploadTrip(body, imageUrl, companyId);
+
+
     
 
 
     
 
-    if (images) {
-
-    }
-  } catch (error) {}
+    
+  } catch (error) {
+    console.log("error is: ", error);
+    
+  }
 };

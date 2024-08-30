@@ -7,6 +7,8 @@ import userRoutes from "./presentation/routes/userRoutes";
 import companyRoutes from "./presentation/routes/companyRoutes";
 import adminRoutes from "./presentation/routes/adminRoutes";
 
+import cookieParser from "cookie-parser";
+
 dotenv.config();
 
 const app = express();
@@ -22,6 +24,7 @@ app.use(
 
 app.use(express.json());
 // app.use(bodyParser.json());
+app.use(cookieParser())
 
 app.use('/api/users', userRoutes);
 app.use('/api/company', companyRoutes);

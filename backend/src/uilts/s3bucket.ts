@@ -5,7 +5,7 @@ export async function uploadToS3Bucket(files: IMulterFile | IMulterFile[]): Prom
   try {
     // const filesArray = Array.isArray(files) ? files : [files];
     // const filesArray = files as IMulterFile[];
-    const filesArray = Array.isArray(files) ? files.flat() : [files];
+    const filesArray = Array.isArray(files) ? files.flat(Infinity) : [files];
 
     console.log(filesArray);
     

@@ -7,7 +7,7 @@ import {
 } from "../Infrastructure/companyRepository";
 import { Company } from "../domain/company";
 import { uploadToS3Bucket } from "../uilts/s3bucket";
-import { IMulterFile } from "../types/types"
+import { Trip, Trips } from "../domain/trips";
 
 // registerUser new Company
 export const registerCompany = async (company: Company) => {
@@ -56,24 +56,29 @@ export const loginCompany = async (email: string, password: string) => {
   if (!isPasswordValid) {
     throw new Error("Invalid Email/Password");
   }
-  const companyToken = jwt.sign({ companyId: company._id }, process.env.JWT_SECRET_KEY!, {
-    expiresIn: "1h",
-  });
+  const companyToken = jwt.sign(
+    { companyId: company._id },
+    process.env.JWT_SECRET_KEY!,
+    {
+      expiresIn: "1h",
+    }
+  );
   return { company, companyToken };
 };
 
-
-export const uploadImage = async  (file: any): Promise<any> => {
+export const uploadImage = async (file: any): Promise<any> => {
   try {
-    console.log("came");
-    
     const result = await uploadToS3Bucket([file]);
-    console.log(result);
-    
-    return result
-    // return await postsRepository.uploadImage(imageFile);
+    // console.log(result);
 
+    return result;
+    // return await postsRepository.uploadImage(imageFile);
   } catch (error: any) {
     throw new Error(error.message);
   }
-}
+};
+
+export const uploadTrip = async (companyId: string, data: Trip, images : string[]) => {
+  console.log("came");
+  
+};
