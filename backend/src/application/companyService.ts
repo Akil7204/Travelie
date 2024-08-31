@@ -2,6 +2,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import {
   createCompany,
+  CreatingTrip,
   findCompanyByEmail,
   updateCompany,
 } from "../Infrastructure/companyRepository";
@@ -86,14 +87,16 @@ export const uploadTrip = async (
   console.log("came");
   try {
     const TripData = { companyId, data, images };
-    console.log("companyID : ",companyId);
-    console.log("data : ",data);
-    console.log("images : ",images);
+    // console.log("companyID : ",companyId);
+    // console.log("data : ",data);
+    // console.log("images : ",images);
+    // console.log(TripData);
+    
 
 
     TripData.data.seats = Number(TripData?.data?.seats)
-    
-    return await Trips.create(TripData);
+    const tripsadd = await CreatingTrip(TripData);
+    // console.log(tripsadd);
 
   } catch (error) {}
 };
