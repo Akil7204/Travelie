@@ -87,16 +87,11 @@ export const uploadTrip = async (
   console.log("came");
   try {
     const TripData = { companyId, data, images };
-    // console.log("companyID : ",companyId);
-    // console.log("data : ",data);
-    // console.log("images : ",images);
-    // console.log(TripData);
-    
-
 
     TripData.data.seats = Number(TripData?.data?.seats)
     const tripsadd = await CreatingTrip(TripData);
     // console.log(tripsadd);
+    return tripsadd
 
   } catch (error) {}
 };

@@ -81,6 +81,7 @@ export const CreatingTrip = async (TripData: any) => {
     console.log("Saved Trip: ", savedTrip);
 
     return savedTrip;
+    
   } catch (error) {
     console.error("Error saving trip: ", error);
     throw error;

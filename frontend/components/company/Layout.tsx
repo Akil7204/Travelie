@@ -46,8 +46,11 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       <div className="min-h-screen flex bg-gray-100">
         {/* Sidebar */}
         <div className="w-64 bg-white shadow-lg fixed h-full">
-          <div className="p-6">
+          {/* <div className="p-6">
             <h2 className="text-2xl font-semibold">Travelie</h2>
+          </div> */}
+          <div className=" p-6 text-2xl font-bold font-serif">
+            <Link href="/company/dashboard">TRAVELIE</Link>
           </div>
           <nav className="mt-10">
             <ul>

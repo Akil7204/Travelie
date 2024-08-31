@@ -89,30 +89,20 @@ export const login = async (req: Request, res: Response) => {
 
 export const addTrip = async (req: any, res: Response): Promise<void> => {
   try {
-    // const { body, files} = req
-    const body = req.body
-    const companyId = req.companyId
-    
-    // console.log({companyId});
+    const body = req.body;
+    const companyId = req.companyId;
 
     const file = req.files as IMulterFile[];
-    // console.log({file});
-    
-    const imageUrl = await uploadImage(file);
-    // console.log(imageUrl);
 
+    const imageUrl = await uploadImage(file);
 
     const tripData = await uploadTrip(companyId, body, imageUrl);
-
-
-    
-
-
-    
-
-    
+    if (tripData) {
+      res.status(200).json("Trip Added successfully");
+    } else {
+      res.status(400).json({ error: "Trip not added :- somthing went worng" });
+    }
   } catch (error) {
     console.log("error is: ", error);
-    
   }
 };
