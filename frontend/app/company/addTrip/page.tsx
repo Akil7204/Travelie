@@ -2,6 +2,7 @@
 
 import { addTripAPI } from "@/app/services/companyAPI";
 import Layout from "@/components/company/Layout";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import {
   useForm,
@@ -9,6 +10,8 @@ import {
   SubmitHandler,
   useFieldArray,
 } from "react-hook-form";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 type FormValues = {
   tripName: string;
@@ -61,6 +64,8 @@ const AddTrip = () => {
     name: "locations",
   });
 
+  const router = useRouter();
+
   const [photos, setPhotos] = useState<File[]>([]);
 
   const handlePhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -100,8 +105,8 @@ const AddTrip = () => {
     // data.locations.forEach((loc, index) => {
     //   formData.append(`locations[${index}]`, loc.location);
     // });
-    let location = data.locations.map((val)=>val.location)
-    console.log('form data',data.locations);
+    let location = data.locations.map((val) => val.location);
+    console.log("form data", data.locations);
     console.log(location);
     formData.append("locations", JSON.stringify(location));
     formData.append("category", data.category);
@@ -113,24 +118,48 @@ const AddTrip = () => {
     //   formData.append(`images[${index}]`, image);
     // });
 
-      // Append other form data
-  // formData.append('fieldName', data.fieldName);
-  // Append images
-  if (data.images) {
-    data.images.forEach((image, index) => {
-      formData.append(`images`, image, image.name);
-    });
-  }
+    // Append other form data
+    // formData.append('fieldName', data.fieldName);
+    // Append images
+    if (data.images) {
+      data.images.forEach((image, index) => {
+        formData.append(`images`, image, image.name);
+      });
+    }
 
+    try {
+      const result = await addTripAPI(formData);
+      if (result) {
 
+        toast.success("Trip added successfully");
+        setTimeout(()=>{
+          router.push(`/company/trips`);
+        }, 3000)
 
-    const result = await addTripAPI(formData);
+      } else{
+        toast.error("somthing went worng")
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error("Trip already exist!");
+    }
 
     // TODO: Submit the form data to the backend
   };
 
   return (
     <Layout>
+      <ToastContainer
+        position="top-center"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
       <div className="p-6">
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-2xl font-semibold">Add Trip</h1>
@@ -501,8 +530,6 @@ const AddTrip = () => {
                 <p className="text-red-500">{errors.seats.message}</p>
               )}
             </div>
-
-            
           </div>
         </form>
       </div>

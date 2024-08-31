@@ -84,14 +84,14 @@ export const uploadTrip = async (
   data: Trip,
   images: string[]
 ) => {
-  console.log("came");
   try {
     const TripData = { companyId, data, images };
 
-    TripData.data.seats = Number(TripData?.data?.seats)
+    TripData.data.seats = Number(TripData?.data?.seats);
     const tripsadd = await CreatingTrip(TripData);
     // console.log(tripsadd);
-    return tripsadd
-
-  } catch (error) {}
+    return tripsadd;
+  } catch (error: any) {
+    throw new Error(error.message);
+  }
 };
