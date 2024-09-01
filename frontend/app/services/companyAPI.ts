@@ -36,3 +36,8 @@ export const verifyOtp = async (data: any) => {
 export const addTripAPI = async (data: any) => {
   return await axios.post(`${SERVER_URL_COMPANY}/addTrip`, data, {withCredentials: true});
 }
+
+export const getAllTripsAPI = async () => {
+  const response =  await axios.get(`${SERVER_URL_COMPANY}/trips`, {withCredentials: true});
+  return response.data;
+}

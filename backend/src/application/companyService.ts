@@ -4,6 +4,7 @@ import {
   createCompany,
   CreatingTrip,
   findCompanyByEmail,
+  getAllTripsFromDB,
   updateCompany,
 } from "../Infrastructure/companyRepository";
 import { Company } from "../domain/company";
@@ -94,4 +95,8 @@ export const uploadTrip = async (
   } catch (error: any) {
     throw new Error(error.message);
   }
+};
+
+export const getAllTrips = async (comapanyId: string) => {
+  return await getAllTripsFromDB(comapanyId);
 };

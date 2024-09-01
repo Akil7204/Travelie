@@ -87,3 +87,10 @@ export const CreatingTrip = async (TripData: any) => {
     throw error;
   }
 };
+
+export const getAllTripsFromDB = async (comapanyId: string) => {
+
+  return await Trips.find({companyId: comapanyId}).sort({
+    createdAt: -1,
+  });
+};

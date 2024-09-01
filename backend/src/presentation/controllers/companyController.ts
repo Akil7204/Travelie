@@ -1,6 +1,7 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { otpGenerator } from "../../uilts/otpGenerator";
 import {
+  getAllTrips,
   loginCompany,
   registerCompany,
   uploadImage,
@@ -104,5 +105,31 @@ export const addTrip = async (req: any, res: Response): Promise<void> => {
     }
   } catch (error) {
     console.log("error is: ", error);
+  }
+};
+
+// export const trips = async (req: Request, res: Response) => {
+//   try {
+    
+//   } catch (error) {
+//     console.log("error is: ", error);
+//   }
+// }
+
+export const getTripsById = async (
+  req: any,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
+  try {
+    const comapanyId = req.companyId
+    console.log(comapanyId);
+    
+    const allTrips = await getAllTrips(comapanyId);
+    console.log({allTrips});
+    
+    res.status(200).json(allTrips);
+  } catch (error) {
+    next(error);
   }
 };
