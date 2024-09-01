@@ -97,8 +97,8 @@ const TripList: React.FC = () => {
               <li className="cursor-pointer text-blue-600 border-b-2 border-blue-600">
                 All Trip
               </li>
-              <li className="cursor-pointer">Upcoming</li>
-              <li className="cursor-pointer">Completed</li>
+              {/* <li className="cursor-pointer">Upcoming</li>
+              <li className="cursor-pointer">Completed</li> */}
             </ul>
           </div>
           <table className="min-w-full bg-white border">
@@ -120,12 +120,12 @@ const TripList: React.FC = () => {
                   <td className="py-3 px-4">{trip.tripName}</td>
                   <td className="py-3 px-4">{trip.category}</td>
                   <td className="py-3 px-4">{trip.seats}</td>
-                  <td className="py-3 px-4">{trip.status}</td>
+                  <td className="py-3 px-4">{trip.bookedSeats}</td>
                   <td className="py-3 px-4">{trip.price}</td>
                   <td className="py-3 px-4">
                     <span
                       className={`text-sm font-semibold ${
-                        trip.status === "Opening"
+                        trip.status === "Upcoming"
                           ? "text-green-500"
                           : trip.status === "Filled"
                           ? "text-red-500"

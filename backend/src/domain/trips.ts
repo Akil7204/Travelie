@@ -81,6 +81,7 @@ const tripSchema = new Schema<Trip>({
     },
     bookedSeats: {
         type: Number,
+        default: 0,
     }
 }, {timestamps: true});
 
