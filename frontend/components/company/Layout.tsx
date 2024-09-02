@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { deleteCookie } from "@/utils/deleteCookie";
 import { useRouter } from "next/navigation";
 

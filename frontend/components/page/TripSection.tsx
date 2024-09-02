@@ -24,7 +24,7 @@ const packages = [
     discountPrice: 10000,
     duration: '2 days per head',
     buttonText: 'See availability',
-    image: '/img/GettyImages-483645840-5a06b125da27150037f954d1.jpg',
+    image: '/img/satya-n-k-4U4FpfAI3Hw-unsplash.jpg',
   },
   {
     name: 'Ooty',
@@ -57,7 +57,7 @@ const TripSection: React.FC = () => {
       <div className="space-y-6">
         {packages.map((pkg, index) => (
           <div key={index} className="bg-white shadow-md rounded-lg overflow-hidden flex flex-col md:flex-row">
-            <img className="w-full  md:w-60 h-48 object-cover" src={pkg.image} alt={pkg.name} />
+            <img className="w-full  md:w-60 h-auto object-cover" src={pkg.image} alt={pkg.name} />
             <div className="p-4 flex-grow">
               <h3 className="text-lg font-semibold text-gray-800">{pkg.name}</h3>
               <p className="text-gray-600 mt-2">{pkg.description}</p>
