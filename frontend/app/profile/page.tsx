@@ -78,6 +78,7 @@ const ManageAccount: React.FC = () => {
     if (token) {
       setLoading(true);
       try {
+        console.log({reqBody});
         
         const result = await updateUserProfileAPI(reqBody);
 
@@ -144,12 +145,13 @@ const ManageAccount: React.FC = () => {
           {/* Account Details Form */}
           <div className="mt-6 md:mt-0 md:w-2/3">
             <h3 className="text-xl font-semibold mb-4">Manage Account</h3>
-            <form onClick={handleUpdate}>
+            
               <div className="space-y-4">
                 <div>
                   <label className="block text-gray-700">Username</label>
                   <input
                     type="text"
+                    name="username"
                     value={userProfile.username}
                     onChange={handleFieldChange}
                     placeholder="Enter your username"
@@ -160,6 +162,7 @@ const ManageAccount: React.FC = () => {
                   <label className="block text-gray-700">Email</label>
                   <input
                     type="email"
+                    name="email"
                     value={userProfile.email}
                     onChange={handleFieldChange}
                     placeholder="Email address"
@@ -171,6 +174,7 @@ const ManageAccount: React.FC = () => {
                   <label className="block text-gray-700">Phone Number</label>
                   <input
                     type="tel"
+                    name="phone"
                     value={userProfile.phone}
                     onChange={handleFieldChange}
                     placeholder="Your phone number"
@@ -179,12 +183,12 @@ const ManageAccount: React.FC = () => {
                 </div>
               </div>
               <button
-                type="submit"
+                onClick={handleUpdate}
                 className="mt-6 bg-blue-500 text-white py-3 px-6 rounded-md hover:bg-blue-600 transition-colors sm:text-lg"
               >
                 Save Changes
               </button>
-            </form>
+           
           </div>
         </div>
         <br />
