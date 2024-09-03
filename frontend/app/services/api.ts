@@ -23,3 +23,5 @@ export const login = async (data: any) => {
 export const resendOtp = async (data: any) => {
   return api.post("/resendOtp", data);
 };
+
+

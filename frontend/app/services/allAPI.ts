@@ -32,9 +32,18 @@ export const verifyOtp = async (data: any) => {
 
 // Google Api
 export const GoogleLoginAPI = async (reqBody: any) => {
-  console.log(reqBody);
+  // console.log(reqBody);
   
   // return await commonAPI("POST", `${SERVER_URL}/googleLogin`, reqBody);
   const response = await axios.post(`${SERVER_URL}/googleLogin`, reqBody, {withCredentials: true});
   return response.data
+};
+
+
+// get All Trip
+export const allTripsAPI = async () => {
+  const response = await axios.get(`${SERVER_URL}/discover`, {
+    withCredentials: true,
+  });
+  return response.data;
 };

@@ -25,29 +25,6 @@ interface Trip {
   bookedSeats?: number;
 }
 
-// const trips = [
-//   {
-//     id: 1,
-//     name: "Varkala",
-//     category: "Bus",
-//     bookedSeat: 35,
-//     availableSeat: 57,
-//     price: "₹121.00",
-//     status: "Opening",
-//     startDate: "29 Dec 2022",
-//   },
-//   {
-//     id: 2,
-//     name: "Ooty",
-//     category: "Traveller",
-//     bookedSeat: 14,
-//     availableSeat: 36,
-//     price: "₹590.00",
-//     status: "Opening",
-//     startDate: "24 Dec 2022",
-//   },
-//   // Add more trip objects as needed
-// ];
 
 const TripList: React.FC = () => {
   const [trips, setTrips] = useState<Trip[]>([]);
