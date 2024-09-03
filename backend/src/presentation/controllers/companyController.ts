@@ -122,11 +122,9 @@ export const getTripsById = async (
   next: NextFunction
 ): Promise<void> => {
   try {
-    const comapanyId = req.companyId
-    console.log(comapanyId);
+    const comapanyId = req.companyId;
     
     const allTrips = await getAllTrips(comapanyId);
-    console.log({allTrips});
     
     res.status(200).json(allTrips);
   } catch (error) {
