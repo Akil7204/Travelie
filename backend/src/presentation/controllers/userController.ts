@@ -74,7 +74,7 @@ export const login = async (req: Request, res: Response) => {
     const { email, password } = req.body;
     const { user, token } = await loginUser(email, password);
     // console.log({user, token});
-    
+
     res.cookie("token", token);
     // console.log('Cookie set:', req.cookies['token']);
     res.status(200).json({ user, token });
@@ -86,7 +86,7 @@ export const login = async (req: Request, res: Response) => {
 export const googleLoginHandler = async (req: Request, res: Response) => {
   try {
     const { email, username, profileImage, phone } = req.body;
-console.log("from req.body: " + email, username, phone);
+    console.log("from req.body: " + email, username, phone);
 
     googleLogin({
       email,
@@ -94,7 +94,7 @@ console.log("from req.body: " + email, username, phone);
       phone,
     })
       .then((loginResult) => {
-        res.cookie("token", loginResult.token)
+        res.cookie("token", loginResult.token);
         res.status(200).json(loginResult);
       })
       .catch((error: any) => {
@@ -106,18 +106,34 @@ console.log("from req.body: " + email, username, phone);
   }
 };
 
-
 export const getAllTrips = async (
   req: any,
   res: Response,
   next: NextFunction
 ): Promise<void> => {
   try {
-    
     const AllTrips = await allTrips();
-    
+
     res.status(200).json(AllTrips);
   } catch (error) {
     next(error);
+  }
+};
+
+export const updateProfile = async (req: any, res: Response) => {
+  try {
+    const userId = req.userId;
+    const { username, email, password, phone } = req.body;
+    const profileImage = req.file ? req.file.buffer : null;
+    console.log({userId});
+    console.log(req.body);
+    console.log(req.files);
+    
+    
+    
+
+  } catch (error: any) {
+    console.log({ error });
+    res.status(400).json({ error: error.message });
   }
 };

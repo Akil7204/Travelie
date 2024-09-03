@@ -4,6 +4,7 @@ import {
   googleLoginHandler,
   login,
   register,
+  updateProfile,
   verifyOtp,
 } from "../controllers/userController";
 import upload from "../../uilts/multer";
@@ -22,8 +23,8 @@ router.post("/googleLogin", googleLoginHandler); // googleLoginHandler
 router.put(
   "/profile",
   verifyUser,
-  upload.single("profileImage")
-  //   updateProfile
+  upload.single("profileImage"),
+  updateProfile
 );
 
 router.get("/trips", getAllTrips);
