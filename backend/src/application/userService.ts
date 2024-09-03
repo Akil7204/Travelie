@@ -1,6 +1,7 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import {
+  allTripsFromDB,
   createUser,
   findUserByEmail,
   updateUser,
@@ -117,4 +118,8 @@ export const googleLogin = async ({
     console.error("Error during Google login:", error);
     throw new Error("Failed to handle Google login");
   }
+};
+
+export const allTrips = async () => {
+  return await allTripsFromDB();
 };

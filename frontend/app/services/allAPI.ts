@@ -42,8 +42,6 @@ export const GoogleLoginAPI = async (reqBody: any) => {
 
 // get All Trip
 export const allTripsAPI = async () => {
-  const response = await axios.get(`${SERVER_URL}/discover`, {
-    withCredentials: true,
-  });
+  const response = await axios.get(`${SERVER_URL}/trips`);
   return response.data;
 };

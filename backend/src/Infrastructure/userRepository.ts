@@ -1,5 +1,6 @@
 import mongoose, { Schema, Document } from "mongoose";
 import { User } from "../domain/user";
+import { Trips } from "../domain/trips";
 
 // Extending the User interface with mongoose Document
 interface UserModel extends User, Document {
@@ -51,4 +52,11 @@ export const updateUserProfile = async (
   update: Partial<User>
 ) => {
   return UserModel.findByIdAndUpdate(userId, update, { new: true });
+};
+
+export const allTripsFromDB = async () => {
+
+  return await Trips.find().sort({
+    createdAt: -1,
+  });
 };

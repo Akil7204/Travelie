@@ -1,6 +1,7 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { otpGenerator } from "../../uilts/otpGenerator";
 import {
+  allTrips,
   googleLogin,
   loginUser,
   registerUser,
@@ -102,5 +103,21 @@ console.log("from req.body: " + email, username, phone);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Failed to process Google login" });
+  }
+};
+
+
+export const getAllTrips = async (
+  req: any,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
+  try {
+    
+    const AllTrips = await allTrips();
+    
+    res.status(200).json(AllTrips);
+  } catch (error) {
+    next(error);
   }
 };
