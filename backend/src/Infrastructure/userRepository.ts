@@ -14,7 +14,7 @@ const UserSchema: Schema<UserModel> = new Schema({
   phone: { type: Number },
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
-  profileImage: { type: String },
+  profileImage: { type: String, default: "/img/DefaultProfilePicMale.png" },
   otp: { type: String },
   otpVerified: { type: Boolean, default: false },
 });

@@ -1,4 +1,4 @@
-const protectedRoutes = new Set(["/trips"]);
+const protectedRoutes = new Set(["/profile"]);
 
 const changeToHomeRoutes = new Set(["/login", "/signup"]);
 

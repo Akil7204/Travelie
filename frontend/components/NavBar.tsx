@@ -13,13 +13,16 @@ import "react-toastify/dist/ReactToastify.css";
 const Navbar: React.FC = () => {
   const router = useRouter();
   const [isAuthorized, setIsAuthorized] = useState<boolean>(false);
+  const [user, setUser] =  useState<any>(null);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
     const userData = localStorage.getItem("user");
 
     if (token && userData) {
-      const user = JSON.parse(userData)
+      const users = JSON.parse(userData);
+      setUser(users)
+      
       setIsAuthorized(true);
     } else {
       setIsAuthorized(false);
@@ -70,11 +73,18 @@ const Navbar: React.FC = () => {
       </ul>
 
       {isAuthorized ? (
-        <div className="flex space-x-4">
+        <div className="flex space-x-8">
+          <Link href="/profile">
+            <img
+              src={user.profileImage}
+              alt="Profile"
+              className="w-9 h-9 rounded-full"
+            />
+          </Link>
           <Link href="#">
             <span
               onClick={handleLogoutClick}
-              className="px-4 py-2 border border-blue-500 text-blue-500 rounded"
+              className="px-5 py-2 border border-blue-500 text-blue-500 rounded align-middle"
             >
               Logout
             </span>

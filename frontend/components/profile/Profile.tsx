@@ -1,15 +1,28 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
-import Link from "next/link"; // Import Link from next/link
-import Navbar from "../NavBar";
+import Link from "next/link";
 
 interface LayoutProps {
   children: React.ReactNode;
 }
 
-const Layout: React.FC<LayoutProps> = ({ children }) => {
-  // State to keep track of the active link
+const Profile: React.FC<LayoutProps> = ({ children }) => {
   const [activePath, setActivePath] = useState<string>("profile");
+  const [userProfile, setUserProfile] = useState<any>(null); // Initialize userProfile state
+
+  useEffect(() => {
+    // Get user profile from local storage on component mount
+    const storedUserProfile = localStorage.getItem("user");
+    
+    if (storedUserProfile) {
+      try {
+        const user = JSON.parse(storedUserProfile);
+        setUserProfile(user);
+      } catch (error) {
+        console.error("Error parsing user data from localStorage:", error);
+      }
+    }
+  }, []); // Empty dependency array to run once on mount
 
   // Function to determine if a link is active
   const isActive = (path: string) => activePath === path;
@@ -21,15 +34,19 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         <div className="bg-blue-100 py-6 px-4">
           <div className="max-w-4xl mx-auto flex items-center space-x-6">
             <div className="w-16 h-16 rounded-full overflow-hidden">
-              <Image
-                src="/img/DefaultPhoto.jpg" // Replace with your profile image path
-                alt="Profile"
-                width={64}
-                height={64}
-                className="object-cover"
-              />
+              {userProfile && (
+                <Image
+                  src={userProfile.profileImage } // Use a default image if none found
+                  alt="Profile"
+                  width={64}
+                  height={64}
+                  className="object-cover"
+                />
+              )}
             </div>
-            <h2 className="text-xl font-semibold text-gray-800">Akil</h2>
+            <h2 className="text-xl font-semibold text-gray-800">
+              {userProfile ? userProfile.username : "Loading..."}
+            </h2>
           </div>
           <div className="max-w-6xl mx-auto mt-4 border-b border-gray-200 ">
             <nav className="flex justify-center space-x-6">
@@ -96,4 +113,4 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   );
 };
 
-export default Layout;
+export default Profile;
