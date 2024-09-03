@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 // pages/manage-account.tsx
 import React, { useState } from "react";
@@ -6,35 +6,101 @@ import Image from "next/image";
 import Prfile from "@/components/profile/Profile";
 import Navbar from "@/components/NavBar";
 import Footer from "@/components/Footer";
+import { toast } from "react-toastify";
+import { updateUserProfileAPI } from "../services/allAPI";
 
 interface UserProfile {
   profileImage: string;
   username: string;
   email: string;
   phone: number;
-  oldPassword?: string;
-  newPassword?: string;
+  password?: string;
 }
 
 const ManageAccount: React.FC = () => {
-    
+  const [profileImagePreview, setProfileImagePreview] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
+
   const [userProfile, setUserProfile] = useState<UserProfile>({
-    profileImage: JSON.parse(localStorage.getItem("user") || "{}")?.profileImage || "",
+    profileImage:
+      JSON.parse(localStorage.getItem("user") || "{}")?.profileImage || "",
     username: JSON.parse(localStorage.getItem("user") || "{}")?.username || "",
     email: JSON.parse(localStorage.getItem("user") || "{}")?.email || "",
     phone: JSON.parse(localStorage.getItem("user") || "{}")?.phone || "",
-    oldPassword: "",
-    newPassword: "",
+    password: "",
   });
-//   console.log({userProfile});
-  
+  //   console.log({userProfile});
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
+    const image = e.target.files?.[0];
+    if (image) {
       const reader = new FileReader();
-      reader.onloadend = () => {};
-      reader.readAsDataURL(file);
+      reader.onloadend = () => {
+        setProfileImagePreview(reader.result as string);
+        setUserProfile((prev) => ({
+          ...prev,
+          registerImage: image,
+        }));
+      };
+      reader.readAsDataURL(image);
+    }
+  };
+
+  const handleFieldChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const target = e.target as HTMLInputElement | HTMLTextAreaElement;
+    const { name, value } = target;
+
+    setUserProfile((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const handleUpdate = async () => {
+    const { username, profileImage, password, phone } = userProfile;
+    const token = localStorage.getItem("token");
+
+    if (!username) {
+      toast.warning("Please fill the form completely!");
+      return;
+    }
+
+    const reqBody = new FormData();
+    reqBody.append("username", username);
+    reqBody.append("phone", phone.toString());
+    reqBody.append(
+      "profileImage",
+      profileImagePreview ? profileImagePreview : profileImage
+    );
+
+    if (token) {
+      setLoading(true);
+      try {
+        
+        const result = await updateUserProfileAPI(reqBody);
+
+        if (result) {
+          toast.success("Your profile updated successfully");
+          localStorage.setItem("user", JSON.stringify(result));
+          // navigate("/");
+        } else {
+          toast.info(result || "Something went wrong!");
+        }
+      } catch (err: any) {
+        if (err.response && err.response.status === 403) {
+          toast.warning("Your account is blocked. Please contact support.");
+          localStorage.removeItem("user");
+          localStorage.removeItem("token");
+          // navigate("/");
+        } else {
+          console.error(err);
+          toast.error("An error occurred while updating your profile.");
+        }
+      } finally {
+        setLoading(false);
+      }
     }
   };
 
@@ -48,10 +114,15 @@ const ManageAccount: React.FC = () => {
             <div className="flex flex-col items-center">
               <div className="w-32 h-32 rounded-full overflow-hidden mb-4">
                 <Image
-                  src={userProfile.profileImage}// Replace with your image path
+                  src={
+                    profileImagePreview
+                      ? profileImagePreview
+                      : userProfile.profileImage
+                  }
                   alt="Profile"
                   width={128}
                   height={128}
+                  itemType="image/*"
                   className="object-cover"
                 />
               </div>
@@ -59,6 +130,7 @@ const ManageAccount: React.FC = () => {
                 Upload Photo
                 <input
                   type="file"
+                  accept="image/*"
                   onChange={(e) => handleImageChange(e)}
                   className="hidden"
                 />
@@ -72,13 +144,14 @@ const ManageAccount: React.FC = () => {
           {/* Account Details Form */}
           <div className="mt-6 md:mt-0 md:w-2/3">
             <h3 className="text-xl font-semibold mb-4">Manage Account</h3>
-            <form>
+            <form onClick={handleUpdate}>
               <div className="space-y-4">
                 <div>
                   <label className="block text-gray-700">Username</label>
                   <input
                     type="text"
                     value={userProfile.username}
+                    onChange={handleFieldChange}
                     placeholder="Enter your username"
                     className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-lg py-3 px-4"
                   />
@@ -88,7 +161,9 @@ const ManageAccount: React.FC = () => {
                   <input
                     type="email"
                     value={userProfile.email}
+                    onChange={handleFieldChange}
                     placeholder="Email address"
+                    disabled
                     className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-lg py-3 px-4"
                   />
                 </div>
@@ -97,6 +172,7 @@ const ManageAccount: React.FC = () => {
                   <input
                     type="tel"
                     value={userProfile.phone}
+                    onChange={handleFieldChange}
                     placeholder="Your phone number"
                     className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-lg py-3 px-4"
                   />

@@ -39,6 +39,13 @@ export const GoogleLoginAPI = async (reqBody: any) => {
   return response.data
 };
 
+// Update User Profile
+export const updateUserProfileAPI = async (
+  reqBody: any,
+) => {
+  return await axios.put(`${SERVER_URL}/profile`, reqBody, {withCredentials: true});
+};
+
 
 // get All Trip
 export const allTripsAPI = async () => {
