@@ -24,25 +24,6 @@ interface Trip {
   bookedSeats?: number;
 }
 
-// const packages = [
-//   {
-//     name: "Varkala",
-//     rating: 4.5,
-//     reviews: 1200,
-//     description:
-//       "Varkala is a town in the south Indian state of Kerala. It’s on the Arabian Sea and known for Varkala Beach, backed by palm-covered red cliffs.",
-//     originalPrice: 25000,
-//     discountPrice: 20000,
-//     duration: "3 days per head",
-//     discount: "5% off",
-//     buttonText: "See availability",
-//     image: "/img/satya-n-k-4U4FpfAI3Hw-unsplash.jpg",
-//     // image: "/img/GettyImages-483645840-5a06b125da27150037f954d1.jpg",
-//     specialOffer: "Book now and receive 15% off",
-//   },
-//   // ... other packages
-// ];
-
 const TripSection: React.FC = () => {
   const [trips, setTrips] = useState<Trip[]>([]);
   const [formattedDates, setFormattedDates] = useState<string[]>([]);
@@ -101,6 +82,7 @@ const TripSection: React.FC = () => {
                 </h3>
                 <p className="text-gray-600 mt-2">{trip.description}</p>
                 <div className="flex items-center mt-4 space-x-4">
+                  <p className="text-black mt-2">Per head /</p>
                   <span className="text-green-500 mt-2">
                     Rs. {trip.price}
                   </span>

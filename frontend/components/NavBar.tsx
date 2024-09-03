@@ -36,7 +36,7 @@ const Navbar: React.FC = () => {
   };
 
   return (
-    <nav className="fixed w-screen z-50 flex justify-between items-center py-4 px-6  bg-white border-b border-gray-200 ">
+    <nav className="fixed w-screen z-50 flex justify-between items-center py-4  px-6  bg-white border-b border-gray-200 ">
       <ToastContainer
         position="top-center"
         autoClose={5000}
