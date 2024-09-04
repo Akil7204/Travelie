@@ -23,7 +23,7 @@ router.post("/googleLogin", googleLoginHandler); // googleLoginHandler
 router.put(
   "/profile",
   verifyUser,
-  upload.single("profileImage"),
+  upload.single("file"),
   updateProfile
 );
 

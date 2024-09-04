@@ -5,7 +5,7 @@ import {
   } from "@aws-sdk/client-s3";
   import { IMulterFile } from "../types/types";
   
-  export async function uploadToS3Bucket(
+  export async function profileAddBucket(
     file: IMulterFile
   ): Promise<string> {
     try {

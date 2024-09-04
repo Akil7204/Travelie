@@ -10,7 +10,7 @@ import { toast } from "react-toastify";
 import { updateUserProfileAPI } from "../services/allAPI";
 
 interface UserProfile {
-  profileImage: string;
+  profileImage: File;
   username: string;
   email: string;
   phone: number;
@@ -18,10 +18,15 @@ interface UserProfile {
 }
 
 const ManageAccount: React.FC = () => {
-  const [profileImagePreview, setProfileImagePreview] = useState<string>("");
+  const [profileImagePreview, setProfileImagePreview] = useState<File | null>(
+    null
+  );
+  const [imageProfile, setImageProfile] = useState<File | null>(null)
+  console.log(imageProfile);
+  
   const [loading, setLoading] = useState<boolean>(false);
 
-  const [userProfile, setUserProfile] = useState<UserProfile>({
+  const [userProfile, setUserProfile] = useState<any>({
     profileImage:
       JSON.parse(localStorage.getItem("user") || "{}")?.profileImage || "",
     username: JSON.parse(localStorage.getItem("user") || "{}")?.username || "",
@@ -36,13 +41,14 @@ const ManageAccount: React.FC = () => {
     if (image) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        setProfileImagePreview(reader.result as string);
-        setUserProfile((prev) => ({
+        setProfileImagePreview(reader.result as any);
+        setUserProfile((prev: any) => ({
           ...prev,
           registerImage: image,
         }));
       };
       reader.readAsDataURL(image);
+      setImageProfile(image)
     }
   };
 
@@ -52,7 +58,7 @@ const ManageAccount: React.FC = () => {
     const target = e.target as HTMLInputElement | HTMLTextAreaElement;
     const { name, value } = target;
 
-    setUserProfile((prev) => ({
+    setUserProfile((prev: any) => ({
       ...prev,
       [name]: value,
     }));
@@ -70,16 +76,23 @@ const ManageAccount: React.FC = () => {
     const reqBody = new FormData();
     reqBody.append("username", username);
     reqBody.append("phone", phone.toString());
-    reqBody.append(
-      "profileImage",
-      profileImagePreview ? profileImagePreview : profileImage
-    );
+    if (imageProfile) {
+      reqBody.append(
+        "file",
+        imageProfile
+      );
+    }
+
+    // reqBody.append(
+    //   "profileImage",
+    //   profileImage instanceof File ? profileImage : profileImagePreview
+    // );
 
     if (token) {
       setLoading(true);
       try {
-        console.log({reqBody});
-        
+        console.log({ reqBody });
+
         const result = await updateUserProfileAPI(reqBody);
 
         if (result) {
@@ -131,6 +144,7 @@ const ManageAccount: React.FC = () => {
                 Upload Photo
                 <input
                   type="file"
+                  name="profileImage"
                   accept="image/*"
                   onChange={(e) => handleImageChange(e)}
                   className="hidden"
@@ -145,50 +159,49 @@ const ManageAccount: React.FC = () => {
           {/* Account Details Form */}
           <div className="mt-6 md:mt-0 md:w-2/3">
             <h3 className="text-xl font-semibold mb-4">Manage Account</h3>
-            
-              <div className="space-y-4">
-                <div>
-                  <label className="block text-gray-700">Username</label>
-                  <input
-                    type="text"
-                    name="username"
-                    value={userProfile.username}
-                    onChange={handleFieldChange}
-                    placeholder="Enter your username"
-                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-lg py-3 px-4"
-                  />
-                </div>
-                <div>
-                  <label className="block text-gray-700">Email</label>
-                  <input
-                    type="email"
-                    name="email"
-                    value={userProfile.email}
-                    onChange={handleFieldChange}
-                    placeholder="Email address"
-                    disabled
-                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-lg py-3 px-4"
-                  />
-                </div>
-                <div>
-                  <label className="block text-gray-700">Phone Number</label>
-                  <input
-                    type="tel"
-                    name="phone"
-                    value={userProfile.phone}
-                    onChange={handleFieldChange}
-                    placeholder="Your phone number"
-                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-lg py-3 px-4"
-                  />
-                </div>
+
+            <div className="space-y-4">
+              <div>
+                <label className="block text-gray-700">Username</label>
+                <input
+                  type="text"
+                  name="username"
+                  value={userProfile.username}
+                  onChange={handleFieldChange}
+                  placeholder="Enter your username"
+                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-lg py-3 px-4"
+                />
               </div>
-              <button
-                onClick={handleUpdate}
-                className="mt-6 bg-blue-500 text-white py-3 px-6 rounded-md hover:bg-blue-600 transition-colors sm:text-lg"
-              >
-                Save Changes
-              </button>
-           
+              <div>
+                <label className="block text-gray-700">Email</label>
+                <input
+                  type="email"
+                  name="email"
+                  value={userProfile.email}
+                  onChange={handleFieldChange}
+                  placeholder="Email address"
+                  disabled
+                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-lg py-3 px-4"
+                />
+              </div>
+              <div>
+                <label className="block text-gray-700">Phone Number</label>
+                <input
+                  type="tel"
+                  name="phone"
+                  value={userProfile.phone}
+                  onChange={handleFieldChange}
+                  placeholder="Your phone number"
+                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-lg py-3 px-4"
+                />
+              </div>
+            </div>
+            <button
+              onClick={handleUpdate}
+              className="mt-6 bg-blue-500 text-white py-3 px-6 rounded-md hover:bg-blue-600 transition-colors sm:text-lg"
+            >
+              Save Changes
+            </button>
           </div>
         </div>
         <br />

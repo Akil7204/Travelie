@@ -9,6 +9,7 @@ import {
 } from "../../application/userService";
 import { findUserByEmail } from "../../Infrastructure/userRepository";
 import { sendEmail } from "../../uilts/sendEmail";
+import { profileAddBucket } from "../../uilts/profileAddBucket";
 
 // register the user
 export const register = async (req: Request, res: Response) => {
@@ -120,20 +121,26 @@ export const getAllTrips = async (
   }
 };
 
-export const updateProfile = async (req: any, res: Response) => {
+export const updateProfile = async (req: any, res: Response, next: NextFunction) => {
   try {
     const userId = req.userId;
     const { username, email, password, phone } = req.body;
-    const profileImage = req.file ? req.file.buffer : null;
+    const profileImage = req.file
     console.log({userId});
     console.log(req.body);
-    console.log(req.files);
+    console.log(profileImage);
+    if(profileImage){
+      const image = await profileAddBucket(profileImage);
+    }
+    
+    
     
     
     
 
   } catch (error: any) {
     console.log({ error });
+    next(error)
     res.status(400).json({ error: error.message });
   }
 };
