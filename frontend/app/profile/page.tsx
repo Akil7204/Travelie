@@ -8,6 +8,7 @@ import Navbar from "@/components/NavBar";
 import Footer from "@/components/Footer";
 import { toast } from "react-toastify";
 import { updateUserProfileAPI } from "../services/allAPI";
+import { useRouter } from "next/navigation";
 
 interface UserProfile {
   profileImage: File;
@@ -21,10 +22,11 @@ const ManageAccount: React.FC = () => {
   const [profileImagePreview, setProfileImagePreview] = useState<File | null>(
     null
   );
-  const [imageProfile, setImageProfile] = useState<File | null>(null)
+  const [imageProfile, setImageProfile] = useState<File | null>(null);
   console.log(imageProfile);
-  
+
   const [loading, setLoading] = useState<boolean>(false);
+  const router = useRouter();
 
   const [userProfile, setUserProfile] = useState<any>({
     profileImage:
@@ -48,7 +50,7 @@ const ManageAccount: React.FC = () => {
         }));
       };
       reader.readAsDataURL(image);
-      setImageProfile(image)
+      setImageProfile(image);
     }
   };
 
@@ -77,10 +79,7 @@ const ManageAccount: React.FC = () => {
     reqBody.append("username", username);
     reqBody.append("phone", phone.toString());
     if (imageProfile) {
-      reqBody.append(
-        "file",
-        imageProfile
-      );
+      reqBody.append("file", imageProfile);
     }
 
     // reqBody.append(
@@ -97,8 +96,10 @@ const ManageAccount: React.FC = () => {
 
         if (result) {
           toast.success("Your profile updated successfully");
-          localStorage.setItem("user", JSON.stringify(result));
-          // navigate("/");
+          localStorage.setItem("user", JSON.stringify(result.data));
+          setTimeout(() => {
+            router.push(`/`);
+          }, 3000);
         } else {
           toast.info(result || "Something went wrong!");
         }
