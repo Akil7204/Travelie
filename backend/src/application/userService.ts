@@ -5,6 +5,7 @@ import {
   createUser,
   findUserByEmail,
   updateUser,
+  updateUserProfile,
 } from "../Infrastructure/userRepository";
 
 import { User } from "../domain/user";
@@ -61,7 +62,7 @@ export const loginUser = async (email: string, password: string) => {
   const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET_KEY!, {
     expiresIn: "1h",
   });
-  
+
   // const secret: string | undefined = process.env.JWT_SECRET;
   // if (!secret) throw new Error("JWT Secret not found");
   // const data = { user, role: "travelie-user" };
@@ -122,4 +123,24 @@ export const googleLogin = async ({
 
 export const allTrips = async () => {
   return await allTripsFromDB();
+};
+
+export const updateUserProfileSER = async (
+  userId: string,
+  update: Partial<User>
+) => {
+  try {
+    console.log("userId:", userId);
+    // console.log('update:', update);
+    const updatedUser = await updateUserProfile(userId, update);
+    console.log(updateUser);
+
+    if (!updatedUser) {
+      throw new Error("User not found");
+    }
+    return updatedUser;
+  } catch (error) {
+    console.error("Error updating user profile:", error);
+    throw new Error("Failed to update user profile");
+  }
 };

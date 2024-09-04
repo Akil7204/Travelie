@@ -60,3 +60,9 @@ export const allTripsFromDB = async () => {
     createdAt: -1,
   });
 };
+
+// Function to find a user by ID
+export const findUserById = async (userId: string) => {
+  return UserModel.findById(userId);
+};
+

@@ -5,9 +5,13 @@ import {
   googleLogin,
   loginUser,
   registerUser,
+  updateUserProfileSER,
   verifyAndSaveUser,
 } from "../../application/userService";
-import { findUserByEmail } from "../../Infrastructure/userRepository";
+import {
+  findUserByEmail,
+  findUserById,
+} from "../../Infrastructure/userRepository";
 import { sendEmail } from "../../uilts/sendEmail";
 import { profileAddBucket } from "../../uilts/profileAddBucket";
 
@@ -121,26 +125,51 @@ export const getAllTrips = async (
   }
 };
 
-export const updateProfile = async (req: any, res: Response, next: NextFunction) => {
+export const updateProfile = async (
+  req: any,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const userId = req.userId;
     const { username, email, password, phone } = req.body;
-    const profileImage = req.file
-    console.log({userId});
-    console.log(req.body);
-    console.log(profileImage);
-    if(profileImage){
-      const image = await profileAddBucket(profileImage);
+    const profileImage = req.file;
+    // console.log({ userId });
+    // console.log(req.body);
+    // console.log(profileImage);
+    let imageUrl: any;
+    if (profileImage) {
+       imageUrl = await profileAddBucket(profileImage);
     }
-    
-    
-    
-    
-    
+    const user = await findUserById(userId);
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+    const proceedWithUpdate = async (image?: any) => {
+      try {
+        const updateData: any = {
+          username,
+          email,
+        };
+        if (imageUrl) {
+          updateData.profileImage = imageUrl;
+        }
+
+        const updatedUser = await updateUserProfileSER(userId, updateData);
+
+        res.status(200).json(updatedUser);
+      } catch (error: any) {
+        res
+          .status(400)
+          .json({ error: "Failed to update profile: " + error.message });
+      }
+    };
+
+    proceedWithUpdate(imageUrl);
 
   } catch (error: any) {
     console.log({ error });
-    next(error)
+    next(error);
     res.status(400).json({ error: error.message });
   }
 };

@@ -94,7 +94,6 @@ export const addTrip = async (req: any, res: Response): Promise<void> => {
     const companyId = req.companyId;
 
     const file = req.files as IMulterFile[];
-console.log({file});
 
     const imageUrl = await uploadImage(file);
 
