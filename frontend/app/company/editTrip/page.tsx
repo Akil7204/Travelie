@@ -178,13 +178,14 @@ const EditTrip = () => {
             + Edit Trip
           </button>
         </div>
+
         <form
-          id="editTripForm"
+          id="addTripForm"
           onSubmit={handleSubmit(onSubmit)}
           className="grid grid-cols-12 gap-6"
         >
-          {/* General Information */}
           <div className="col-span-8 space-y-6">
+            {/* General Information */}
             <div className="p-4 bg-white rounded-lg shadow-md">
               <h2 className="text-lg font-semibold mb-4">
                 General Information
@@ -478,56 +479,64 @@ const EditTrip = () => {
             </div>
           </div>
 
-          {/* Form Sections (Category, Status, Seats, etc.) */}
           <div className="col-span-4 space-y-6">
             {/* Category */}
-            <Controller
-              name="category"
-              control={control}
-              render={({ field }) => (
-                <select {...field} className="w-full p-2 border rounded">
-                  <option value="">Select Category</option>
-                  <option value="Bus">Bus</option>
-                  <option value="Traveller">Traveller</option>
-                  <option value="Jeep">Jeep</option>
-                </select>
+            <div className="p-4 bg-white rounded-lg shadow-md">
+              <h2 className="text-lg font-semibold mb-4">Category</h2>
+              <Controller
+                name="category"
+                control={control}
+                render={({ field }) => (
+                  <select {...field} className="w-full p-2 border rounded">
+                    <option value="">Select Category</option>
+                    <option value="Bus">bus</option>
+                    <option value="Traveller">Traveller</option>
+                    <option value="Jeep">Jeep</option>
+                  </select>
+                )}
+                rules={{ required: "Category is required" }}
+              />
+              {errors.category && (
+                <p className="text-red-500">{errors.category.message}</p>
               )}
-              rules={{ required: "Category is required" }}
-            />
-            {errors.category && (
-              <p className="text-red-500">{errors.category.message}</p>
-            )}
+            </div>
 
             {/* Status */}
-            <Controller
-              name="status"
-              control={control}
-              render={({ field }) => (
-                <select {...field} className="w-full p-2 border rounded">
-                  <option value="Upcoming">Upcoming</option>
-                  <option value="Ongoing">Ongoing</option>
-                  <option value="Completed">Completed</option>
-                </select>
-              )}
-            />
+            <div className="p-4 bg-white rounded-lg shadow-md">
+              <h2 className="text-lg font-semibold mb-4">Status</h2>
+              <Controller
+                name="status"
+                control={control}
+                render={({ field }) => (
+                  <select {...field} className="w-full p-2 border rounded">
+                    <option value="Upcoming">Upcoming</option>
+                    <option value="Ongoing">Ongoing</option>
+                    <option value="Completed">Completed</option>
+                  </select>
+                )}
+              />
+            </div>
 
             {/* Seats */}
-            <Controller
-              name="seats"
-              control={control}
-              render={({ field }) => (
-                <input
-                  type="text"
-                  placeholder="Seats"
-                  {...field}
-                  className="w-full p-2 border rounded"
-                />
+            <div className="p-4 bg-white rounded-lg shadow-md">
+              <h2 className="text-lg font-semibold mb-4">Seats</h2>
+              <Controller
+                name="seats"
+                control={control}
+                render={({ field }) => (
+                  <input
+                    type="text"
+                    placeholder="Seats"
+                    {...field}
+                    className="w-full p-2 border rounded"
+                  />
+                )}
+                rules={{ required: "Seats are required" }}
+              />
+              {errors.seats && (
+                <p className="text-red-500">{errors.seats.message}</p>
               )}
-              rules={{ required: "Seats are required" }}
-            />
-            {errors.seats && (
-              <p className="text-red-500">{errors.seats.message}</p>
-            )}
+            </div>
           </div>
         </form>
       </div>
