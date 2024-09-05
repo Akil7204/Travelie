@@ -29,7 +29,7 @@ export function toBeRedirectedAdminRoutes(pathname: string): boolean {
 
 // Company side; 
 
-const changeToCompanyDashboardRoutes = new Set(["/company/dashboard", "/company/addTrip", "/company/trips"]);
+const changeToCompanyDashboardRoutes = new Set(["/company/dashboard", "/company/addTrip", "/company/trips", "/company/editTrip"]);
 
 export function isProtectedCompanyRoute(pathname: string): boolean {
   return changeToCompanyDashboardRoutes.has(pathname);

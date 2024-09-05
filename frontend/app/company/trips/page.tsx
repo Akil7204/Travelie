@@ -128,7 +128,7 @@ const TripList: React.FC = () => {
                   </td>
                   <td className="py-3 px-4">{formattedDates[index]}</td>
                   <td className="py-3 px-4 flex space-x-2">
-                    <Link href={`/company/edit/${trip._id}`} passHref>
+                    <Link href={`/company/editTrip/${trip._id}`} passHref>
                       edit
                     </Link>
                   </td>
