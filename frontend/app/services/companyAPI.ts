@@ -37,7 +37,16 @@ export const addTripAPI = async (data: any) => {
   return await axios.post(`${SERVER_URL_COMPANY}/addTrip`, data, {withCredentials: true});
 }
 
-export const getAllTripsAPI = async () => {
-  const response =  await axios.get(`${SERVER_URL_COMPANY}/trips`, {withCredentials: true});
-  return response.data;
-}
+export const getAllTripsAPI = async (page: number, tripsPerPage: number) => {
+  try {
+    const response = await axios.get(`${SERVER_URL_COMPANY}/trips`, {
+      params: { page, limit: tripsPerPage },
+      withCredentials: true
+    });
+    
+    return response.data; // Make sure this returns both `trips` and `totalCount` from your backend
+  } catch (error) {
+    console.error('Error fetching trips:', error);
+    throw error; // Throw the error to be handled in the calling function
+  }
+};

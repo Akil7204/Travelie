@@ -4,6 +4,7 @@ import Link from "next/link";
 import Layout from "@/components/company/Layout";
 import { getAllTripsAPI } from "@/app/services/companyAPI";
 import { AxiosResponse } from "axios";
+import Pagination from "@/components/page/Pagination";
 // import { FaEdit, FaTrash } from 'react-icons/fa';
 
 interface Trip {
@@ -29,22 +30,34 @@ interface Trip {
 const TripList: React.FC = () => {
   const [trips, setTrips] = useState<Trip[]>([]);
   const [formattedDates, setFormattedDates] = useState<string[]>([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1); // Total pages will be dynamic
+  const tripsPerPage = 4; // Adjust as needed
 
+  // Handle page change in pagination
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
+
+  // Fetch trips with pagination
+  const fetchTrips = async (page: number) => {
+    try {
+      const response = await getAllTripsAPI(page, tripsPerPage); // Fetch trips from API with pagination
+      console.log("API Response:", response); // Log API response
+
+      setTrips(response.trips); // Set fetched trips
+      setTotalPages(Math.ceil(response.totalCount / tripsPerPage)); // Calculate total pages dynamically
+    } catch (error) {
+      console.error("Failed to fetch trips:", error);
+    }
+  };
+
+  // Fetch trips whenever currentPage changes
   useEffect(() => {
-    const fetchTrips = async () => {
-      try {
-        const response = await getAllTripsAPI(); // Fetch trips from API
-        console.log("API Response:", response); // Log API response
+    fetchTrips(currentPage);
+  }, [currentPage]);
 
-        setTrips(response); // Update state with fetched trips
-      } catch (error) {
-        console.error("Failed to fetch trips:", error);
-      }
-    };
-
-    fetchTrips(); // Call fetch function when component mounts
-  }, []);
-
+  // Format trip starting dates
   useEffect(() => {
     if (trips.length > 0) {
       const dates = trips.map((trip) => {
@@ -58,6 +71,7 @@ const TripList: React.FC = () => {
       setFormattedDates(dates);
     }
   }, [trips]);
+
 
   return (
     <Layout>
@@ -123,24 +137,7 @@ const TripList: React.FC = () => {
             </tbody>
           </table>
           <div className="mt-4 flex justify-between items-center">
-            <p className="text-gray-500">Showing 1-10 from 100</p>
-            <div className="flex space-x-2">
-              <button className="py-1 px-2 bg-gray-200 text-gray-500 rounded">
-                1
-              </button>
-              <button className="py-1 px-2 bg-gray-200 text-gray-500 rounded">
-                2
-              </button>
-              <button className="py-1 px-2 bg-gray-200 text-gray-500 rounded">
-                3
-              </button>
-              <button className="py-1 px-2 bg-gray-200 text-gray-500 rounded">
-                ...
-              </button>
-              <button className="py-1 px-2 bg-gray-200 text-gray-500 rounded">
-                5
-              </button>
-            </div>
+            <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange} />
           </div>
         </div>
       </div>
