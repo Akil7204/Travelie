@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import { otpGenerator } from "../../uilts/otpGenerator";
 import {
   getAllTrips,
+  getTotalCount,
   loginCompany,
   registerCompany,
   uploadImage,
@@ -114,11 +115,15 @@ export const getTripsById = async (
   next: NextFunction
 ): Promise<void> => {
   try {
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const skip = (page - 1) * limit;
     const comapanyId = req.companyId;
     
-    const allTrips = await getAllTrips(comapanyId);
+    const allTrips = await getAllTrips(comapanyId, skip,  limit);
+    const totalCount = await getTotalCount()
     
-    res.status(200).json(allTrips);
+    res.status(200).json({allTrips, totalCount});
   } catch (error) {
     next(error);
   }

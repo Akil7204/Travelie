@@ -88,9 +88,18 @@ export const CreatingTrip = async (TripData: any) => {
   }
 };
 
-export const getAllTripsFromDB = async (comapanyId: string) => {
+export const getAllTripsFromDB = async (comapanyId: string, skip: number, limit: number) => {
 
-  return await Trips.find({companyId: comapanyId}).sort({
+  return await Trips.find({companyId: comapanyId}).skip(skip).limit(limit).sort({
     createdAt: -1,
   });
+};
+
+export const getAllCountFromDb = async (): Promise<number> => {
+  try {
+    return await Trips.countDocuments(); // Count all documents in the Trip collection
+  } catch (error) {
+    console.error("Error fetching count from database:", error);
+    throw error;
+  }
 };

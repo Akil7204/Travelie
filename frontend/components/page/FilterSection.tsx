@@ -2,6 +2,8 @@
 import React from 'react';
 
 const FilterSection: React.FC = () => {
+
+  
   return (
     <aside className="w-full md:w-1/4 p-4 bg-white shadow-md rounded-lg">
       <div className="mb-6">

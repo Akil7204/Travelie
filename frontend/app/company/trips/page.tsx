@@ -45,7 +45,7 @@ const TripList: React.FC = () => {
       const response = await getAllTripsAPI(page, tripsPerPage); // Fetch trips from API with pagination
       console.log("API Response:", response); // Log API response
 
-      setTrips(response.trips); // Set fetched trips
+      setTrips(response.allTrips); // Set fetched trips
       setTotalPages(Math.ceil(response.totalCount / tripsPerPage)); // Calculate total pages dynamically
     } catch (error) {
       console.error("Failed to fetch trips:", error);

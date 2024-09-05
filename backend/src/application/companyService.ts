@@ -4,6 +4,7 @@ import {
   createCompany,
   CreatingTrip,
   findCompanyByEmail,
+  getAllCountFromDb,
   getAllTripsFromDB,
   updateCompany,
 } from "../Infrastructure/companyRepository";
@@ -97,6 +98,10 @@ export const uploadTrip = async (
   }
 };
 
-export const getAllTrips = async (comapanyId: string) => {
-  return await getAllTripsFromDB(comapanyId);
+export const getAllTrips = async (comapanyId: string,skip: number, limit: number, ) => {
+  return await getAllTripsFromDB(comapanyId, skip, limit);
 };
+
+export const getTotalCount = async() => {
+  return await getAllCountFromDb();
+}
