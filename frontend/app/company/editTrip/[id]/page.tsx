@@ -12,6 +12,7 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 import Layout from "@/components/company/Layout";
+import { getTripByIdAPI } from "@/app/services/companyAPI";
 
 type FormValues = {
   tripName: string;
@@ -75,7 +76,9 @@ const EditTrip = () => {
       if (!tripId) return;
 
       try {
-        // const tripData = await getTripByIdAPI(tripId);
+        const tripData = await getTripByIdAPI(tripId);
+        console.log(tripData);
+        
         // // Populate the form with fetched data
         // setValue("tripName", tripData.tripName);
         // setValue("description", tripData.description);

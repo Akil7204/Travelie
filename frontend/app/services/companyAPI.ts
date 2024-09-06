@@ -50,3 +50,13 @@ export const getAllTripsAPI = async (page: number, tripsPerPage: number) => {
     throw error; // Throw the error to be handled in the calling function
   }
 };
+
+export const getTripByIdAPI = async (tripId: string) => {
+  try {
+    const response = await axios.get(`${SERVER_URL_COMPANY}/editTrip/${tripId}`, {withCredentials: true});
+    return response.data; // Axios automatically parses the JSON response
+  } catch (error) {
+    console.error('Failed to fetch trip data:', error);
+    throw error;
+  }
+};
