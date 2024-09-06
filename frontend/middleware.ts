@@ -31,7 +31,8 @@ export async function middleware(req: NextRequest) {
       const feedUrl = new URL("/admin/dashboard", req.url);
       return NextResponse.redirect(feedUrl);
     }
-
+    
+    // company side
     const CompanyTokenVerified = await verifyToken("companyToken", req);
 
     const isProtectedCompany = isProtectedCompanyRoute(pathname);

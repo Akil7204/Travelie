@@ -103,3 +103,7 @@ export const getAllCountFromDb = async (): Promise<number> => {
     throw error;
   }
 };
+
+export const getTripById = async (id: string): Promise<Trip | null> => {
+  return await Trips.findById(id);
+};

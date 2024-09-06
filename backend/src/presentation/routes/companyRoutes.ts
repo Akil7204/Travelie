@@ -1,5 +1,5 @@
 import express  from "express";
-import { addTrip, getTripsById, login, register, verifyOtp } from "../controllers/companyController";
+import { addTrip, getTripById, getTripsById, login, register, verifyOtp } from "../controllers/companyController";
 import upload from "../../uilts/multer";
 import { verifycompany } from "../MiddleWare/companyJWT";
 
@@ -13,6 +13,7 @@ router.post("/login", login);
 
 router.get("/trips", verifycompany, getTripsById);
 router.post("/addTrip", verifycompany, upload.array("images"), addTrip);
+router.get("/editTrip/:id", verifycompany, getTripById);
 
 
 export default router;

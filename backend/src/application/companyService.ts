@@ -6,6 +6,7 @@ import {
   findCompanyByEmail,
   getAllCountFromDb,
   getAllTripsFromDB,
+  getTripById,
   updateCompany,
 } from "../Infrastructure/companyRepository";
 import { Company } from "../domain/company";
@@ -105,3 +106,11 @@ export const getAllTrips = async (comapanyId: string,skip: number, limit: number
 export const getTotalCount = async() => {
   return await getAllCountFromDb();
 }
+
+export const fetchTripById = async (tripId: string): Promise<Trip> => {
+  const trip = await getTripById(tripId);
+  if (!trip) {
+    throw new Error('Trip not found');
+  }
+  return trip;
+};

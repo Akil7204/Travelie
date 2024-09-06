@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams, useParams  } from "next/navigation";
+// import { useRouter } from "next/router"
 import {
   useForm,
   Controller,
@@ -31,9 +32,15 @@ type FormValues = {
 };
 
 const EditTrip = () => {
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const tripId = searchParams.get("id"); // Fetch trip ID from query params
+  // const router = useRouter();
+  // const searchParams = useSearchParams();
+  // const tripId = searchParams.get("id"); // Fetch trip ID from query params
+
+  // const router = useRouter();
+  // const { tripId }: any = router.query; 
+
+  const params = useParams(); // Access the dynamic parameters
+  const tripId: any = params.id;
 
   const {
     control,
@@ -73,11 +80,12 @@ const EditTrip = () => {
   // Fetch the trip details when the component loads
   useEffect(() => {
     const fetchTripDetails = async () => {
-      if (!tripId) return;
+      if (!tripId) return console.log("nothing");
+      
 
       try {
         const tripData = await getTripByIdAPI(tripId);
-        console.log(tripData);
+        console.log({tripData});
         
         // // Populate the form with fetched data
         // setValue("tripName", tripData.tripName);
