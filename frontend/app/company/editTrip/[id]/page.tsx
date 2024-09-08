@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter, useSearchParams, useParams  } from "next/navigation";
+import { useRouter, useSearchParams, useParams } from "next/navigation";
 // import { useRouter } from "next/router"
 import {
   useForm,
@@ -32,13 +32,6 @@ type FormValues = {
 };
 
 const EditTrip = () => {
-  // const router = useRouter();
-  // const searchParams = useSearchParams();
-  // const tripId = searchParams.get("id"); // Fetch trip ID from query params
-
-  // const router = useRouter();
-  // const { tripId }: any = router.query; 
-
   const params = useParams(); // Access the dynamic parameters
   const tripId: any = params.id;
 
@@ -81,25 +74,31 @@ const EditTrip = () => {
   useEffect(() => {
     const fetchTripDetails = async () => {
       if (!tripId) return console.log("nothing");
-      
 
       try {
         const tripData = await getTripByIdAPI(tripId);
-        console.log({tripData});
-        
-        // // Populate the form with fetched data
-        // setValue("tripName", tripData.tripName);
-        // setValue("description", tripData.description);
-        // setValue("days", tripData.days);
-        // setValue("startingFrom", tripData.startingFrom);
-        // setValue("endingAt", tripData.endingAt);
-        // setValue("startingDate", tripData.startingDate);
-        // setValue("endingDate", tripData.endingDate);
-        // setValue("basePrice", tripData.basePrice);
-        // setValue("locations", tripData.locations);
-        // setValue("category", tripData.category);
-        // setValue("seats", tripData.seats);
-        // setValue("status", tripData.status);
+        console.log({ tripData });
+        // Function to format date from ISO to dd-mm-yyyy
+        const formatDateToDDMMYYYY = (isoDate: any) => {
+          const date = new Date(isoDate);
+          const day = String(date.getDate()).padStart(2, "0"); // Get day and pad with leading zero if needed
+          const month = String(date.getMonth() + 1).padStart(2, "0"); // Get month (0-based) and pad with leading zero
+          const year = date.getFullYear();
+          return `${day}-${month}-${year}`; // Return formatted date
+        }; // Extract YYYY-MM-DD
+        // Populate the form with fetched data
+        setValue("tripName", tripData.tripName);
+        setValue("description", tripData.description);
+        setValue("days", tripData.days);
+        setValue("startingFrom", tripData.startingFrom);
+        setValue("endingAt", tripData.formattedEndingDate);
+        setValue("startingDate", tripData.startingDate);
+        setValue("endingDate", formatDateToDDMMYYYY(tripData.endingDate));
+        setValue("basePrice", tripData.basePrice);
+        setValue("locations", tripData.locations);
+        setValue("category", tripData.category);
+        setValue("seats", tripData.seats);
+        setValue("status", tripData.status);
         // Set images
         // Handle images logic if necessary
       } catch (error) {
