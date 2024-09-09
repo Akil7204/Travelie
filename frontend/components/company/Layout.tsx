@@ -79,18 +79,18 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                   Trips
                 </Link>
               </li>
-              {/* <li className="px-6 py-3">
+              <li className="px-6 py-3">
                 <Link
                   href="/company/category"
                   className={`rounded-lg block text-xl p-3 font-semibold  ${
-                    isActive("/company/category")
+                    isActive("/company/categorys")
                       ? "text-blue-700 bg-blue-200"
                       : "hover:bg-gray-200"
                   }`}
                 >
                   Category
                 </Link>
-              </li> */}
+              </li>
               <li className="px-6 py-3">
                 <Link
                   href="/company/booking-list"
