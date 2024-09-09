@@ -1,18 +1,22 @@
-import mongoose, { Schema, Document } from 'mongoose';
+import mongoose, { Schema, Document } from "mongoose";
 
 // Updated interface with _id included
 export interface ICategory extends Document {
-  _id: mongoose.Types.ObjectId; 
   name: string;
-  createdAt: Date;
-  updatedAt: Date;
+  companyId: mongoose.Schema.Types.ObjectId;
 }
 
-const CategorySchema: Schema = new Schema({
-  name: { type: String, required: true, unique: true },
-  createdAt: { type: Date, default: Date.now },
-  updatedAt: { type: Date, default: Date.now },
-});
+const CategorySchema: Schema = new Schema(
+  {
+    name: { type: String, required: true },
+    companyId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Company", // it is reference of company
+      required: true,
+    },
+  },
+  { timestamps: true }
+);
 
 // Ensure the model is typed correctly with ICategory
-export const Category = mongoose.model<ICategory>('Category', CategorySchema);
+export const Category = mongoose.model<ICategory>("Category", CategorySchema);

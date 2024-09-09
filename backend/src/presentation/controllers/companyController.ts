@@ -6,6 +6,7 @@ import {
   getTotalCount,
   loginCompany,
   registerCompany,
+  uploadCategory,
   uploadImage,
   uploadTrip,
   verifyAndSaveCompany,
@@ -138,5 +139,22 @@ export const getTripById = async (req: Request, res: Response): Promise<void> =>
   } catch (error : any) {
     console.error('Error fetching trip:', error);
     res.status(404).json({ message: error.message });
+  }
+};
+
+export const addCategory = async (req: any, res: Response): Promise<void> => {
+  try {
+    const body = req.body;
+    const companyId = req.companyId;
+
+
+    const categoryData = await uploadCategory(companyId, body);
+    if (categoryData) {
+      res.status(200).json("Category Added successfully");
+    } else {
+      res.status(400).json({ error: "Category not added :- somthing went worng" });
+    }
+  } catch (error) {
+    console.log("error is: ", error);
   }
 };

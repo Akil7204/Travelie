@@ -1,6 +1,7 @@
 import mongoose, { Schema, Document } from "mongoose";
 import { Company } from "../domain/company";
 import { Trip, Trips } from "../domain/trips";
+import { Category } from "../domain/category";
 
 // Extending the Company interface with mongoose Document
 interface CompanyModel extends Company, Document {
@@ -106,4 +107,26 @@ export const getAllCountFromDb = async (): Promise<number> => {
 
 export const getTripById = async (id: string): Promise<Trip | null> => {
   return await Trips.findById(id);
+};
+
+
+
+export const CreatingCategory = async (categoryData: any) => {
+  try {
+    // Create a new category instance
+    const category = new Category({
+      categoryName: categoryData.categoryName,
+      companyId: categoryData.companyId,
+    });
+
+    // Save the trip to the database
+    const savedCategory = await category.save();
+    console.log("Saved Trip: ", savedCategory);
+
+    return savedCategory;
+    
+  } catch (error) {
+    console.error("Error saving trip: ", error);
+    throw error;
+  }
 };

@@ -2,6 +2,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import {
   createCompany,
+  CreatingCategory,
   CreatingTrip,
   findCompanyByEmail,
   getAllCountFromDb,
@@ -113,4 +114,20 @@ export const fetchTripById = async (tripId: string): Promise<Trip> => {
     throw new Error('Trip not found');
   }
   return trip;
+};
+
+
+export const uploadCategory = async (
+  companyId: string,
+  data: Trip,
+) => {
+  try {
+    const categoryData = { companyId, data };
+
+    const addedCategory = await CreatingCategory(categoryData);
+    // console.log(tripsadd);
+    return addedCategory;
+  } catch (error: any) {
+    throw new Error(error.message);
+  }
 };
