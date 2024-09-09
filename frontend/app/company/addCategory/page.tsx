@@ -1,6 +1,6 @@
 "use client";
 
-import { addTripAPI } from "@/app/services/companyAPI";
+import { addCategoryAPI, addTripAPI } from "@/app/services/companyAPI";
 import Layout from "@/components/company/Layout";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -44,7 +44,7 @@ const AddCategory = () => {
 
 
     try {
-      const result = await addTripAPI(formData);
+      const result = await addCategoryAPI(formData);
       if (result) {
 
         toast.success("Category added successfully");

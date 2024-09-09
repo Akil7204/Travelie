@@ -106,7 +106,7 @@ const TripList: React.FC = () => {
               </tr>
             </thead>
             <tbody>
-              {trips.map((trip, index) => (
+              {trips?.map((trip, index) => (
                 <tr key={trip._id} className="border-b">
                   <td className="py-3 px-4">{trip.tripName}</td>
                   <td className="py-3 px-4">{trip.category}</td>

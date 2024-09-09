@@ -29,7 +29,7 @@ export function toBeRedirectedAdminRoutes(pathname: string): boolean {
 
 // Company side; 
 
-const changeToCompanyDashboardRoutes = new Set(["/company/dashboard", "/company/addTrip", "/company/trips" ]);
+const changeToCompanyDashboardRoutes = new Set(["/company/dashboard", "/company/addTrip", "/company/trips", "/company/categorys", "/company/addCategory" ]);
 
 const EditTripRoutePattern = /^\/company\/editTrip\/[^/]+\/?.*$/
 

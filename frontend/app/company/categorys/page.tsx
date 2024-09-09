@@ -59,7 +59,7 @@ const TripList: React.FC = () => {
 
   // Format trip starting dates
   useEffect(() => {
-    if (categorys.length > 0) {
+    if (categorys?.length > 0) {
       const dates = categorys.map((trip) => {
         const startingDate = new Date(trip.startingDate);
         return startingDate.toLocaleDateString("en-US", {
@@ -101,7 +101,7 @@ const TripList: React.FC = () => {
               </tr>
             </thead>
             <tbody>
-              {categorys.map((category, index) => (
+              {categorys?.map((category, index) => (
                 <tr key={category._id} className="border-b">
                   <td className="py-3 px-4">{category.tripName}</td>
                   <td className="py-3 px-4">{formattedDates[index]}</td>
