@@ -15,7 +15,7 @@ router.get("/trips", verifycompany, getTripsById);
 router.post("/addTrip", verifycompany, upload.array("images"), addTrip);
 router.get("/editTrip/:id", verifycompany, getTripById);
 
-router.get("/addCategory", verifycompany, addCategory);
+router.post("/addCategory", verifycompany, upload.any(), addCategory);
 
 
 export default router;

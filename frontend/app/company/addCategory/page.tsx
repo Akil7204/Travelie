@@ -28,7 +28,6 @@ const AddCategory = () => {
   } = useForm<FormValues>({
     defaultValues: {
       categoryName: "",
-
     },
   });
 
@@ -36,12 +35,16 @@ const AddCategory = () => {
 
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
     console.log("Form Data:", data);
-
+    console.log(data.categoryName);
+    
     // Create a new FormData object
     const formData = new FormData();
 
-    formData.append("categoryName", data.categoryName);
 
+    formData.append("categoryName", data.categoryName);
+    
+    console.log(formData);
+    
 
     try {
       const result = await addCategoryAPI(formData);

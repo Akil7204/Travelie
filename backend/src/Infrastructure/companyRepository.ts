@@ -113,20 +113,22 @@ export const getTripById = async (id: string): Promise<Trip | null> => {
 
 export const CreatingCategory = async (categoryData: any) => {
   try {
+    console.log({categoryData});
+    
     // Create a new category instance
     const category = new Category({
-      categoryName: categoryData.categoryName,
+      name: categoryData.data.categoryName,
       companyId: categoryData.companyId,
     });
 
     // Save the trip to the database
     const savedCategory = await category.save();
-    console.log("Saved Trip: ", savedCategory);
+    console.log("Saved category: ", savedCategory);
 
     return savedCategory;
     
   } catch (error) {
-    console.error("Error saving trip: ", error);
+    console.error("Error saving category: ", error);
     throw error;
   }
 };

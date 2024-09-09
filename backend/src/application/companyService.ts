@@ -13,6 +13,7 @@ import {
 import { Company } from "../domain/company";
 import { uploadToS3Bucket } from "../uilts/s3bucket";
 import { Trip, Trips } from "../domain/trips";
+import { Category } from "../domain/category";
 
 // registerUser new Company
 export const registerCompany = async (company: Company) => {
@@ -119,7 +120,7 @@ export const fetchTripById = async (tripId: string): Promise<Trip> => {
 
 export const uploadCategory = async (
   companyId: string,
-  data: Trip,
+  data: any,
 ) => {
   try {
     const categoryData = { companyId, data };
