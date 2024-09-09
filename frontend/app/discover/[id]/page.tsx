@@ -7,6 +7,7 @@ import Footer from "@/components/Footer";
 import { useParams } from "next/navigation";
 import { detailTripsAPI } from "@/app/services/allAPI";
 import { DNA, InfinitySpin } from "react-loader-spinner";
+import Modal from "@/components/page/ModalSection";
 
 interface Trip {
   _id: string;
@@ -28,7 +29,9 @@ interface Trip {
 }
 
 const TripPage: React.FC = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [tripData, setTripData] = useState<Trip | undefined>();
+  const [bookedSeat, setBookedSeat] = useState();
   const [loading, setLoading] = useState<boolean>(true);
   const params = useParams(); // Access the dynamic parameters
   const tripId: any = params.id;
@@ -50,6 +53,20 @@ const TripPage: React.FC = () => {
 
     fetchTrips(); // Call fetch function when component mounts
   }, []);
+
+  const handleBookClick = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleProceedToPayment = () => {
+    // Logic to proceed to the payment page
+    console.log('Proceeding to payment...');
+    // Add your navigation logic here, e.g., using Next.js router
+  };
 
   return (
     <>
@@ -161,14 +178,22 @@ const TripPage: React.FC = () => {
             </div>
 
             <div className="mt-8">
-              <button className="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600">
+              <button onClick={handleBookClick} className="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600">
                 Book
               </button>
             </div>
+
           </>
         )}
       </div>
+
       <Footer />
+      <Modal 
+        isOpen={isModalOpen} 
+        onClose={handleCloseModal} 
+        availableSeats={tripData?.seats || 0 - (tripData?.bookedSeats || 0)} 
+        onProceed={handleProceedToPayment} 
+      />
     </>
   );
 };

@@ -58,7 +58,7 @@ export const allTripsFromDB = async () => {
 
   return await Trips.find().sort({
     createdAt: -1,
-  });
+  }).populate('companyId');
 };
 
 // Function to find a user by ID
