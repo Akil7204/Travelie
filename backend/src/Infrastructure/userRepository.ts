@@ -1,6 +1,6 @@
 import mongoose, { Schema, Document } from "mongoose";
 import { User } from "../domain/user";
-import { Trips } from "../domain/trips";
+import { Trip, Trips } from "../domain/trips";
 
 // Extending the User interface with mongoose Document
 interface UserModel extends User, Document {
@@ -64,5 +64,9 @@ export const allTripsFromDB = async () => {
 // Function to find a user by ID
 export const findUserById = async (userId: string) => {
   return UserModel.findById(userId);
+};
+
+export const getDetailTrip = async (id: string): Promise<Trip | null> => {
+  return await Trips.findById(id);
 };
 

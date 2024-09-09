@@ -26,14 +26,11 @@ interface Trip {
   bookedSeats?: number;
 }
 
-const params = useParams(); // Access the dynamic parameters
-const tripId: any = params.id;
-
-
-
-
 const TripPage: React.FC = () => {
   const [trips, setTrips] = useState<Trip[]>([]);
+
+  const params = useParams(); // Access the dynamic parameters
+  const tripId: any = params.id;
 
   useEffect(() => {
     const fetchTrips = async () => {

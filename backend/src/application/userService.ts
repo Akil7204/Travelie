@@ -4,11 +4,13 @@ import {
   allTripsFromDB,
   createUser,
   findUserByEmail,
+  getDetailTrip,
   updateUser,
   updateUserProfile,
 } from "../Infrastructure/userRepository";
 
 import { User } from "../domain/user";
+import { Trip } from "../domain/trips";
 
 // registerUser new User
 export const registerUser = async (user: User) => {
@@ -143,4 +145,12 @@ export const updateUserProfileSER = async (
     console.error("Error updating user profile:", error);
     throw new Error("Failed to update user profile");
   }
+};
+
+export const fetchDetailTrip = async (tripId: string): Promise<Trip> => {
+  const trip = await getDetailTrip(tripId);
+  if (!trip) {
+    throw new Error('Trip not found');
+  }
+  return trip;
 };
