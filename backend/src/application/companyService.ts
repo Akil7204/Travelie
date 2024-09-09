@@ -5,6 +5,8 @@ import {
   CreatingCategory,
   CreatingTrip,
   findCompanyByEmail,
+  getAllCategoryFromDB,
+  getAllCountCategoryFromDb,
   getAllCountFromDb,
   getAllTripsFromDB,
   getTripById,
@@ -132,3 +134,11 @@ export const uploadCategory = async (
     throw new Error(error.message);
   }
 };
+
+export const getAllCategory = async (comapanyId: string,skip: number, limit: number, ) => {
+  return await getAllCategoryFromDB(comapanyId, skip, limit);
+};
+
+export const getTotalCountCategory = async() => {
+  return await getAllCountCategoryFromDb();
+}

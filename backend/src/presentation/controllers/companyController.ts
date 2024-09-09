@@ -2,8 +2,10 @@ import { NextFunction, Request, Response } from "express";
 import { otpGenerator } from "../../uilts/otpGenerator";
 import {
   fetchTripById,
+  getAllCategory,
   getAllTrips,
   getTotalCount,
+  getTotalCountCategory,
   loginCompany,
   registerCompany,
   uploadCategory,
@@ -156,5 +158,25 @@ export const addCategory = async (req: any, res: Response): Promise<void> => {
     }
   } catch (error) {
     console.log("error is: ", error);
+  }
+};
+
+export const getCategorysById = async (
+  req: any,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
+  try {
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const skip = (page - 1) * limit;
+    const comapanyId = req.companyId;
+    
+    const allCategory = await getAllCategory(comapanyId, skip,  limit);
+    const totalCount = await getTotalCountCategory()
+    
+    res.status(200).json({allCategory, totalCount});
+  } catch (error) {
+    next(error);
   }
 };

@@ -80,3 +80,17 @@ export const addCategoryAPI = async (data: any) => {
     },
   });
 };
+
+export const getAllCategoryAPI = async (page: number, categoyPerPage: number) => {
+  try {
+    const response = await axios.get(`${SERVER_URL_COMPANY}/categorys`, {
+      params: { page, limit: categoyPerPage },
+      withCredentials: true,
+    });
+
+    return response.data; // Make sure this returns both `trips` and `totalCount` from your backend
+  } catch (error) {
+    console.error("Error fetching category:", error);
+    throw error; // Throw the error to be handled in the calling function
+  }
+};

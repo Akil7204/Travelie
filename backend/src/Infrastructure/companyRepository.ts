@@ -113,8 +113,6 @@ export const getTripById = async (id: string): Promise<Trip | null> => {
 
 export const CreatingCategory = async (categoryData: any) => {
   try {
-    console.log({categoryData});
-    
     // Create a new category instance
     const category = new Category({
       name: categoryData.data.categoryName,
@@ -123,12 +121,27 @@ export const CreatingCategory = async (categoryData: any) => {
 
     // Save the trip to the database
     const savedCategory = await category.save();
-    console.log("Saved category: ", savedCategory);
 
     return savedCategory;
     
   } catch (error) {
     console.error("Error saving category: ", error);
+    throw error;
+  }
+};
+
+export const getAllCategoryFromDB = async (comapanyId: string, skip: number, limit: number) => {
+
+  return await Category.find({companyId: comapanyId}).skip(skip).limit(limit).sort({
+    createdAt: -1,
+  });
+};
+
+export const getAllCountCategoryFromDb = async (): Promise<number> => {
+  try {
+    return await Category.countDocuments(); // Count all documents in the Trip collection
+  } catch (error) {
+    console.error("Error fetching count from database:", error);
     throw error;
   }
 };

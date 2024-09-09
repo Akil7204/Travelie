@@ -2,37 +2,23 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import Layout from "@/components/company/Layout";
-import { getAllTripsAPI } from "@/app/services/companyAPI";
+import { getAllCategoryAPI, getAllTripsAPI } from "@/app/services/companyAPI";
 import { AxiosResponse } from "axios";
 import Pagination from "@/components/page/Pagination";
 // import { FaEdit, FaTrash } from 'react-icons/fa';
 
-interface Trip {
+interface Category {
   _id: string;
-  tripName: string;
-  description: string;
-  images: string[];
-  days: number;
-  startingFrom: string;
-  endingAt: string;
-  startingDate: Date;
-  endingDate: Date;
-  price: number;
-  locations: string[];
-  status: string;
-  companyId: string;
-  category: string;
-  seats: number;
-  bookedSeats?: number;
+  name: string;
 }
 
 
 const TripList: React.FC = () => {
-  const [categorys, setCategory] = useState<Trip[]>([]);
+  const [categorys, setCategory] = useState<Category[]>([]);
   const [formattedDates, setFormattedDates] = useState<string[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1); // Total pages will be dynamic
-  const tripsPerPage = 4; // Adjust as needed
+  const categoyPerPage = 5; // Adjust as needed
 
   // Handle page change in pagination
   const handlePageChange = (page: number) => {
@@ -42,11 +28,11 @@ const TripList: React.FC = () => {
   // Fetch trips with pagination
   const fetchTrips = async (page: number) => {
     try {
-      const response = await getAllTripsAPI(page, tripsPerPage); // Fetch trips from API with pagination
+      const response = await getAllCategoryAPI(page, categoyPerPage); // Fetch trips from API with pagination
       console.log("API Response:", response); // Log API response
 
       setCategory(response.allCategory); // Set fetched trips
-      setTotalPages(Math.ceil(response.totalCount / tripsPerPage)); // Calculate total pages dynamically
+      setTotalPages(Math.ceil(response.totalCount / categoyPerPage)); // Calculate total pages dynamically
     } catch (error) {
       console.error("Failed to fetch trips:", error);
     }
@@ -56,21 +42,6 @@ const TripList: React.FC = () => {
   useEffect(() => {
     fetchTrips(currentPage);
   }, [currentPage]);
-
-  // Format trip starting dates
-  useEffect(() => {
-    if (categorys?.length > 0) {
-      const dates = categorys.map((trip) => {
-        const startingDate = new Date(trip.startingDate);
-        return startingDate.toLocaleDateString("en-US", {
-          month: "short", // Short month name, e.g., "Sep"
-          day: "2-digit", // Two-digit day, e.g., "01"
-          year: "numeric", // Full year, e.g., "2024"
-        });
-      });
-      setFormattedDates(dates);
-    }
-  }, [categorys]);
 
 
   return (
@@ -92,7 +63,7 @@ const TripList: React.FC = () => {
               <li className="cursor-pointer">Completed</li> */}
             </ul>
           </div>
-          <table className="min-w-full bg-white border">
+          <table className=" min-w-full justify-evenly bg-white border">
             <thead>
               <tr>
                 <th className="py-3 px-4 text-left">Category Id</th>
@@ -103,8 +74,8 @@ const TripList: React.FC = () => {
             <tbody>
               {categorys?.map((category, index) => (
                 <tr key={category._id} className="border-b">
-                  <td className="py-3 px-4">{category.tripName}</td>
-                  <td className="py-3 px-4">{formattedDates[index]}</td>
+                  <td className="py-3 px-4">{category._id}</td>
+                  <td className="py-3 px-4">{category.name}</td>
                   <td className="py-3 px-4 flex space-x-2">
                     <Link href={`/company/editCategory/${category._id}`} passHref>
                       edit
