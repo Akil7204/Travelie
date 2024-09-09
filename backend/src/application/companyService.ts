@@ -9,6 +9,7 @@ import {
   getAllCountCategoryFromDb,
   getAllCountFromDb,
   getAllTripsFromDB,
+  getCategoryById,
   getTripById,
   updateCompany,
 } from "../Infrastructure/companyRepository";
@@ -142,3 +143,11 @@ export const getAllCategory = async (comapanyId: string,skip: number, limit: num
 export const getTotalCountCategory = async() => {
   return await getAllCountCategoryFromDb();
 }
+
+export const fetchCategoryById = async (categoryId: string): Promise<Trip> => {
+  const category = await getCategoryById(categoryId);
+  if (!category) {
+    throw new Error('category not found');
+  }
+  return category;
+};

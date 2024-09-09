@@ -1,5 +1,5 @@
 import express  from "express";
-import { addCategory, addTrip, getCategorysById, getTripById, getTripsById, login, register, verifyOtp } from "../controllers/companyController";
+import { addCategory, addTrip, getCategoryById, getCategorysById, getTripById, getTripsById, login, register, verifyOtp } from "../controllers/companyController";
 import upload from "../../uilts/multer";
 import { verifycompany } from "../MiddleWare/companyJWT";
 
@@ -18,6 +18,8 @@ router.get("/editTrip/:id", verifycompany, getTripById);
 
 router.get("/categorys", verifycompany, getCategorysById);
 router.post("/addCategory", verifycompany, upload.any(), addCategory);
+router.get("/editCategory/:id", verifycompany, getCategoryById);
+
 
 
 export default router;

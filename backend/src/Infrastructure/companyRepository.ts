@@ -145,3 +145,7 @@ export const getAllCountCategoryFromDb = async (): Promise<number> => {
     throw error;
   }
 };
+
+export const getCategoryById = async (id: string): Promise<Trip | null> => {
+  return await Category.findById(id);
+};

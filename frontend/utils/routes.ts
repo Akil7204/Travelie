@@ -7,7 +7,6 @@ export function isProtectedRoute(pathname: string): boolean {
 }
 
 export function toBeRedirectedRoutes(pathname: string): boolean {
-  
   return changeToHomeRoutes.has(pathname);
 }
 
@@ -26,18 +25,31 @@ export function toBeRedirectedAdminRoutes(pathname: string): boolean {
   return !changeToAdminDashboardRoutes.has(pathname);
 }
 
+// Company side;
 
-// Company side; 
+const changeToCompanyDashboardRoutes = new Set([
+  "/company/dashboard",
+  "/company/addTrip",
+  "/company/trips",
+  "/company/categorys",
+  "/company/addCategory",
+]);
 
-const changeToCompanyDashboardRoutes = new Set(["/company/dashboard", "/company/addTrip", "/company/trips", "/company/categorys", "/company/addCategory" ]);
-
-const EditTripRoutePattern = /^\/company\/editTrip\/[^/]+\/?.*$/
+const EditTripRoutePattern = /^\/company\/editTrip\/[^/]+\/?.*$/;
+const EditCategoryRoutePattern = /^\/company\/editCategory\/[^/]+\/?.*$/;
 
 export function isProtectedCompanyRoute(pathname: string): boolean {
-  return changeToCompanyDashboardRoutes.has(pathname) ||
-  EditTripRoutePattern.test(pathname)
+  return (
+    changeToCompanyDashboardRoutes.has(pathname) ||
+    EditTripRoutePattern.test(pathname) ||
+    EditCategoryRoutePattern.test(pathname)
+  );
 }
 
 export function toBeRedirectedCompanyRoutes(pathname: string): boolean {
-  return !changeToCompanyDashboardRoutes.has(pathname) && !EditTripRoutePattern.test(pathname)
+  return (
+    !changeToCompanyDashboardRoutes.has(pathname) &&
+    !EditTripRoutePattern.test(pathname) &&
+    !EditCategoryRoutePattern.test(pathname)
+  );
 }

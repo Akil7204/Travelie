@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { otpGenerator } from "../../uilts/otpGenerator";
 import {
+  fetchCategoryById,
   fetchTripById,
   getAllCategory,
   getAllTrips,
@@ -178,5 +179,16 @@ export const getCategorysById = async (
     res.status(200).json({allCategory, totalCount});
   } catch (error) {
     next(error);
+  }
+};
+
+export const getCategoryById = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const categoryId = req.params.id;
+    const category = await fetchCategoryById(categoryId);
+    res.status(200).json(category);
+  } catch (error : any) {
+    console.error('Error fetching trip:', error);
+    res.status(404).json({ message: error.message });
   }
 };
