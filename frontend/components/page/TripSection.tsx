@@ -89,7 +89,7 @@ const TripSection: React.FC = () => {
                 </div>
               </div>
               <button className="mt-4 px-4 py-2 w-40 bg-blue-500 text-white rounded-lg">
-                <a href="/discover/id">See availability</a>
+                <a href={`/discover/${trip._id}`}>See availability</a>
               </button>
             </div>
           </div>
