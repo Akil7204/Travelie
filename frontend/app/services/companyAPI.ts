@@ -94,3 +94,16 @@ export const getAllCategoryAPI = async (page: number, categoyPerPage: number) =>
     throw error; // Throw the error to be handled in the calling function
   }
 };
+
+export const getCategoryByIdAPI = async (categoryId: string) => {
+  try {
+    const response = await axios.get(
+      `${SERVER_URL_COMPANY}/editCategory/${categoryId}`,
+      { withCredentials: true }
+    );
+    return response.data; // Axios automatically parses the JSON response
+  } catch (error) {
+    console.error("Failed to fetch trip data:", error);
+    throw error;
+  }
+};
