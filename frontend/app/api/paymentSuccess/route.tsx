@@ -14,14 +14,14 @@ export async function POST(req: any, res: NextApiResponse) {
     data[key] = value;
   });
   console.log(data)
-
+  let PayUOrderId
   try {
-    const PayUOrderId = await PayUApiCalls.saveData(data);
+     PayUOrderId = await PayUApiCalls.saveData(data);
     // await paymentService.addTransaction(PayUOrderId, data.email, "success");
   } catch (error: any) {
     console.log(error.message);
   }
   redirect(
-    `/`
+    `/bookingSucessful/${PayUOrderId}`
   );
 }
