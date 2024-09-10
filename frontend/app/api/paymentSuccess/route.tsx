@@ -17,11 +17,11 @@ export async function POST(req: any, res: NextApiResponse) {
 
   try {
     const PayUOrderId = await PayUApiCalls.saveData(data);
-    await paymentService.addTransaction(PayUOrderId, data.email, "success");
+    // await paymentService.addTransaction(PayUOrderId, data.email, "success");
   } catch (error: any) {
     console.log(error.message);
   }
   redirect(
-    `/post/promote/paymentCompleted/?status=${data.status}&mihpayid=${data.mihpayid}`
+    `/`
   );
 }

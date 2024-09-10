@@ -7,6 +7,7 @@ import {
   findUserByEmail,
   getBookingDetail,
   getDetailTrip,
+  updateBookedTrip,
   updateUser,
   updateUserProfile,
 } from "../Infrastructure/userRepository";
@@ -174,3 +175,66 @@ export const findBookingTrip = async (bookingId: string) => {
   const bookingDetails = await getBookingDetail(bookingId)
   return bookingDetails;
 }
+
+
+export const addTransactionDetails = async (
+  email: string,
+  PayUOrderId: string,
+  status: "success" | "failed"
+) => {
+  try {
+    // const PayUOrderData = await PayURepository.getPayUOrder(PayUOrderId);
+    // if (!PayUOrderData) throw new Error("PayU Order Data not found");
+    // console.log("Got order id");
+    // console.log(PayUOrderData);
+
+    // const userData = await userServices.getUserDataByEmail(email);
+    // if (!userData) throw new Error("User Data not found.");
+    // const userId = userData._id.toString();
+
+    // const transaction = await adsRepository.addTransaction(
+    //   userId,
+    //   PayUOrderId,
+    //   PayUOrderData.mihpayid,
+    //   status,
+    //   PayUOrderData.amount
+    // );
+    // console.log("Added transaction");
+    // console.log(transaction);
+    // if (!transaction) throw new Error("Transaction Data not found");
+
+    // if (status === "success") {
+    //   const postId = PayUOrderData?.productinfo;
+    //   const WeNetAdsData = await adsRepository.createWenetAds(
+    //     userId,
+    //     postId,
+    //     transaction._id.toString()
+    //   );
+    //   console.log("created WeNetAdsData");
+    //   console.log(WeNetAdsData);
+
+    //   const postData = await adsRepository.addAdDataToPost(postId);
+    //   console.log("Added ad data to post ");
+    //   console.log(postData);
+
+    //   try {
+    //     await adsRepository.sendPostAdDataToMQ(
+    //       postData._id.toString(),
+    //       postData.WeNetAds
+    //     );
+    //   } catch (error: any) {
+    //     console.log(error.message);
+    //   }
+    // }
+    // return transaction._id.toString();
+  } catch (error: any) {
+    throw new Error(error.message);
+  }
+}
+
+export const fetchbookingData = async (txnid: string, productinfo: string, status: string) => {
+
+  const bookedTrip = await updateBookedTrip(productinfo, txnid, status);
+  // console.log(AllTripDetails?.price);
+  return bookedTrip;
+};

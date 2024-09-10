@@ -1,5 +1,6 @@
 import express from "express";
 import {
+  addTransaction,
   bookingSeat,
   detailTrip,
   fetchBookedData,
@@ -8,6 +9,7 @@ import {
   login,
   payment,
   register,
+  saveData,
   updateProfile,
   verifyOtp,
 } from "../controllers/userController";
@@ -42,6 +44,8 @@ router.get("/bookedTrip/:id", verifyUser, fetchBookedData);
 
 // Payment Routes;
 router.post('/payment', verifyUser, payment);
+router.post('/addTransaction',  addTransaction );
+router.post('/response/saveData', saveData)
 
 
 

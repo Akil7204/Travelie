@@ -7,6 +7,7 @@ interface Booking extends Document {
     totalAmount: number,
     paymentType?: string,
     paymentStatus?: string,
+    txnId?: string,
     createdAt: Date;
 }
 
@@ -36,7 +37,11 @@ const bookingSchema = new Schema<Booking>({
     paymentStatus: {
         type: String,
         default: "pending"
-    }
+    },
+    txnId: {
+        type: String,
+        default: null
+    },
 });
 
 export const bookedModal = mongoose.model<Booking>("bookedTrip", bookingSchema);

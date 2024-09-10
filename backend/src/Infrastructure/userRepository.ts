@@ -125,3 +125,24 @@ export const getBookingDetail = async (id: string) => {
     throw error; // Re-throw the error for the caller to handle
   }
 };
+
+export const updateBookedTrip = async (
+  productinfo: string,
+  txnid: string,
+  status: string,
+) => {
+  try {
+    
+    const bookedData = await bookedModal.findByIdAndUpdate(
+      productinfo, // The ID of the document to update
+      { txnId: txnid, paymentStatus: status }, // The fields to update
+      { new: true } // Return the updated document
+    );
+    // console.log({bookedData});
+    
+    return bookedData?._id
+  } catch (error) {
+    console.log(error);
+    
+  }
+};

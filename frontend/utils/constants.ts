@@ -3,7 +3,7 @@ export const PayU = {
   };
   
   //  /* PROD: =
-  export const FRONTEND_DOMAIN = "http://localhost:3000/api";
+  export const FRONTEND_DOMAIN = "http://localhost:3000";
   
   const DOMAIN = "http://localhost:3000";
   
@@ -12,17 +12,7 @@ export const PayU = {
   const MESSAGE_SERVICE_DOMAIN = DOMAIN;
   const NOTIFICATION_SERVICE_DOMAIN = DOMAIN;
   export const PAYMENT_SERVICE_DOMAIN = DOMAIN;
-  // */
-  
-  /* DEV:
-  export const FRONTEND_DOMAIN = 'http://localhost:3000';
-  
-  const USER_SERVICE_DOMAIN = 'http://localhost:5001';
-  const POSTS_SERVICE_DOMAIN = 'http://localhost:5002';
-  const MESSAGE_SERVICE_DOMAIN = 'http://localhost:5003';
-  const NOTIFICATION_SERVICE_DOMAIN = 'http://localhost:5004';
-  const ADS_SERVICE_DOMAIN = 'http://localhost:5005';
-  */
+
   
   export const USER_SERVICE_URL = `${USER_SERVICE_DOMAIN}/api/user-service`;
   export const POSTS_SERVICE_URL = `${POSTS_SERVICE_DOMAIN}/api/posts-service`;

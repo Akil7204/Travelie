@@ -1,7 +1,9 @@
 import { NextFunction, Request, Response } from "express";
 import { otpGenerator } from "../../uilts/otpGenerator";
 import {
+  addTransactionDetails,
   allTrips,
+  fetchbookingData,
   fetchbookingSeat,
   fetchDetailTrip,
   findBookingTrip,
@@ -250,6 +252,37 @@ export const payment = async (req: Request, res: Response) => {
   } catch (error) {
     console.log("error payment:", error);
     res.status(500).send("Internal server error");
+  }
+}
+
+export const addTransaction = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const { PayUOrderId, email, status } = req.body;
+    console.log({ PayUOrderId, email, status } )
+
+    const transactionId = await addTransactionDetails(
+      email,
+      PayUOrderId,
+      status
+    );
+
+    res.status(200).send(transactionId);
+  } catch (error) {
+    next(error);
+  }
+}
+
+
+export const saveData = async (req: Request, res: Response) => {
+  try {
+    // console.log(req.body);
+    const {txnid, email, productinfo,status } = req.body
+    console.log({txnid, email, productinfo, status });
+    const bookedTripId = await fetchbookingData(txnid, productinfo, status);
+    res.status(200).json(bookedTripId)
+  } catch (error) {
+    console.log(error);
+    
   }
 }
 
