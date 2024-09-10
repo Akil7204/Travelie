@@ -1,5 +1,5 @@
-import mongoose, { Schema, Document } from "mongoose";
-import { Company } from "../domain/company";
+import  { Document } from "mongoose";
+import { Company, CompanyModel } from "../domain/company";
 import { Trip, Trips } from "../domain/trips";
 import { Category } from "../domain/category";
 
@@ -8,24 +8,6 @@ interface CompanyModel extends Company, Document {
   otp?: string;
   otpVerified?: boolean;
 }
-
-// Define the Mongoose schema for the Company
-const CompanySchema: Schema<CompanyModel> = new Schema({
-  companyname: { type: String, required: true },
-  phone: { type: Number, required: true },
-  email: { type: String, required: true, unique: true },
-  password: { type: String, required: true },
-  profileImage: { type: String },
-  adminVerified: { type: Boolean, default: false },
-  otp: { type: String },
-  otpVerified: { type: Boolean, default: false },
-});
-
-// Create the Mongoose model
-export const CompanyModel = mongoose.model<CompanyModel>(
-  "Company",
-  CompanySchema
-);
 
 // Function to create a new user
 export const createCompany = async (company: Company) => {

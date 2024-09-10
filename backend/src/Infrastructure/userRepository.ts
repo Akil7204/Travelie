@@ -1,8 +1,7 @@
-import mongoose, { Schema, Document } from "mongoose";
-import { User } from "../domain/user";
+import  {  Document } from "mongoose";
+import { User, UserModel } from "../domain/user";
 import { Trip, Trips } from "../domain/trips";
 import { bookedModal } from "../domain/bookedTrip";
-
 // Extending the User interface with mongoose Document
 interface UserModel extends User, Document {
   otp?: string;
@@ -10,18 +9,6 @@ interface UserModel extends User, Document {
 }
 
 // Define the Mongoose schema for the User
-const UserSchema: Schema<UserModel> = new Schema({
-  username: { type: String, required: true },
-  phone: { type: Number },
-  email: { type: String, required: true, unique: true },
-  password: { type: String, required: true },
-  profileImage: { type: String, default: "/img/DefaultProfilePicMale.png" },
-  otp: { type: String },
-  otpVerified: { type: Boolean, default: false },
-});
-
-// Create the Mongoose model
-const UserModel = mongoose.model<UserModel>("User", UserSchema);
 
 // Function to create a new user
 export const createUser = async (user: User) => {
