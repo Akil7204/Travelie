@@ -1,6 +1,7 @@
 import mongoose, { Schema, Document } from "mongoose";
 import { User } from "../domain/user";
 import { Trip, Trips } from "../domain/trips";
+import { bookedModal } from "../domain/bookedTrip";
 
 // Extending the User interface with mongoose Document
 interface UserModel extends User, Document {
@@ -55,10 +56,11 @@ export const updateUserProfile = async (
 };
 
 export const allTripsFromDB = async () => {
-
-  return await Trips.find().sort({
-    createdAt: -1,
-  }).populate('companyId');
+  return await Trips.find()
+    .sort({
+      createdAt: -1,
+    })
+    .populate("companyId");
 };
 
 // Function to find a user by ID
@@ -67,6 +69,29 @@ export const findUserById = async (userId: string) => {
 };
 
 export const getDetailTrip = async (id: string): Promise<Trip | null> => {
-  return await Trips.findById(id);
+  return await Trips.findById(id).populate("companyId");
 };
 
+export const createBookingformDB = async (
+  tripId: string,
+  seatCount: number,
+  totalAmount: number,
+  userId: string
+) => {
+  try {
+    const bookedTrip = new bookedModal({
+      tripId: tripId,
+      userId: userId,
+      seats: seatCount,
+      totalAmount: totalAmount,
+    });
+    const bookedTripSaved = await bookedTrip.save();
+    console.log(bookedTripSaved._id);
+
+    return bookedTripSaved._id
+
+  } catch (error) {
+    console.error("Error saving bookedTrip: ", error);
+    throw error;
+  }
+};

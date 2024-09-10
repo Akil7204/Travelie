@@ -5,7 +5,7 @@ import Image from "next/image";
 import Navbar from "@/components/NavBar";
 import Footer from "@/components/Footer";
 import { useParams } from "next/navigation";
-import { detailTripsAPI } from "@/app/services/allAPI";
+import { bookingApi, detailTripsAPI } from "@/app/services/allAPI";
 import { DNA, InfinitySpin } from "react-loader-spinner";
 import Modal from "@/components/page/ModalSection";
 
@@ -36,6 +36,7 @@ const TripPage: React.FC = () => {
   const params = useParams(); // Access the dynamic parameters
   const [seatCount, setSeatCount] = React.useState(1);
   const [mainImgInd, setMainImgInd] = React.useState(0);
+  const [totalAmout, setTotalAmout] = useState(0);
 
   const tripId: any = params.id;
 
@@ -65,10 +66,25 @@ const TripPage: React.FC = () => {
     setIsModalOpen(false);
   };
 
-  const handleProceedToPayment = () => {
-    console.log(seatCount);
-    
-    console.log("Proceeding to payment...");
+  const handleProceedToPayment = async () => {
+    const reqBody = new FormData();
+    if (tripData) {
+      reqBody.append("tripId", tripData._id);
+      reqBody.append("seatCount", seatCount.toString());
+    } else {
+      console.error("Trip data is not available for proceeding to payment.");
+    }
+    const reqHeader = {
+      "Content-Type": "application/json",
+    };
+    try {
+      const result = await bookingApi(reqBody, {
+        "Content-Type": "multipart/form-data", // You can include this header, but axios sets it automatically
+      });
+
+      console.log(result);
+      
+    } catch (error) {}
   };
 
   return (

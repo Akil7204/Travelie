@@ -65,3 +65,20 @@ export const detailTripsAPI = async (id: string) => {
     throw error;
   }
 };
+
+export const bookingApi = async (reqBody: FormData, reqHeader: any) => {
+  try {
+    const response = await axios.post(
+      `${SERVER_URL}/bookingSeat`, 
+      reqBody,
+      {
+        headers: reqHeader,
+        withCredentials: true,
+      }
+    );
+    return response.data; 
+  } catch (error) {
+    console.error("Error in booking API:", error);
+    throw error; // Optionally rethrow the error for further handling
+  }
+};

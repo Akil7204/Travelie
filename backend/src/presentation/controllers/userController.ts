@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import { otpGenerator } from "../../uilts/otpGenerator";
 import {
   allTrips,
+  fetchbookingSeat,
   fetchDetailTrip,
   googleLogin,
   loginUser,
@@ -186,3 +187,16 @@ export const detailTrip = async (req: Request, res: Response): Promise<void> => 
     res.status(404).json({ message: error.message });
   }
 };
+
+export const bookingSeat = async (req: any, res: Response) => {
+  try {
+    // console.log(req.body);
+    const {tripId, seatCount} = req.body;
+    const userId = req.userId
+    console.log(tripId, seatCount, userId);
+    const bookedSeatId = await fetchbookingSeat(tripId, seatCount, userId);
+    res.status(200).json({bookedSeatId})
+  } catch (error) {
+    
+  }
+}

@@ -1,5 +1,6 @@
 import express from "express";
 import {
+  bookingSeat,
   detailTrip,
   getAllTrips,
   googleLoginHandler,
@@ -31,5 +32,7 @@ router.put(
 router.get("/trips", getAllTrips);
 
 router.get("/trips/:id", detailTrip);
+
+router.post("/bookingSeat", verifyUser, upload.none(), bookingSeat)
 
 export default router;

@@ -39,7 +39,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, availableSeats, onProcee
         <p className="mb-4">Available Seats: {availableSeats}</p>
         <div className="flex justify-between">
           <button className="bg-red-500 text-white py-2 px-4 rounded-md hover:bg-red-600" onClick={onClose}>Cancel</button>
-          <button className="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600" onClick={onProceed}>Proceed to Payment</button>
+          <button className="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600" onClick={onProceed}>Next</button>
         </div>
       </div>
     </div>

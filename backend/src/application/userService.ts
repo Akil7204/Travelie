@@ -2,6 +2,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import {
   allTripsFromDB,
+  createBookingformDB,
   createUser,
   findUserByEmail,
   getDetailTrip,
@@ -150,7 +151,18 @@ export const updateUserProfileSER = async (
 export const fetchDetailTrip = async (tripId: string): Promise<Trip> => {
   const trip = await getDetailTrip(tripId);
   if (!trip) {
-    throw new Error('Trip not found');
+    throw new Error("Trip not found");
   }
   return trip;
+};
+
+export const fetchbookingSeat = async (tripId: string, seatCount: number, userId: string) => {
+  const AllTripDetails = await getDetailTrip(tripId);
+  console.log(AllTripDetails?.price);
+  let totalAmount;
+  if (AllTripDetails) {
+    totalAmount = seatCount + AllTripDetails?.price;
+  }
+  const createBooking = await createBookingformDB(tripId, seatCount, totalAmount?totalAmount:0, userId)
+  return createBooking;
 };
