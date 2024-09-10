@@ -5,6 +5,7 @@ import {
   createBookingformDB,
   createUser,
   findUserByEmail,
+  getBookingDetail,
   getDetailTrip,
   updateUser,
   updateUserProfile,
@@ -158,7 +159,7 @@ export const fetchDetailTrip = async (tripId: string): Promise<Trip> => {
 
 export const fetchbookingSeat = async (tripId: string, seatCount: number, userId: string) => {
   const AllTripDetails = await getDetailTrip(tripId);
-  console.log(AllTripDetails?.price);
+  // console.log(AllTripDetails?.price);
   let totalAmount;
   if (AllTripDetails) {
     totalAmount = seatCount + AllTripDetails?.price;
@@ -167,3 +168,9 @@ export const fetchbookingSeat = async (tripId: string, seatCount: number, userId
   const createBooking = await createBookingformDB(tripId, seatCount, totalAmount?totalAmount:0, userId)
   return createBooking;
 };
+
+
+export const findBookingTrip = async (bookingId: string) => {
+  const bookingDetails = await getBookingDetail(bookingId)
+  return bookingDetails;
+}

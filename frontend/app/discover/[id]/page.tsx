@@ -4,7 +4,7 @@ import React, { Suspense, useEffect, useState } from "react";
 import Image from "next/image";
 import Navbar from "@/components/NavBar";
 import Footer from "@/components/Footer";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { bookingApi, detailTripsAPI } from "@/app/services/allAPI";
 import { DNA, InfinitySpin } from "react-loader-spinner";
 import Modal from "@/components/page/ModalSection";
@@ -39,6 +39,7 @@ const TripPage: React.FC = () => {
   const [totalAmout, setTotalAmout] = useState(0);
 
   const tripId: any = params.id;
+  const router = useRouter();
 
   useEffect(() => {
     const fetchTrips = async () => {
@@ -82,6 +83,7 @@ const TripPage: React.FC = () => {
         "Content-Type": "multipart/form-data", // You can include this header, but axios sets it automatically
       });
 
+      router.push(`/payment/${result.bookedSeatId}`);
       console.log(result);
       
     } catch (error) {}

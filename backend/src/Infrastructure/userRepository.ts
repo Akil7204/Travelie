@@ -89,7 +89,7 @@ export const createBookingformDB = async (
 
     // Save the new booking in the database
     const bookedTripSaved = await bookedTrip.save();
-    console.log("Booking ID: ", bookedTripSaved._id);
+    // console.log("Booking ID: ", bookedTripSaved._id);
 
     // // Find the trip by tripId and increment the bookedSeat field by seatCount
     // const updatedTrip = await Trips.findByIdAndUpdate(
@@ -107,3 +107,21 @@ export const createBookingformDB = async (
   }
 };
 
+export const getBookingDetail = async (id: string) => {
+  try {
+    // Fetch booking details by ID and populate 'tripId' and 'userId'
+    const bookedData = await bookedModal
+      .findById(id)
+      .populate("tripId") // Populate trip details
+      .populate("userId"); // Populate user details
+
+    if (!bookedData) {
+      throw new Error(`Booking with id ${id} not found`);
+    }
+    // console.log(bookedData); // Log the fetched booking details
+    return bookedData; // Return the booking data
+  } catch (error) {
+    console.error("Error fetching booking details:", error);
+    throw error; // Re-throw the error for the caller to handle
+  }
+};

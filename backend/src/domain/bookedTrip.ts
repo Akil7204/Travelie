@@ -13,7 +13,7 @@ interface Booking extends Document {
 const bookingSchema = new Schema<Booking>({
     tripId: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Trip",
+        ref: "Trips",
         required: true
     },
     userId: {

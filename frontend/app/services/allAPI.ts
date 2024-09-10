@@ -82,3 +82,13 @@ export const bookingApi = async (reqBody: FormData, reqHeader: any) => {
     throw error; // Optionally rethrow the error for further handling
   }
 };
+
+export const fetchBookedData = async (bookingId: string) => {
+  try {
+    const response = await axios.get(`${SERVER_URL}/bookedTrip/${bookingId}`, { withCredentials: true}); // Adjust the API endpoint
+    return response.data; // Return the data from the response
+  } catch (error) {
+    console.error("Error fetching booking data:", error);
+    throw error;
+  }
+};

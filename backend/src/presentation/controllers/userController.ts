@@ -4,6 +4,7 @@ import {
   allTrips,
   fetchbookingSeat,
   fetchDetailTrip,
+  findBookingTrip,
   googleLogin,
   loginUser,
   registerUser,
@@ -193,10 +194,30 @@ export const bookingSeat = async (req: any, res: Response) => {
     // console.log(req.body);
     const {tripId, seatCount} = req.body;
     const userId = req.userId
-    console.log(tripId, seatCount, userId);
     const bookedSeatId = await fetchbookingSeat(tripId, seatCount, userId);
     res.status(200).json({bookedSeatId})
   } catch (error) {
     
   }
 }
+
+
+export const fetchBookedData = async (req: Request, res: Response) => {
+  const bookingId = req.params.id; // Get bookingId from request params
+  try {
+    // console.log(`Fetching booking with ID: ${bookingId}`);
+    
+    const booking: any = await findBookingTrip(bookingId); // Fetch booking from DB
+    
+    if (!booking) {
+      return res.status(404).json({ message: "Booking not found" }); // Handle no booking found case
+    }
+    
+    console.log("Booking found:", booking);
+    res.status(200).json(booking); // Send booking data back to the client
+  } catch (error) {
+    console.error("Error fetching booking data:", error);
+    res.status(500).json({ message: "Internal server error" }); // Send error response
+  }
+};
+

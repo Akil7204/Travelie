@@ -2,6 +2,7 @@ import express from "express";
 import {
   bookingSeat,
   detailTrip,
+  fetchBookedData,
   getAllTrips,
   googleLoginHandler,
   login,
@@ -33,6 +34,8 @@ router.get("/trips", getAllTrips);
 
 router.get("/trips/:id", detailTrip);
 
-router.post("/bookingSeat", verifyUser, upload.none(), bookingSeat)
+router.post("/bookingSeat", verifyUser, upload.none(), bookingSeat);
+
+router.get("/bookedTrip/:id", verifyUser, fetchBookedData);
 
 export default router;

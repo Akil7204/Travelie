@@ -1,15 +1,23 @@
 "use client"
 
+import { fetchBookedData } from '@/app/services/allAPI';
+import { useParams } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 
 const BookingConfirmation = () => {
-    const [bookingDetails, setBookingDetails] = useState<any>(null);
 
+    const [bookingDetails, setBookingDetails] = useState<any>(null);
+    const params = useParams();
+
+
+    const bookingId: any = params.id;
+    console.log(bookingId);
+    
     // Fetch booking details from the API
     useEffect(() => {
         const fetchBookingDetails = async () => {
             try {
-                const response = await fetch('/api/bookingDetails'); // Adjust the API endpoint accordingly
+                const response = await fetchBookedData(bookingId); // Adjust the API endpoint accordingly
                 const data = await response.json();
                 setBookingDetails(data);
             } catch (error) {
