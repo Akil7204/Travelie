@@ -19,25 +19,26 @@ const PayUComponent = ({ BookedData }: props) => {
   const txnid = txnidRef.current;
   const amount = parseFloat("1000").toFixed(2); // Ensure correct format
   const productinfo = BookedData.tripId;
-  const firstname = username;
   const key = PayU.merchantKey;
 //   const surl = `${FRONTEND_DOMAIN}/api/paymentSuccess`;
 //   const furl = `${FRONTEND_DOMAIN}/api/paymentFailure`;
   const service_provider = "payu_paisa";
 
   useEffect(() => {
-    const data = { txnid, amount, productinfo, firstname, email, phone };
+    const data = { txnid, amount, productinfo, username, email, phone };
 
     (async function (data) {
       try {
         const res = await PayUApiCalls.paymentReq(data);
+        console.log(res.hash);
+        
         setHash(res.hash);
       } catch (error: any) {
         console.error("Payment Error: " + error.message);
         alert(error.message);
       }
     })(data);
-  }, [amount, email, firstname, productinfo, txnid]);
+  }, [amount, email, username, productinfo, txnid]);
 
   return (
     <form action="https://test.payu.in/_payment" method="post">

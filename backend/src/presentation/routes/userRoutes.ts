@@ -6,6 +6,7 @@ import {
   getAllTrips,
   googleLoginHandler,
   login,
+  payment,
   register,
   updateProfile,
   verifyOtp,
@@ -37,5 +38,40 @@ router.get("/trips/:id", detailTrip);
 router.post("/bookingSeat", verifyUser, upload.none(), bookingSeat);
 
 router.get("/bookedTrip/:id", verifyUser, fetchBookedData);
+
+
+// Payment Routes;
+router.post('/payment', verifyUser, payment);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 export default router;

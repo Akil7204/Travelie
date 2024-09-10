@@ -1,5 +1,5 @@
 export const PayU = {
-    merchantKey: 'Pfo8pz',
+    merchantKey: 'PMd9OW',
   };
   
   //  /* PROD: =

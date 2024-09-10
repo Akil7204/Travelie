@@ -17,6 +17,7 @@ import {
 } from "../../Infrastructure/userRepository";
 import { sendEmail } from "../../uilts/sendEmail";
 import { profileAddBucket } from "../../uilts/profileAddBucket";
+var jsSHA = require("jssha");
 
 // register the user
 export const register = async (req: Request, res: Response) => {
@@ -213,11 +214,42 @@ export const fetchBookedData = async (req: Request, res: Response) => {
       return res.status(404).json({ message: "Booking not found" }); // Handle no booking found case
     }
     
-    console.log("Booking found:", booking);
+    // console.log("Booking found:", booking);
     res.status(200).json(booking); // Send booking data back to the client
   } catch (error) {
     console.error("Error fetching booking data:", error);
     res.status(500).json({ message: "Internal server error" }); // Send error response
   }
 };
+
+
+
+// payment controllers
+
+export const payment = async (req: Request, res: Response) => {
+  try {
+    // console.log(req.body);
+    
+    const { txnid, amount, productinfo, username, email } = req.body;
+    console.log({ txnid, amount, productinfo, username, email });
+
+    if (!txnid || !amount || !productinfo || !username || !email) {
+      res.status(400).send("Mandatory fields missing");
+      return;
+    }
+
+    // console.log({ process.env.PAYU_MERCHANT_KEY, PAYU_SALT, txnid });
+
+    const hashString = `${process.env.PAYU_MERCHANT_KEY}|${txnid}|${amount}|${productinfo}|${username}|${email}|||||||||||${process.env.PAYU_SALT}`;
+
+    const sha = new jsSHA("SHA-512", "TEXT");
+    sha.update(hashString);
+    const hash = sha.getHash("HEX");
+
+    res.send({ hash: hash });
+  } catch (error) {
+    console.log("error payment:", error);
+    res.status(500).send("Internal server error");
+  }
+}
 

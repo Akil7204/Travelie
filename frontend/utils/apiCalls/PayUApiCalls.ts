@@ -2,15 +2,15 @@ import { SERVER_URL } from "@/app/services/serverURL";
 import axios from "axios";
 
 const apiClient = axios.create({
-  baseURL: `${SERVER_URL}/PayU`,
+  baseURL: `${SERVER_URL}`,
   withCredentials: true,
   timeout: 120000,
 });
 
 export const PayUUrl = {
-  payment: `${SERVER_URL}/PayU/payment`,
-  response: `${SERVER_URL}/PayU/response`,
-  test: `${SERVER_URL}/PayU/response/test`,
+  payment: `${SERVER_URL}/payment`,
+  response: `${SERVER_URL}/response`,
+  test: `${SERVER_URL}/response/test`,
 };
 
 export default {
