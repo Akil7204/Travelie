@@ -149,3 +149,43 @@ export const getAllCountCategoryFromDb = async (): Promise<number> => {
 export const getCategoryById = async (id: string): Promise<Trip | null> => {
   return await Category.findById(id);
 };
+
+export const updateingTrip = async (companyId: string, body: any, imageUrl: string[], tripId: string) => {
+  try {
+    // Find the existing trip
+    const trip = await Trips.findOne({ _id: tripId, companyId });
+    
+    if (!trip) {
+      throw new Error('Trip not found or you are not authorized to edit this trip');
+    }
+
+    // Update fields
+    trip.tripName = body.tripName || trip.tripName;
+    trip.description = body.description || trip.description;
+    trip.days = body.days || trip.days;
+    trip.startingFrom = body.startingFrom || trip.startingFrom;
+    trip.endingAt = body.endingAt || trip.endingAt;
+    trip.startingDate = body.startingDate ? new Date(body.startingDate) : trip.startingDate;
+    trip.endingDate = body.endingDate ? new Date(body.endingDate) : trip.endingDate;
+    trip.price = body.price || trip.price;
+    trip.locations = body.locations || trip.locations;
+    trip.category = body.category || trip.category;
+    trip.seats = body.seats || trip.seats;
+    trip.status = body.status || trip.status;
+
+    // Update images if new ones are provided
+    if (imageUrl && imageUrl.length > 0) {
+      trip.images = imageUrl;
+    }
+
+    // Save the updated trip
+    const updatedTrip = await trip.save();
+
+    return updatedTrip;
+  } catch (error: any) {
+    console.error("Error updating trip:", error);
+    throw new Error(error.message);
+  }
+};
+
+

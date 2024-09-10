@@ -12,6 +12,7 @@ import {
   getCategoryById,
   getTripById,
   updateCompany,
+  updateingTrip,
 } from "../Infrastructure/companyRepository";
 import { Company } from "../domain/company";
 import { uploadToS3Bucket } from "../uilts/s3bucket";
@@ -150,4 +151,22 @@ export const fetchCategoryById = async (categoryId: string): Promise<Trip> => {
     throw new Error('category not found');
   }
   return category;
+};
+
+export const updateTrip = async (
+  companyId: string,
+  data: Trip,
+  images: string[],
+  tripId: string
+) => {
+  try {
+    const TripData = { companyId, data, images };
+
+    TripData.data.seats = Number(TripData?.data?.seats);
+    const tripsadd = await updateingTrip(companyId, data, images, tripId);
+    // console.log(tripsadd);
+    return tripsadd;
+  } catch (error: any) {
+    throw new Error(error.message);
+  }
 };

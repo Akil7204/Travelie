@@ -107,3 +107,10 @@ export const getCategoryByIdAPI = async (categoryId: string) => {
     throw error;
   }
 };
+
+
+export const editTripApi = async (data: any, tripId: string) => {
+  return await axios.post(`${SERVER_URL_COMPANY}/editTrip/${tripId}`, data, {
+    withCredentials: true,
+  });
+};

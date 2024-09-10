@@ -13,7 +13,7 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 import Layout from "@/components/company/Layout";
-import { getTripByIdAPI } from "@/app/services/companyAPI";
+import { editTripApi, getTripByIdAPI } from "@/app/services/companyAPI";
 
 type FormValues = {
   tripName: string;
@@ -33,6 +33,7 @@ type FormValues = {
 
 const EditTrip = () => {
   const params = useParams(); // Access the dynamic parameters
+  const router = useRouter()
   const tripId: any = params.id;
 
   const {
@@ -156,15 +157,15 @@ const EditTrip = () => {
     }
 
     try {
-      //   const result = await updateTripAPI(tripId, formData);
-      //   if (result) {
-      //     toast.success("Trip updated successfully");
-      //     setTimeout(() => {
-      //       router.push(`/company/trips`);
-      //     }, 3000);
-      //   } else {
-      //     toast.error("Something went wrong");
-      //   }
+        const result = await editTripApi(formData, tripId);
+        if (result) {
+          toast.success("Trip updated successfully");
+          setTimeout(() => {
+            router.push(`/company/trips`);
+          }, 3000);
+        } else {
+          toast.error("Something went wrong");
+        }
     } catch (error) {
       console.error("Error updating trip:", error);
       toast.error("Error updating trip");

@@ -9,6 +9,7 @@ import {
   getTotalCountCategory,
   loginCompany,
   registerCompany,
+  updateTrip,
   uploadCategory,
   uploadImage,
   uploadTrip,
@@ -124,23 +125,26 @@ export const getTripsById = async (
     const limit = parseInt(req.query.limit) || 10;
     const skip = (page - 1) * limit;
     const comapanyId = req.companyId;
-    
-    const allTrips = await getAllTrips(comapanyId, skip,  limit);
-    const totalCount = await getTotalCount()
-    
-    res.status(200).json({allTrips, totalCount});
+
+    const allTrips = await getAllTrips(comapanyId, skip, limit);
+    const totalCount = await getTotalCount();
+
+    res.status(200).json({ allTrips, totalCount });
   } catch (error) {
     next(error);
   }
 };
 
-export const getTripById = async (req: Request, res: Response): Promise<void> => {
+export const getTripById = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
   try {
     const tripId = req.params.id;
     const trip = await fetchTripById(tripId);
     res.status(200).json(trip);
-  } catch (error : any) {
-    console.error('Error fetching trip:', error);
+  } catch (error: any) {
+    console.error("Error fetching trip:", error);
     res.status(404).json({ message: error.message });
   }
 };
@@ -150,12 +154,13 @@ export const addCategory = async (req: any, res: Response): Promise<void> => {
     const body = req.body;
     const companyId = req.companyId;
 
-
     const categoryData = await uploadCategory(companyId, body);
     if (categoryData) {
       res.status(200).json("Category Added successfully");
     } else {
-      res.status(400).json({ error: "Category not added :- somthing went worng" });
+      res
+        .status(400)
+        .json({ error: "Category not added :- somthing went worng" });
     }
   } catch (error) {
     console.log("error is: ", error);
@@ -172,23 +177,56 @@ export const getCategorysById = async (
     const limit = parseInt(req.query.limit) || 10;
     const skip = (page - 1) * limit;
     const comapanyId = req.companyId;
-    
-    const allCategory = await getAllCategory(comapanyId, skip,  limit);
-    const totalCount = await getTotalCountCategory()
-    
-    res.status(200).json({allCategory, totalCount});
+
+    const allCategory = await getAllCategory(comapanyId, skip, limit);
+    const totalCount = await getTotalCountCategory();
+
+    res.status(200).json({ allCategory, totalCount });
   } catch (error) {
     next(error);
   }
 };
 
-export const getCategoryById = async (req: Request, res: Response): Promise<void> => {
+export const getCategoryById = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
   try {
     const categoryId = req.params.id;
     const category = await fetchCategoryById(categoryId);
     res.status(200).json(category);
-  } catch (error : any) {
-    console.error('Error fetching trip:', error);
+  } catch (error: any) {
+    console.error("Error fetching trip:", error);
     res.status(404).json({ message: error.message });
   }
 };
+
+export const editTripById = async (req: any, res: Response): Promise<void> => {
+  try {
+    const tripId = req.params.id;
+    const body = req.body;
+    const companyId = req.companyId;
+
+    // Check if files are uploaded
+    const files = req.files as IMulterFile[];
+    let imageUrl = [];
+    
+    // If files exist, upload the images
+    if (files && files.length > 0) {
+      imageUrl = await uploadImage(files); // Assuming this returns an array of image URLs
+    }
+
+    // Update the trip with the new data
+    const updatedTripData = await updateTrip(companyId, body, imageUrl, tripId);
+
+    // Send the updated trip as a response
+    res.status(200).json({
+      message: "Trip updated successfully",
+      data: updatedTripData
+    });
+  } catch (error: any) {
+    console.error("Error updating trip:", error);
+    res.status(500).json({ message: "Failed to update trip", error: error.message });
+  }
+};
+
