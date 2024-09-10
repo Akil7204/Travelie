@@ -75,9 +75,7 @@ const TripPage: React.FC = () => {
     } else {
       console.error("Trip data is not available for proceeding to payment.");
     }
-    const reqHeader = {
-      "Content-Type": "application/json",
-    };
+    
     try {
       const result = await bookingApi(reqBody, {
         "Content-Type": "multipart/form-data", // You can include this header, but axios sets it automatically

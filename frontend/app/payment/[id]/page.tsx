@@ -2,6 +2,7 @@
 
 import { fetchBookedData } from "@/app/services/allAPI";
 import Navbar from "@/components/NavBar";
+import PayUComponent from "@/components/payment/payUComponent";
 import { useParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
@@ -102,9 +103,10 @@ const BookingConfirmation = () => {
 
           {/* Complete Booking Button */}
           <div className="mt-6">
-            <button className="w-full bg-blue-500 text-white px-4 py-3 rounded-lg font-medium hover:bg-blue-600 transition">
+            {/* <button className="w-full bg-blue-500 text-white px-4 py-3 rounded-lg font-medium hover:bg-blue-600 transition">
               proceed to payment
-            </button>
+            </button> */}
+            <PayUComponent BookedData={bookingDetails} />
           </div>
         </div>
       </div>
