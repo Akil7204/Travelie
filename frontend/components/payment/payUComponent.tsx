@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 // import PayUApiCalls from "@/utils/apiCalls/PayUApiCalls";
-import {  PayU } from "@/utils/constants";
+import {  FRONTEND_DOMAIN, PayU } from "@/utils/constants";
 // import { IUser } from "@/types/types";
 import { generateTxnId } from "@/utils/generateTxnId";
 import PayUApiCalls from "@/utils/apiCalls/PayUApiCalls";
@@ -20,8 +20,8 @@ const PayUComponent = ({ BookedData }: props) => {
   const amount = parseFloat("1000").toFixed(2); // Ensure correct format
   const productinfo = BookedData.tripId;
   const key = PayU.merchantKey;
-//   const surl = `${FRONTEND_DOMAIN}/api/paymentSuccess`;
-//   const furl = `${FRONTEND_DOMAIN}/api/paymentFailure`;
+  const surl = `${FRONTEND_DOMAIN}/paymentSuccess`;
+  const furl = `${FRONTEND_DOMAIN}/paymentFailure`;
   const service_provider = "payu_paisa";
 
   useEffect(() => {
