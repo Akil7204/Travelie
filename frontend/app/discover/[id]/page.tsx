@@ -34,6 +34,9 @@ const TripPage: React.FC = () => {
   const [bookedSeat, setBookedSeat] = useState();
   const [loading, setLoading] = useState<boolean>(true);
   const params = useParams(); // Access the dynamic parameters
+  const [seatCount, setSeatCount] = React.useState(1);
+  const [mainImgInd, setMainImgInd] = React.useState(0);
+
   const tripId: any = params.id;
 
   useEffect(() => {
@@ -63,9 +66,9 @@ const TripPage: React.FC = () => {
   };
 
   const handleProceedToPayment = () => {
-    // Logic to proceed to the payment page
-    console.log('Proceeding to payment...');
-    // Add your navigation logic here, e.g., using Next.js router
+    console.log(seatCount);
+    
+    console.log("Proceeding to payment...");
   };
 
   return (
@@ -85,12 +88,12 @@ const TripPage: React.FC = () => {
           </div>
         ) : (
           <>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-3">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
               {/* Main Image */}
               <div className="col-span-1">
                 {tripData?.images[0] && (
                   <Image
-                    src={tripData?.images[0]} // Main image from the trip data
+                    src={tripData?.images[mainImgInd]} // Main image from the trip data
                     alt="image1"
                     width={800}
                     height={400}
@@ -110,6 +113,7 @@ const TripPage: React.FC = () => {
                       width={300}
                       height={200}
                       className="rounded-md h-[100px] object-cover cursor-pointer transition-all duration-700"
+                      onClick={() => setMainImgInd(index)}
                     />
                   ))}
                 </div>
@@ -178,21 +182,25 @@ const TripPage: React.FC = () => {
             </div>
 
             <div className="mt-8">
-              <button onClick={handleBookClick} className="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600">
+              <button
+                onClick={handleBookClick}
+                className="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600"
+              >
                 Book
               </button>
             </div>
-
           </>
         )}
       </div>
 
       <Footer />
-      <Modal 
-        isOpen={isModalOpen} 
-        onClose={handleCloseModal} 
-        availableSeats={tripData?.seats || 0 - (tripData?.bookedSeats || 0)} 
-        onProceed={handleProceedToPayment} 
+      <Modal
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+        availableSeats={tripData?.seats || 0 - (tripData?.bookedSeats || 0)}
+        onProceed={handleProceedToPayment}
+        setSeatCount={setSeatCount}
+        seatCount={seatCount}
       />
     </>
   );

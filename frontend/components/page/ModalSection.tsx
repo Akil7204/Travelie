@@ -3,15 +3,16 @@
 import React from 'react';
 
 interface ModalProps {
+  seatCount: number; // Type for seatCount state
+  setSeatCount: React.Dispatch<React.SetStateAction<number>>; 
   isOpen: boolean;
   onClose: () => void;
   availableSeats: number;
   onProceed: () => void;
 }
 
-const Modal: React.FC<ModalProps> = ({ isOpen, onClose, availableSeats, onProceed }) => {
-  const [seatCount, setSeatCount] = React.useState(1);
-
+const Modal: React.FC<ModalProps> = ({ isOpen, onClose, availableSeats, onProceed, seatCount, setSeatCount }) => {
+  
   const handleIncrement = () => {
     if (seatCount < availableSeats) {
       setSeatCount(seatCount + 1);
