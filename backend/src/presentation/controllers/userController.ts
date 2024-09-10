@@ -145,7 +145,7 @@ export const updateProfile = async (
     // console.log(profileImage);
     let imageUrl: any;
     if (profileImage) {
-       imageUrl = await profileAddBucket(profileImage);
+      imageUrl = await profileAddBucket(profileImage);
     }
     const user = await findUserById(userId);
     if (!user) {
@@ -172,7 +172,6 @@ export const updateProfile = async (
     };
 
     proceedWithUpdate(imageUrl);
-
   } catch (error: any) {
     console.log({ error });
     next(error);
@@ -180,14 +179,16 @@ export const updateProfile = async (
   }
 };
 
-
-export const detailTrip = async (req: Request, res: Response): Promise<void> => {
+export const detailTrip = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
   try {
     const tripId = req.params.id;
     const trip = await fetchDetailTrip(tripId);
     res.status(200).json(trip);
-  } catch (error : any) {
-    console.error('Error fetching trip:', error);
+  } catch (error: any) {
+    console.error("Error fetching trip:", error);
     res.status(404).json({ message: error.message });
   }
 };
@@ -195,27 +196,24 @@ export const detailTrip = async (req: Request, res: Response): Promise<void> => 
 export const bookingSeat = async (req: any, res: Response) => {
   try {
     // console.log(req.body);
-    const {tripId, seatCount} = req.body;
-    const userId = req.userId
+    const { tripId, seatCount } = req.body;
+    const userId = req.userId;
     const bookedSeatId = await fetchbookingSeat(tripId, seatCount, userId);
-    res.status(200).json({bookedSeatId})
-  } catch (error) {
-    
-  }
-}
-
+    res.status(200).json({ bookedSeatId });
+  } catch (error) {}
+};
 
 export const fetchBookedData = async (req: Request, res: Response) => {
   const bookingId = req.params.id; // Get bookingId from request params
   try {
     // console.log(`Fetching booking with ID: ${bookingId}`);
-    
+
     const booking: any = await findBookingTrip(bookingId); // Fetch booking from DB
-    
+
     if (!booking) {
       return res.status(404).json({ message: "Booking not found" }); // Handle no booking found case
     }
-    
+
     // console.log("Booking found:", booking);
     res.status(200).json(booking); // Send booking data back to the client
   } catch (error) {
@@ -224,14 +222,12 @@ export const fetchBookedData = async (req: Request, res: Response) => {
   }
 };
 
-
-
 // payment controllers
 
 export const payment = async (req: Request, res: Response) => {
   try {
     // console.log(req.body);
-    
+
     const { txnid, amount, productinfo, username, email } = req.body;
     console.log({ txnid, amount, productinfo, username, email });
 
@@ -253,12 +249,16 @@ export const payment = async (req: Request, res: Response) => {
     console.log("error payment:", error);
     res.status(500).send("Internal server error");
   }
-}
+};
 
-export const addTransaction = async (req: Request, res: Response, next: NextFunction) => {
+export const addTransaction = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const { PayUOrderId, email, status } = req.body;
-    console.log({ PayUOrderId, email, status } )
+    console.log({ PayUOrderId, email, status });
 
     const transactionId = await addTransactionDetails(
       email,
@@ -270,19 +270,21 @@ export const addTransaction = async (req: Request, res: Response, next: NextFunc
   } catch (error) {
     next(error);
   }
-}
-
+};
 
 export const saveData = async (req: Request, res: Response) => {
   try {
     // console.log(req.body);
-    const {txnid, email, productinfo,status } = req.body
-    console.log({txnid, email, productinfo, status });
-    const bookedTripId = await fetchbookingData(txnid, productinfo, status);
-    res.status(200).json(bookedTripId)
+    const { txnid, email, productinfo, status } = req.body;
+    console.log({ txnid, email, productinfo, status });
+    if (status == "success") {
+      const bookedTripId = await fetchbookingData(txnid, productinfo, status);
+      res.status(200).json(bookedTripId);
+    } else if (status == "failure"){
+      console.log(status);
+
+    }
   } catch (error) {
     console.log(error);
-    
   }
-}
-
+};

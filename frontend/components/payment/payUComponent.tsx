@@ -17,7 +17,7 @@ const PayUComponent = ({ BookedData }: props) => {
 
   const txnidRef = useRef(generateTxnId(8));
   const txnid = txnidRef.current;
-  const amount = parseFloat("1000").toFixed(2); // Ensure correct format
+  const amount = BookedData.totalAmount; // Ensure correct format
   const productinfo = BookedData._id;
   const key = PayU.merchantKey;
   const surl = `${FRONTEND_DOMAIN}/api/paymentSuccess`;

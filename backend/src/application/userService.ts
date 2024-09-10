@@ -163,7 +163,7 @@ export const fetchbookingSeat = async (tripId: string, seatCount: number, userId
   // console.log(AllTripDetails?.price);
   let totalAmount;
   if (AllTripDetails) {
-    totalAmount = seatCount + AllTripDetails?.price;
+    totalAmount = seatCount * AllTripDetails?.price;
      AllTripDetails?.bookedSeats || 0
   }
   const createBooking = await createBookingformDB(tripId, seatCount, totalAmount?totalAmount:0, userId)

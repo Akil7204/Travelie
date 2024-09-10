@@ -91,12 +91,7 @@ export const createBookingformDB = async (
     const bookedTripSaved = await bookedTrip.save();
     // console.log("Booking ID: ", bookedTripSaved._id);
 
-    // // Find the trip by tripId and increment the bookedSeat field by seatCount
-    // const updatedTrip = await Trips.findByIdAndUpdate(
-    //   tripId,
-    //   { $inc: { bookedSeats: seatCount } }, // Increment the bookedSeat field by seatCount
-    //   { new: true } // Return the updated document
-    // );
+   
 
     // console.log("Updated Trip: ", updatedTrip);
 
@@ -138,6 +133,12 @@ export const updateBookedTrip = async (
       { txnId: txnid, paymentStatus: status }, // The fields to update
       { new: true } // Return the updated document
     );
+     // // Find the trip by tripId and increment the bookedSeat field by seatCount
+    // const updatedTrip = await Trips.findByIdAndUpdate(
+    //   tripId,
+    //   { $inc: { bookedSeats: seatCount } }, // Increment the bookedSeat field by seatCount
+    //   { new: true } // Return the updated document
+    // );
     // console.log({bookedData});
     
     return bookedData?._id
