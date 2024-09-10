@@ -1,7 +1,6 @@
 import mongoose, { Schema, Document } from "mongoose";
 import { Admin } from "../domain/admin";
-import { Company } from "../domain/company";
-import { CompanyModel } from "./companyRepository";
+import { Company, CompanyModel } from "../domain/company";
 
 // Define the Mongoose schema for the User
 const AdminSchema: Schema<Admin> = new Schema({
