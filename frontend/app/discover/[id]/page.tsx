@@ -213,7 +213,7 @@ const TripPage: React.FC = () => {
       <Modal
         isOpen={isModalOpen}
         onClose={handleCloseModal}
-        availableSeats={tripData?.seats || 0 - (tripData?.bookedSeats || 0)}
+        availableSeats={(tripData?.seats || 0) - (tripData?.bookedSeats || 0)}
         onProceed={handleProceedToPayment}
         setSeatCount={setSeatCount}
         seatCount={seatCount}

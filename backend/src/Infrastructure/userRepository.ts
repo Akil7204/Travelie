@@ -79,19 +79,31 @@ export const createBookingformDB = async (
   userId: string
 ) => {
   try {
+    // Create a new booking document
     const bookedTrip = new bookedModal({
       tripId: tripId,
       userId: userId,
       seats: seatCount,
       totalAmount: totalAmount,
     });
+
+    // Save the new booking in the database
     const bookedTripSaved = await bookedTrip.save();
-    console.log(bookedTripSaved._id);
+    console.log("Booking ID: ", bookedTripSaved._id);
 
-    return bookedTripSaved._id
+    // // Find the trip by tripId and increment the bookedSeat field by seatCount
+    // const updatedTrip = await Trips.findByIdAndUpdate(
+    //   tripId,
+    //   { $inc: { bookedSeats: seatCount } }, // Increment the bookedSeat field by seatCount
+    //   { new: true } // Return the updated document
+    // );
 
+    // console.log("Updated Trip: ", updatedTrip);
+
+    return bookedTripSaved._id;
   } catch (error) {
     console.error("Error saving bookedTrip: ", error);
     throw error;
   }
 };
+
