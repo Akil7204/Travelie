@@ -68,8 +68,11 @@ const EditTrip = () => {
     name: "locations",
   });
 
-  const [photos, setPhotos] = useState<File[]>([]);
 
+  // [{ locations: ""}, {location: ""}]
+
+  const [photos, setPhotos] = useState<File[]>([]);
+  const [image, setImage] = useState([])
   // Fetch the trip details when the component loads
   useEffect(() => {
     const fetchTripDetails = async () => {
@@ -84,21 +87,25 @@ const EditTrip = () => {
           const day = String(date.getDate()).padStart(2, "0"); // Get day and pad with leading zero if needed
           const month = String(date.getMonth() + 1).padStart(2, "0"); // Get month (0-based) and pad with leading zero
           const year = date.getFullYear();
-          return `${day}-${month}-${year}`; // Return formatted date
+          return `${year}-${month}-${day}`; // Return formatted date
         }; // Extract YYYY-MM-DD
         // Populate the form with fetched data
+        console.log(tripData.locations);
+        tripData.locations = tripData.locations.map((item: any) => ({location: item}))
+        
         setValue("tripName", tripData.tripName);
         setValue("description", tripData.description);
         setValue("days", tripData.days);
         setValue("startingFrom", tripData.startingFrom);
-        setValue("endingAt", tripData.formattedEndingDate);
-        setValue("startingDate", tripData.startingDate);
+        setValue("endingAt", tripData.endingAt);
+        setValue("startingDate", formatDateToDDMMYYYY(tripData.startingDate));
         setValue("endingDate", formatDateToDDMMYYYY(tripData.endingDate));
-        setValue("basePrice", tripData.basePrice);
+        setValue("basePrice", tripData.price);
         setValue("locations", tripData.locations);
         setValue("category", tripData.category);
         setValue("seats", tripData.seats);
         setValue("status", tripData.status);
+        setImage(tripData.images)
         // Set images
         // Handle images logic if necessary
       } catch (error) {
@@ -269,6 +276,24 @@ const EditTrip = () => {
                     <div key={index} className="relative">
                       <img
                         src={URL.createObjectURL(photo)}
+                        alt={`Uploaded ${index + 1}`}
+                        className="w-full h-32 object-cover rounded"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => removePhoto(index)}
+                        className="absolute top-1 right-1 bg-red-600 text-white rounded-full p-1 text-xs"
+                      >
+                        ✕
+                      </button>
+                    </div>
+                  ))}
+                </div>
+                <div className="grid grid-cols-3 gap-4">
+                  {image?.map((img, index) => (
+                    <div key={index} className="relative">
+                      <img
+                        src={img}
                         alt={`Uploaded ${index + 1}`}
                         className="w-full h-32 object-cover rounded"
                       />
