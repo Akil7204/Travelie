@@ -1,8 +1,30 @@
+"use client"
 // components/FilterSection.tsx
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+
+interface Trip {
+  id: string;
+  tripName: string;
+  price: number;
+  // Add other relevant fields
+}
 
 const FilterSection: React.FC = () => {
+  const [searchTerm, setSearchTerm] = useState<string>('');
+  const [budgetRange, setBudgetRange] = useState<string>('');
+  const [trips, setTrips] = useState<Trip[]>([]);
+  const [filteredTrips, setFilteredTrips] = useState<Trip[]>([]);
 
+  // useEffect(() => {
+  //   const fetchTrips = async () => {
+  //     const response = await fetchserchApi(); // Change to your API endpoint
+  //     const data = await response.json();
+  //     setTrips(data.trips);
+  //     setFilteredTrips(data.trips);
+  //   };
+    
+  //   fetchTrips();
+  // }, []);
   
   return (
     <aside className="w-full md:w-1/4 p-4 bg-white shadow-md rounded-lg">
