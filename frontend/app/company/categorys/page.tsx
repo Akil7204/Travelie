@@ -48,7 +48,7 @@ const TripList: React.FC = () => {
     <Layout>
       <div className="p-8 bg-gray-100 min-h-screen">
         <div className="flex justify-between items-center mb-6">
-          <h2 className="text-3xl font-semibold">Trip</h2>
+          <h2 className="text-3xl font-semibold">Category</h2>
           <button className="bg-purple-600 text-white py-2 px-4 rounded-lg flex items-center">
             <Link href={"/company/addCategory"}> + Add Category </Link>
           </button>

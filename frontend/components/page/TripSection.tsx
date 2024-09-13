@@ -24,41 +24,13 @@ interface Trip {
   bookedSeats?: number;
 }
 
-const TripSection: React.FC = () => {
-  const [trips, setTrips] = useState<Trip[]>([]);
-  const [formattedDates, setFormattedDates] = useState<string[]>([]);
-  const [loading, setLoading] = useState(true);
+interface TripSectionProps {
+  trips: Trip[];
+  loading: boolean;
+}
 
-  useEffect(() => {
-    const fetchTrips = async () => {
-      try {
-        const response = await allTripsAPI(); // Fetch trips from API
-        console.log("API Response:", response); // Log API response
+const TripSection: React.FC<TripSectionProps> = ({ trips, loading }) => {
 
-        setTrips(response); // Update state with fetched trips
-        setLoading(false);
-      } catch (error) {
-        setLoading(false);
-        console.error("Failed to fetch trips:", error);
-      }
-    };
-
-    fetchTrips(); // Call fetch function when component mounts
-  }, []);
-
-  useEffect(() => {
-    if (trips.length > 0) {
-      const dates = trips.map((trip) => {
-        const startingDate = new Date(trip.startingDate);
-        return startingDate.toLocaleDateString("en-US", {
-          month: "short", // Short month name, e.g., "Sep"
-          day: "2-digit", // Two-digit day, e.g., "01"
-          year: "numeric", // Full year, e.g., "2024"
-        });
-      });
-      setFormattedDates(dates);
-    }
-  }, [trips]);
 
   return (
     <>

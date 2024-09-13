@@ -1,38 +1,41 @@
-"use client"
+"use client";
 // components/FilterSection.tsx
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 
-interface Trip {
-  id: string;
-  tripName: string;
-  price: number;
-  // Add other relevant fields
+interface FilterSectionProps {
+  setSearchTerm: React.Dispatch<React.SetStateAction<string>>;
+  setBudgetRange: React.Dispatch<React.SetStateAction<string[]>>;
 }
 
-const FilterSection: React.FC = () => {
-  const [searchTerm, setSearchTerm] = useState<string>('');
-  const [budgetRange, setBudgetRange] = useState<string>('');
-  const [trips, setTrips] = useState<Trip[]>([]);
-  const [filteredTrips, setFilteredTrips] = useState<Trip[]>([]);
+const FilterSection: React.FC<FilterSectionProps> = ({
+  setSearchTerm,
+  setBudgetRange,
+}) => {
+  const [selectedBudget, setSelectedBudget] = useState<string[]>([]);
 
-  // useEffect(() => {
-  //   const fetchTrips = async () => {
-  //     const response = await fetchserchApi(); // Change to your API endpoint
-  //     const data = await response.json();
-  //     setTrips(data.trips);
-  //     setFilteredTrips(data.trips);
-  //   };
-    
-  //   fetchTrips();
-  // }, []);
-  
+  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(e.target.value); // Update search term
+  };
+
+  const handleBudgetChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    let updatedBudget = selectedBudget.includes(value)
+      ? selectedBudget.filter((budget) => budget !== value) // Uncheck
+      : [...selectedBudget, value]; // Check
+    setSelectedBudget(updatedBudget);
+    setBudgetRange(updatedBudget); // Update budget range
+  };
+
   return (
     <aside className="w-full md:w-1/4 p-4 bg-white shadow-md rounded-lg">
       <div className="mb-6">
-        <label htmlFor="search" className="block text-gray-700 font-semibold">Search by place name</label>
+        <label htmlFor="search" className="block text-gray-700 font-semibold">
+          Search by place name
+        </label>
         <input
           type="text"
           id="search"
+          onChange={handleSearch}
           placeholder="e.g., Beach westplam"
           className="mt-2 p-2 w-full border border-gray-300 rounded-md"
         />
@@ -44,25 +47,25 @@ const FilterSection: React.FC = () => {
           <h4 className="font-medium text-gray-700">Your budget per day</h4>
           <div className="mt-2 space-y-2">
             <label className="flex items-center">
-              <input type="checkbox" className="mr-2" /> ₹ 0 - ₹ 200
+              <input type="checkbox" value="0-200" className="mr-2"  onChange={handleBudgetChange}/> ₹ 0 - ₹ 200
             </label>
             <label className="flex items-center">
-              <input type="checkbox" className="mr-2" /> ₹ 200 - ₹ 500
+              <input type="checkbox" className="mr-2" value="200-500" onChange={handleBudgetChange} /> ₹ 200 - ₹ 500
             </label>
             <label className="flex items-center">
-              <input type="checkbox" className="mr-2" /> ₹ 500 - ₹ 1000
+              <input type="checkbox" className="mr-2" value="500-5000" onChange={handleBudgetChange} /> ₹ 500 - ₹ 5000
             </label>
             <label className="flex items-center">
-              <input type="checkbox" className="mr-2" /> ₹ 1000 - ₹ 2000
+              <input type="checkbox" className="mr-2" value="5000-20000" onChange={handleBudgetChange} /> ₹ 5000 - ₹ 20000
             </label>
             <label className="flex items-center">
-              <input type="checkbox" className="mr-2" /> ₹ 2000 - ₹ 5000
+              <input type="checkbox" className="mr-2" value="20000-50000" onChange={handleBudgetChange} /> ₹ 20000 - ₹ 50000
             </label>
           </div>
         </div>
       </div>
 
-      <div className="mb-6">
+      {/* <div className="mb-6">
         <h4 className="font-medium text-gray-700">Rating</h4>
         <div className="mt-2 space-x-2">
           <button className="px-2 py-1 border rounded">1+</button>
@@ -71,7 +74,7 @@ const FilterSection: React.FC = () => {
           <button className="px-2 py-1 border rounded">4+</button>
           <button className="px-2 py-1 border rounded">5+</button>
         </div>
-      </div>
+      </div> */}
 
       <div className="mb-6">
         <h4 className="font-medium text-gray-700">Popular Filters</h4>
