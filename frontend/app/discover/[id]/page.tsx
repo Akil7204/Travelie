@@ -90,9 +90,9 @@ const TripPage: React.FC = () => {
       console.log(result);
       
     } catch (error: any) {
-      console.log(error.response.status);
+      console.log(error.status);
       
-      if(error.response.status == 401){
+      if(error.status == 401){
         router.push("/login")
       }
     }

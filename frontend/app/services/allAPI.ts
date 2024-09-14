@@ -67,7 +67,7 @@ export const detailTripsAPI = async (id: string) => {
 };
 
 export const bookingApi = async (reqBody: FormData, reqHeader: any) => {
-  // try {
+  try {
     const response = await axios.post(
       `${SERVER_URL}/bookingSeat`, 
       reqBody,
@@ -77,10 +77,10 @@ export const bookingApi = async (reqBody: FormData, reqHeader: any) => {
       }
     );
     return response.data; 
-  // } catch (error) {
-  //   console.error("Error in booking API:", error);
-  //   throw error; // Optionally rethrow the error for further handling
-  // }
+  } catch (error: any) {
+    console.error("Error in booking API:", error);
+    return error.response
+  }
 };
 
 export const fetchBookedData = async (bookingId: string) => {
