@@ -15,3 +15,17 @@ export const createChat = async (req: Request, res: Response) => {
         res.status(500).json(error);
     }
 }
+
+export const userChat = async (req: Request, res: Response) => {
+
+    try {
+
+        const chat = await chatModel.find({
+            members: {$in: [req.params.userId]}
+        })
+        
+    } catch (error: any) {
+        res.status(500).json(error)
+    }
+
+}
