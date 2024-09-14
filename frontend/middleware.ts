@@ -53,6 +53,10 @@ export async function middleware(req: NextRequest) {
 
   // Protected Routes logic - redirect to login if it doesn't have token in localstorage
   const isProtected = isProtectedRoute(pathname);
+  console.log("isprotucted",isProtected);
+  console.log("token is : ", tokenVerified);
+  
+  
   if (isProtected && !tokenVerified) {
     const loginUrl = new URL("/login", req.url);
     return NextResponse.redirect(loginUrl);
