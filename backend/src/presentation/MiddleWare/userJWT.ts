@@ -6,7 +6,7 @@ export function verifyUser(req: any, res: Response, next: NextFunction) {
   const Token = req.cookies?.token;
     
   if (!Token) {
-    return res.status(401).send("JWT not found in the cookies");
+    return res.status(401).json("JWT not found in the cookies");
   }
 
   const secret = process.env.JWT_SECRET_KEY || "";

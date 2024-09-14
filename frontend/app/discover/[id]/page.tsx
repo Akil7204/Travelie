@@ -77,14 +77,25 @@ const TripPage: React.FC = () => {
     }
     
     try {
+
       const result = await bookingApi(reqBody, {
         "Content-Type": "multipart/form-data", // You can include this header, but axios sets it automatically
       });
 
+      if(result.status == 401){
+        router.push("/login")
+      }
+
       router.push(`/payment/${result.bookedSeatId}`);
       console.log(result);
       
-    } catch (error) {}
+    } catch (error: any) {
+      console.log(error.response.status);
+      
+      if(error.response.status == 401){
+        router.push("/login")
+      }
+    }
   };
 
   return (

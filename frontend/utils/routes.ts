@@ -1,13 +1,16 @@
-const protectedRoutes = new Set(["/profile"]);
+const protectedRoutes = new Set(["/profile, /payment"]);
+
+const paymentRoute = /^\/payment\/[^/]+\/?.*$/;
 
 const changeToHomeRoutes = new Set(["/login", "/signup"]);
 
 export function isProtectedRoute(pathname: string): boolean {
-  return protectedRoutes.has(pathname);
+  return protectedRoutes.has(pathname) ||
+  paymentRoute.test(pathname);
 }
 
 export function toBeRedirectedRoutes(pathname: string): boolean {
-  return changeToHomeRoutes.has(pathname);
+  return changeToHomeRoutes.has(pathname) && paymentRoute.test(pathname);
 }
 
 // Admin side;
