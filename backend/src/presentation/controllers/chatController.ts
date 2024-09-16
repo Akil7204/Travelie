@@ -24,6 +24,7 @@ export const userChat = async (req: Request, res: Response) => {
             members: {$in: [req.params.userId]}
         })
         
+        
     } catch (error: any) {
         res.status(500).json(error)
     }
