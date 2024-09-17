@@ -1,13 +1,22 @@
-import ChatArea from '@/components/page/ChatArea';
-import MessageList from '@/components/page/MessageList';
-import React from 'react';
+"use client";
+
+import Navbar from "@/components/NavBar";
+import ChatArea from "@/components/page/ChatArea";
+import MessageList from "@/components/page/MessageList";
+import Profile from "@/components/profile/Profile";
+import React from "react";
 
 const MessagePage = () => {
   return (
-    <div className="flex h-screen">
-      <MessageList />
-      <ChatArea />
-    </div>
+    <>
+      <Navbar />
+      <Profile>
+        <div className="flex flex-grow">
+          <MessageList />
+          <ChatArea />
+        </div>
+      </Profile>
+    </>
   );
 };
 

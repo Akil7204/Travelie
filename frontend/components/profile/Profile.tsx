@@ -24,6 +24,12 @@ const Profile: React.FC<LayoutProps> = ({ children }) => {
     }
   }, []); // Empty dependency array to run once on mount
 
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setActivePath(window.location.pathname);
+    }
+  }, []);
+
   // Function to determine if a link is active
   const isActive = (path: string) => activePath === path;
 
@@ -54,14 +60,14 @@ const Profile: React.FC<LayoutProps> = ({ children }) => {
                 href="/profile"
                 className={`rounded-lg block text-xl p-3 font-semibold ${
                   isActive("/profile")
-                    ? "text-blue-900 bg-blue-200"
+                    ? "text-blue-700 bg-blue-200"
                     : "hover:bg-gray-200"
                 }`}
               >
                 Manage account
               </Link>
               <Link
-                href="/company/trips"
+                href="#"
                 className={`rounded-lg block text-xl p-3 font-semibold ${
                   isActive("/company/trips")
                     ? "text-blue-700 bg-blue-200"
@@ -71,9 +77,9 @@ const Profile: React.FC<LayoutProps> = ({ children }) => {
                 Trips
               </Link>
               <Link
-                href="/company/message"
+                href="/chat"
                 className={`rounded-lg block text-xl p-3 font-semibold ${
-                  isActive("/company/message")
+                  isActive("/chat")
                     ? "text-blue-700 bg-blue-200"
                     : "hover:bg-gray-200"
                 }`}
