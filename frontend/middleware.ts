@@ -21,6 +21,7 @@ export async function middleware(req: NextRequest) {
     const adminTokenVerified = await verifyToken("adminToken", req);
 
     const isProtectedAdmin = isProtectedAdminRoute(pathname);
+    
     if (isProtectedAdmin && !adminTokenVerified) {
       const loginUrl = new URL("/admin/login", req.url);
       return NextResponse.redirect(loginUrl);

@@ -5,7 +5,7 @@ const paymentRoute = /^\/payment\/[^/]+\/?.*$/;
 const changeToHomeRoutes = new Set(["/login", "/signup"]);
 
 export function isProtectedRoute(pathname: string): boolean {
-  console.log(pathname);
+  // console.log(pathname);
   
   return protectedRoutes.has(pathname) ||
   paymentRoute.test(pathname);
