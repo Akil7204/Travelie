@@ -1,7 +1,7 @@
 "use client";
 
 // pages/manage-account.tsx
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import Prfile from "@/components/profile/Profile";
 import Navbar from "@/components/NavBar";
@@ -29,13 +29,21 @@ const ManageAccount: React.FC = () => {
   const router = useRouter();
 
   const [userProfile, setUserProfile] = useState<any>({
-    profileImage:
-      JSON.parse(localStorage.getItem("user") || "{}")?.profileImage || "",
-    username: JSON.parse(localStorage.getItem("user") || "{}")?.username || "",
-    email: JSON.parse(localStorage.getItem("user") || "{}")?.email || "",
-    phone: JSON.parse(localStorage.getItem("user") || "{}")?.phone || "",
-    password: "",
+    profileImage: "",
+    username: "",
+    email: "",
+    phone: "",
   });
+
+  useEffect(() => {
+    const userData = JSON.parse(localStorage.getItem("user") || "{}");
+    setUserProfile({
+      profileImage: userData?.profileImage || "",
+      username: userData?.username || "",
+      email: userData?.email || "",
+      phone: userData?.phone || "",
+    });
+  }, []);
   //   console.log({userProfile});
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
