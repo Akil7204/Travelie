@@ -33,10 +33,11 @@ const ChatArea: React.FC<ChatAreaProps> = ({ chatId, messages }) => {
   }, [chatId]); // Fetch company details when chatId changes
 
   return (
-    <div className="flex-grow h-screen p-4">
+    <div className="ml-1/3 flex-grow h-screen ">
+      {/* Header with profile info */}
       <div className="flex items-center space-x-4 p-4 bg-gray-100 rounded-lg mb-4">
         <img
-          src={profileImage || '/img/DefaultProfilePicMale.png'} // Use a default profile image if not provided
+          src={profileImage || '/img/DefaultProfilePicMale.png'}
           alt={`${companyName}'s profile`}
           className="rounded-full bg-gray-300 h-10 w-10"
         />
@@ -45,15 +46,25 @@ const ChatArea: React.FC<ChatAreaProps> = ({ chatId, messages }) => {
           <p className="text-sm text-gray-500">Active Now</p>
         </div>
       </div>
-      <div className="bg-white p-4 rounded-lg shadow-lg flex-grow mb-4">
-        {messages.map((msg) => (
-          <div key={msg._id} className={`flex ${msg.fromMe ? 'justify-end' : 'justify-start'} mb-2`}>
-            <div className={`max-w-xs p-2 rounded-lg ${msg.fromMe ? 'bg-blue-500 text-white' : 'bg-gray-100 text-gray-800'}`}>
-              <p>{msg.content}</p>
+
+      {/* Messages */}
+      <div className="bg-white p-4 rounded-lg shadow-lg flex-grow mb-4 overflow-y-auto h-4/6">
+        {messages.length > 0 ? (
+          messages.map((msg) => (
+            <div key={msg._id} className={`flex ${msg.fromMe ? 'justify-end' : 'justify-start'} mb-2`}>
+              <div className={`max-w-xs p-2 rounded-lg ${msg.fromMe ? 'bg-blue-500 text-white' : 'bg-gray-100 text-gray-800'}`}>
+                <p>{msg.content}</p>
+              </div>
             </div>
+          ))
+        ) : (
+          <div className="flex justify-center items-center h-full">
+            <p className="text-gray-500">No messages yet</p>
           </div>
-        ))}
+        )}
       </div>
+
+      {/* Input box */}
       <div className="flex items-center">
         <input
           type="text"

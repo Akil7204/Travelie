@@ -1,22 +1,22 @@
-"use client"
+"use client";
 
 import React, { useEffect, useState } from "react";
 import Navbar from "@/components/NavBar";
 import ChatArea from "@/components/page/ChatArea";
 import MessageList from "@/components/page/MessageList";
 import Profile from "@/components/profile/Profile";
-import { userChats,  } from "../services/chatAPI"; // Assume getMessages is the function to fetch messages for a chat
+import { userChats } from "../services/chatAPI"; // Assume getMessages is the function to fetch messages for a chat
 
 interface User {
   _id: string;
 }
 
 const MessagePage = () => {
-  const [chats, setChats] = useState([]);  // Store chats here
-  const [users, setUsers] = useState<User | null>(null);  // Store user data here
-  const [loading, setLoading] = useState(true);  // Loading state to handle async operation
-  const [selectedChatId, setSelectedChatId] = useState<string | null>(null);  // Store selected chat ID
-  const [messages, setMessages] = useState([]);  // Store messages for the selected chat
+  const [chats, setChats] = useState([]); // Store chats here
+  const [users, setUsers] = useState<User | null>(null); // Store user data here
+  const [loading, setLoading] = useState(true); // Loading state to handle async operation
+  const [selectedChatId, setSelectedChatId] = useState<string | null>(null); // Store selected chat ID
+  const [messages, setMessages] = useState([]); // Store messages for the selected chat
 
   // Get user data from local storage
   useEffect(() => {
@@ -32,13 +32,13 @@ const MessagePage = () => {
     const getChats = async () => {
       try {
         if (users) {
-          const { data } = await userChats(users._id);  // Fetch user chats by user ID
-          setChats(data);  // Set the fetched chats
+          const { data } = await userChats(users._id); // Fetch user chats by user ID
+          setChats(data); // Set the fetched chats
         }
       } catch (error: any) {
         console.log(error);
       } finally {
-        setLoading(false);  // Set loading to false after fetching data
+        setLoading(false); // Set loading to false after fetching data
       }
     };
     if (users) {
@@ -51,8 +51,8 @@ const MessagePage = () => {
     const fetchMessages = async () => {
       if (selectedChatId) {
         try {
-          // const { data } = await getMessages(selectedChatId);  // Fetch messages for the selected chat
-          // setMessages(data);  // Set the fetched messages
+          // const { data } = await getMessages(selectedChatId); // Fetch messages for the selected chat
+          // setMessages(data); // Set the fetched messages
         } catch (error: any) {
           console.log(error);
         }
@@ -86,17 +86,32 @@ const MessagePage = () => {
     );
   }
 
-  // If the user has chats (has booked trips), show the chat interface
+  // If the user has chats, but no chat is selected, show the "click to start conversation" message
   return (
     <>
       <Navbar />
       <Profile>
         <div className="flex flex-grow">
+          {/* Left side with MessageList */}
           <MessageList 
             messages={chats} 
             onChatSelect={setSelectedChatId} // Callback to set selected chat ID
           />
-          {selectedChatId && <ChatArea chatId={selectedChatId} messages={messages} />}
+          
+          {/* Right side with ChatArea or default message */}
+          <div className="flex-grow p-4">
+            {selectedChatId ? (
+              // Show ChatArea if a chat is selected
+              <ChatArea chatId={selectedChatId} messages={messages} />
+            ) : (
+              // Show default message if no chat is selected
+              <div className="flex items-center justify-center h-full">
+                <p className="text-lg font-semibold text-gray-500">
+                  Click on any user to start a conversation
+                </p>
+              </div>
+            )}
+          </div>
         </div>
       </Profile>
     </>
