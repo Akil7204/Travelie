@@ -19,19 +19,17 @@ export const createChat = async (req: Request, res: Response) => {
 }
 
 export const userChat = async (req: Request, res: Response) => {
-
     try {
-        const chat = await chatModel.find({
-            members: {$in: [req.params.userId]}
-        })
-
-        res.status(200).json(chat)
-
+      const chat = await chatModel.find({
+        userId: req.params.userId // Querying by userId directly
+      });
+  
+      res.status(200).json(chat);
     } catch (error: any) {
-        res.status(500).json(error)
+      res.status(500).json(error);
     }
-
-}
+  };
+  
 
 export const findChat = async(req: Request, res: Response) => {
 
