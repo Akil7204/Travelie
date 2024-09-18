@@ -1,6 +1,7 @@
 import React from 'react';
 
 interface Message {
+  _id: string; // Add this field to uniquely identify each message
   name: string;
   message: string;
   companyId: {
@@ -15,26 +16,28 @@ interface Message {
 
 interface MessageListProps {
   messages: Message[];
+  onChatSelect: (chatId: string) => void; // Callback to handle chat selection
 }
 
 const defaultProfileImage = '/img/DefaultProfilePicMale.png'; // Default profile image URL
 
-const MessageList: React.FC<MessageListProps> = ({ messages }) => {
+const MessageList: React.FC<MessageListProps> = ({ messages, onChatSelect }) => {
   return (
     <div className="w-1/3 bg-gray-100 p-4">
-      <h2 className="text-lg font-semibold mb-4">Message</h2>
+      <h2 className="text-lg font-semibold mb-4">Messages</h2>
       <input
         type="text"
         placeholder="Search"
         className="w-full p-2 mb-4 border rounded-lg"
       />
       <ul>
-        {messages.map((msg, index) => (
+        {messages.map((msg) => (
           <li
-            key={index}
+            key={msg._id} // Use unique ID for the key
             className={`flex items-center p-3 mb-2 rounded-lg ${
               msg.active ? 'bg-blue-200' : 'bg-white'
             }`}
+            onClick={() => onChatSelect(msg._id)} // Call the selection function on click
           >
             {/* Display profile image */}
             <img

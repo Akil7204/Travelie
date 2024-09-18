@@ -1,20 +1,22 @@
-"use client";
+"use client"
 
+import React, { useEffect, useState } from "react";
 import Navbar from "@/components/NavBar";
 import ChatArea from "@/components/page/ChatArea";
 import MessageList from "@/components/page/MessageList";
 import Profile from "@/components/profile/Profile";
-import React, { useEffect, useState } from "react";
-import { userChats } from "../services/chatAPI";
+import { userChats,  } from "../services/chatAPI"; // Assume getMessages is the function to fetch messages for a chat
 
 interface User {
-  _id: string,
+  _id: string;
 }
 
 const MessagePage = () => {
   const [chats, setChats] = useState([]);  // Store chats here
   const [users, setUsers] = useState<User | null>(null);  // Store user data here
   const [loading, setLoading] = useState(true);  // Loading state to handle async operation
+  const [selectedChatId, setSelectedChatId] = useState<string | null>(null);  // Store selected chat ID
+  const [messages, setMessages] = useState([]);  // Store messages for the selected chat
 
   // Get user data from local storage
   useEffect(() => {
@@ -31,7 +33,6 @@ const MessagePage = () => {
       try {
         if (users) {
           const { data } = await userChats(users._id);  // Fetch user chats by user ID
-          console.log(data);
           setChats(data);  // Set the fetched chats
         }
       } catch (error: any) {
@@ -44,6 +45,21 @@ const MessagePage = () => {
       getChats();
     }
   }, [users]);
+
+  // Fetch messages when a chat is selected
+  useEffect(() => {
+    const fetchMessages = async () => {
+      if (selectedChatId) {
+        try {
+          // const { data } = await getMessages(selectedChatId);  // Fetch messages for the selected chat
+          // setMessages(data);  // Set the fetched messages
+        } catch (error: any) {
+          console.log(error);
+        }
+      }
+    };
+    fetchMessages();
+  }, [selectedChatId]);
 
   // While loading, show a loading message or spinner
   if (loading) {
@@ -76,8 +92,11 @@ const MessagePage = () => {
       <Navbar />
       <Profile>
         <div className="flex flex-grow">
-          <MessageList messages={chats} />
-          <ChatArea />
+          <MessageList 
+            messages={chats} 
+            onChatSelect={setSelectedChatId} // Callback to set selected chat ID
+          />
+          {selectedChatId && <ChatArea chatId={selectedChatId} messages={messages} />}
         </div>
       </Profile>
     </>
