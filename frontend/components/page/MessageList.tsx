@@ -1,12 +1,16 @@
 import React from 'react';
 
 const MessageList = () => {
+  
+
+
   const messages = [
     { name: 'Liston Fermi', message: 'Yeah sure, tell me zafor', time: 'just now', active: true },
     { name: 'Kiran Kannan', message: 'Thank you so much, sir', time: '2 d', active: false },
     { name: 'Marvin McKinney', message: 'You\'re Welcome', time: '1 m', active: false },
-    // ...other messages
   ];
+
+
 
   return (
     <div className="w-1/3  bg-gray-100 p-4">
