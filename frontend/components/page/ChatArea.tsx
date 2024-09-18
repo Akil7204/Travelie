@@ -1,3 +1,4 @@
+import { sendMessage } from '@/app/services/chatAPI';
 import React, { useEffect, useState } from 'react';
 
 interface Message {
@@ -9,16 +10,18 @@ interface Message {
 interface ChatAreaProps {
   chatId: string; // Chat ID for the current chat
   messages: Message[]; // Array of messages for the chat
+  senderId: string; // Current user (sender) ID
+  senderModel: string
 }
 
-const ChatArea: React.FC<ChatAreaProps> = ({ chatId, messages }) => {
+const ChatArea: React.FC<ChatAreaProps> = ({ chatId, messages, senderId, senderModel}) => {
   const [companyName, setCompanyName] = useState<string>(''); // State for the company name
   const [profileImage, setProfileImage] = useState<string | undefined>(undefined); // State for the profile image
+  const [newMessage, setNewMessage] = useState<string>(''); // State for the new message
 
   // Fetch company details based on chatId (you can adjust this based on your API)
   useEffect(() => {
     const fetchCompanyDetails = async () => {
-      // Simulate an API call to get company details based on chatId
       try {
         const response = await fetch(`/api/company/${chatId}`); // Update with your actual API endpoint
         const data = await response.json();
@@ -29,8 +32,24 @@ const ChatArea: React.FC<ChatAreaProps> = ({ chatId, messages }) => {
       }
     };
 
-    fetchCompanyDetails();
+    fetchCompanyDetails();  
   }, [chatId]); // Fetch company details when chatId changes
+
+  // Function to handle sending the message
+  const handleSendMessage = async () => {
+    if (!newMessage.trim()) return; // Prevent sending empty messages
+
+    try {
+      const result = await sendMessage(chatId, senderId, newMessage, senderModel);
+      console.log('Message sent:', result);
+
+      // Optionally update the message list here
+      // Example: append the new message to the `messages` array
+      setNewMessage(''); // Clear the input field
+    } catch (error) {
+      console.error('Error sending message:', error);
+    }
+  };
 
   return (
     <div className="ml-1/3 flex-grow h-screen mt-0 ">
@@ -70,8 +89,15 @@ const ChatArea: React.FC<ChatAreaProps> = ({ chatId, messages }) => {
           type="text"
           placeholder="Type your message"
           className="flex-grow p-2 border rounded-lg"
+          value={newMessage}
+          onChange={(e) => setNewMessage(e.target.value)} // Update the state with the new message
         />
-        <button className="bg-blue-500 text-white px-4 py-2 rounded-lg ml-2">Send</button>
+        <button
+          className="bg-blue-500 text-white px-4 py-2 rounded-lg ml-2"
+          onClick={handleSendMessage} // Send the message on click
+        >
+          Send
+        </button>
       </div>
     </div>
   );

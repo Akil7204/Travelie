@@ -100,9 +100,9 @@ const MessagePage = () => {
           
           {/* Right side with ChatArea or default message */}
           <div className="flex-grow p-4">
-            {selectedChatId ? (
+            {selectedChatId && users?._id ? (
               // Show ChatArea if a chat is selected
-              <ChatArea chatId={selectedChatId} messages={messages} />
+              <ChatArea chatId={selectedChatId} messages={messages} senderId={users?._id} senderModel="User" />
             ) : (
               // Show default message if no chat is selected
               <div className="flex items-center justify-center h-full">

@@ -3,11 +3,18 @@ import { messageModel } from "../../domain/messageModel";
 
 // Add a new message to the chat
 export const addMessage = async (req: Request, res: Response) => {
-  const { chatId, senderId, text } = req.body;
+  const { chatId, senderId, text, senderModel } = req.body;  // Include senderModel
+
+  console.log(chatId, senderId, text, senderModel);
 
   // Validate the request data
-  if (!chatId || !senderId || !text) {
+  if (!chatId || !senderId || !text || !senderModel) {
     return res.status(400).json({ message: "All fields are required" });
+  }
+
+  // Ensure senderModel is either "User" or "Company"
+  if (!["User", "Company"].includes(senderModel)) {
+    return res.status(400).json({ message: "Invalid senderModel" });
   }
 
   try {
@@ -15,6 +22,7 @@ export const addMessage = async (req: Request, res: Response) => {
       chatId,
       senderId,
       text,
+      senderModel,  // Add senderModel when creating the message
     });
 
     // Save the new message
