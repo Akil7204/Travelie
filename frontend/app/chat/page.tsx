@@ -44,7 +44,7 @@ const MessagePage = () => {
       <Navbar />
       <Profile>
         <div className="flex flex-grow">
-          <MessageList />
+          <MessageList messages= {chats}/>
           <ChatArea />
         </div>
       </Profile>

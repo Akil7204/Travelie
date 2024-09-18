@@ -1,14 +1,18 @@
 import React from 'react';
+interface Message {
+  name: string;
+  message: string;
+  time: string;
+  active: boolean;
+}
 
-const MessageList = () => {
+
+interface MessageListProps {
+  messages: Message[];
+}
+
+const MessageList: React.FC<MessageListProps> = ({messages}) => {
   
-
-
-  const messages = [
-    { name: 'Liston Fermi', message: 'Yeah sure, tell me zafor', time: 'just now', active: true },
-    { name: 'Kiran Kannan', message: 'Thank you so much, sir', time: '2 d', active: false },
-    { name: 'Marvin McKinney', message: 'You\'re Welcome', time: '1 m', active: false },
-  ];
 
 
 
