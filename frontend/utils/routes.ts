@@ -6,9 +6,8 @@ const changeToHomeRoutes = new Set(["/login", "/signup"]);
 
 export function isProtectedRoute(pathname: string): boolean {
   // console.log(pathname);
-  
-  return protectedRoutes.has(pathname) ||
-  paymentRoute.test(pathname);
+
+  return protectedRoutes.has(pathname) || paymentRoute.test(pathname);
 }
 
 export function toBeRedirectedRoutes(pathname: string): boolean {
@@ -38,6 +37,7 @@ const changeToCompanyDashboardRoutes = new Set([
   "/company/trips",
   "/company/categorys",
   "/company/addCategory",
+  "/company/chat",
 ]);
 
 const EditTripRoutePattern = /^\/company\/editTrip\/[^/]+\/?.*$/;
