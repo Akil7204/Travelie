@@ -23,7 +23,7 @@ const defaultProfileImage = '/img/DefaultProfilePicMale.png'; // Default profile
 
 const MessageList: React.FC<MessageListProps> = ({ messages, onChatSelect }) => {
   return (
-    <div className="w-1/3 bg-gray-100 p-4">
+    <div className="w-1/3 bg-gray-100 p-4 h-screen">
       <h2 className="text-lg font-semibold mb-4">Messages</h2>
       <input
         type="text"

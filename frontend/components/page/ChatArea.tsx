@@ -33,7 +33,7 @@ const ChatArea: React.FC<ChatAreaProps> = ({ chatId, messages }) => {
   }, [chatId]); // Fetch company details when chatId changes
 
   return (
-    <div className="ml-1/3 flex-grow h-screen ">
+    <div className="ml-1/3 flex-grow h-screen mt-0 ">
       {/* Header with profile info */}
       <div className="flex items-center space-x-4 p-4 bg-gray-100 rounded-lg mb-4">
         <img
@@ -48,7 +48,7 @@ const ChatArea: React.FC<ChatAreaProps> = ({ chatId, messages }) => {
       </div>
 
       {/* Messages */}
-      <div className="bg-white p-4 rounded-lg shadow-lg flex-grow mb-4 overflow-y-auto h-4/6">
+      <div className="bg-white p-4 rounded-lg shadow-lg flex-grow mb-4 overflow-y-auto h-1/2">
         {messages.length > 0 ? (
           messages.map((msg) => (
             <div key={msg._id} className={`flex ${msg.fromMe ? 'justify-end' : 'justify-start'} mb-2`}>
