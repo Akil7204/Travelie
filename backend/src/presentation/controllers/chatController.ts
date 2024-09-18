@@ -4,7 +4,9 @@ import { chatModel } from "../../domain/chatModel";
 
 export const createChat = async (req: Request, res: Response) => {
     const newChat = new chatModel({
-        members: [req.body.senderId, req.body.receiverId],
+        // members: [req.body.senderId, req.body.receiverId],
+        userId: req.body.senderId,
+        companyId: req.body.receiverId
     });
 
     try {

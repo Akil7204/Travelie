@@ -127,8 +127,9 @@ export const updateBookedTrip = async (
     //   { new: true } // Return the updated document
     // );
     // console.log({bookedData});
+
     
-    return bookedData?._id
+    return bookedData
   } catch (error) {
     console.log(error);
     

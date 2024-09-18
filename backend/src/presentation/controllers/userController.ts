@@ -19,6 +19,7 @@ import {
 } from "../../Infrastructure/userRepository";
 import { sendEmail } from "../../uilts/sendEmail";
 import { profileAddBucket } from "../../uilts/profileAddBucket";
+import { chatModel } from "../../domain/chatModel";
 var jsSHA = require("jssha");
 
 // register the user
@@ -274,12 +275,25 @@ export const addTransaction = async (
 
 export const saveData = async (req: Request, res: Response) => {
   try {
-    // console.log(req.body);
+    console.log("all data: ", req.body);
     const { txnid, email, productinfo, status } = req.body;
     console.log({ txnid, email, productinfo, status });
     if (status == "success") {
       const bookedTripId = await fetchbookingData(txnid, productinfo, status);
-      res.status(200).json(bookedTripId);
+      // console.log({bookedTripId});
+      const { tripId, userId }: any = bookedTripId;
+      const trip = await fetchDetailTrip(tripId);
+      const companyId = trip?.companyId;
+      let chat = await chatModel.findOne({ userId, companyId });
+      if (!chat) {
+        // If no chat exists, create a new chat
+        chat = new chatModel({
+          userId,
+          companyId,
+        });
+        await chat.save();
+      }
+      res.status(200).json(bookedTripId?._id);
     } else if (status == "failure"){
       console.log(status);
 
