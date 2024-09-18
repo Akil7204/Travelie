@@ -35,7 +35,7 @@ const MessageList: React.FC<MessageListProps> = ({ messages, onChatSelect }) => 
           <li
             key={msg._id} // Use unique ID for the key
             className={`flex items-center p-3 mb-2 rounded-lg ${
-              msg.active ? 'bg-blue-200' : 'bg-white'
+              msg.active ? 'bg-blue-400' : 'bg-white'
             }`}
             onClick={() => onChatSelect(msg._id)} // Call the selection function on click
           >
@@ -46,7 +46,12 @@ const MessageList: React.FC<MessageListProps> = ({ messages, onChatSelect }) => 
               className="w-10 h-10 rounded-full mr-3"
             />
             <div className="flex-grow">
-              <p className="font-semibold">{msg.companyId.companyname}</p>
+              <p
+                className="font-semibold text-blue-600 hover:text-blue-800 cursor-pointer"
+                onClick={() => onChatSelect(msg._id)} // Ensure the click still selects the chat
+              >
+                {msg.companyId.companyname}
+              </p>
               <p className="text-sm text-gray-600">{msg.message}</p>
             </div>
             <span className="text-xs text-gray-400">{msg.time}</span>
