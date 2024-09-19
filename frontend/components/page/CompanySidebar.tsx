@@ -9,20 +9,25 @@ interface ChatSidebarProps {
 const ChatSidebar: React.FC<ChatSidebarProps> = ({ users, selectedUser, setSelectedUser }) => {
   return (
     <div className="w-1/4 h-full bg-gray-200 p-4">
-      <ul>
-        {users.map((name, index) => (
-          <li
-            key={index}
-            onClick={() => setSelectedUser(name)}
-            className={`mb-4 cursor-pointer text-lg p-2 rounded-lg hover:bg-blue-200 
+      {users.length > 0 ? (
+        <ul>
+          {users.map((name, index) => (
+            <li
+              key={index}
+              onClick={() => setSelectedUser(name)}
+              className={`mb-4 cursor-pointer text-lg p-2 rounded-lg hover:bg-blue-200 
               ${selectedUser === name ? 'bg-blue-500 text-white' : 'bg-gray-100 text-black'}`}
-          >
-            {name}
-          </li>
-        ))}
-      </ul>
+            >
+              {name}
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p>No users available</p> // Handle the case when users array is empty
+      )}
     </div>
   );
 };
+
 
 export default ChatSidebar;

@@ -1,57 +1,81 @@
 "use client";
+import { companyChats } from "@/app/services/chatAPI";
 import Layout from "@/components/company/Layout";
 import ChatBox from "@/components/page/CompanyChat";
 import ChatSidebar from "@/components/page/CompanySidebar";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+
+interface Company {
+  _id: string;
+}
+
+interface Message {
+  text: string;
+  sender: string;
+  time: string;
+}
 
 const ChatApp = () => {
-  // Usernames in the sidebar
-  const users = ["Kiran", "Liston Fermi", "Sanooj", "Pranav"];
+  const [users, setUsers] = useState<Company | null>(null);
+  const [chats, setChats] = useState<Message[]>([]); // Define the chat messages array
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null); // Error state
 
-  // Initial messages (you can load from backend in a real app)
-  const initialMessages: any = {
-    Kiran: [
-      { text: "Hello, Kiran!", sender: "me", time: "6:30 pm" },
-      { text: "Hey, how are you?", sender: "other", time: "6:31 pm" },
-    ],
-    "Liston Fermi": [
-      { text: "What is the plan for today?", sender: "me", time: "6:32 pm" },
-      { text: "We can discuss at 8 pm.", sender: "other", time: "6:33 pm" },
-    ],
-    Sanooj: [
-      { text: "When is the meeting?", sender: "me", time: "6:34 pm" },
-      { text: "It’s tomorrow at 10 am.", sender: "other", time: "6:35 pm" },
-    ],
-    Pranav: [
-      { text: "Have you completed the task?", sender: "me", time: "6:36 pm" },
-      {
-        text: "Yes, I sent it earlier today.",
-        sender: "other",
-        time: "6:37 pm",
-      },
-    ],
-  };
+  const [selectedUser, setSelectedUser] = useState<string | null>(null);
 
-  // State to manage the selected user and their chat
-  const [selectedUser, setSelectedUser] = useState<string>(users[0]);
+  // Fetch user information from local storage
+  useEffect(() => {
+    const companyData = localStorage.getItem("company");
+    if (companyData) {
+      const company = JSON.parse(companyData);
+      setUsers(company);
+    }
+  }, []);
+
+  // Fetch chats when users are set
+  useEffect(() => {
+    const getChats = async () => {
+      try {
+        if (users) {
+          const { data } = await companyChats(users._id);
+          setChats(data);
+          console.log(data);
+          
+        }
+      } catch (error: any) {
+        console.error(error);
+        setError("Failed to load chats.");
+      } finally {
+        setLoading(false);
+      }
+    };
+    if (users) {
+      getChats();
+    }
+  }, [users]);
 
   return (
-    <Layout>
-      <div className="h-screen flex">
-        {/* Sidebar with users */}
-        <ChatSidebar
-          users={users}
-          selectedUser={selectedUser}
-          setSelectedUser={setSelectedUser}
-        />
+    <div>aii</div>
+    // <Layout>
+    //   <div className="h-screen flex">
+    //     {/* Sidebar with users */}
+    //     <ChatSidebar
+    //       users={users} // Ensure this matches the expected props for ChatSidebar
+    //       selectedUser={selectedUser}
+    //       setSelectedUser={setSelectedUser}
+    //     />
 
-        {/* Chatbox showing dynamic messages based on selected user */}
-        <ChatBox
-          messages={initialMessages[selectedUser]}
-          selectedUser={selectedUser}
-        />
-      </div>
-    </Layout>
+    //     {/* Chatbox showing dynamic messages based on selected user */}
+    //     {selectedUser && chats[selectedUser] ? (
+    //       <ChatBox messages={chats[selectedUser]} selectedUser={selectedUser} />
+    //     ) : (
+    //       <div>No chats available.</div>
+    //     )}
+
+    //     {loading && <div>Loading chats...</div>}
+    //     {error && <div>{error}</div>}
+    //   </div>
+    // </Layout>
   );
 };
 

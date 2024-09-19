@@ -18,10 +18,10 @@ export const createChat = async (req: Request, res: Response) => {
 
 export const userChat = async (req: Request, res: Response) => {
   try {
+    
     const chat = await chatModel.find({
       userId: req.params.userId, // Querying by userId directly
     }).populate("companyId");
-    console.log(chat);
 
     res.status(200).json(chat);
   } catch (error: any) {
@@ -37,6 +37,33 @@ export const findChat = async (req: Request, res: Response) => {
     res.status(200).json(chat);
   } catch (error: any) {
     console.log(error);
+    res.status(500).json(error);
+  }
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+// company controllers;
+
+export const companyChat = async (req: Request, res: Response) => {
+  try {
+    
+    const chat = await chatModel.find({
+      companyId: req.params.companyId, // Querying by companyId directly
+    }).populate("userId");
+
+    res.status(200).json(chat);
+  } catch (error: any) {
     res.status(500).json(error);
   }
 };
