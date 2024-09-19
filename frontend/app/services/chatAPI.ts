@@ -31,3 +31,18 @@ export const sendMessage = async (
 export const companyChats = (id: string) => {
   return axios.get(`${SERVER_URL_CHAT}/company/${id}`);
 };
+
+export const messageSend = async (
+  messageData: any
+) => {
+  try {
+    console.log({messageData});
+
+    const response = await axios.post(`${SERVER_URL_MESSAGE}/company/message`, {
+      messageData
+    });
+    return response.data;
+  } catch (error: any) {
+    throw new Error(error.response?.data?.message || "Failed to send message");
+  }
+};

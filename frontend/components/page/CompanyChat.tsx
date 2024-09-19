@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { messageSend } from "@/app/services/chatAPI";
 
 interface ChatMessage {
   text: string;
@@ -46,7 +47,9 @@ const ChatBox: React.FC<ChatBoxProps> = ({
     
 
     try {
-      const response = await axios.post("/api/messages", messageData);
+      const response = await messageSend(messageData)
+      console.log({response});
+      
       if (response.status === 200) {
         const message: ChatMessage = {
           text: newMessage,

@@ -57,9 +57,10 @@ export const getMessage = async (req: Request, res: Response) => {
 
 
 export const companyAddMessage = async (req: Request, res: Response) => {
-  const { chatId, senderId, text, senderModel } = req.body;  // Include senderModel
+  
+  const { chatId, senderId, text, senderModel } = req.body.messageData;  // Include senderModel
 
-  console.log(chatId, senderId, text, senderModel);
+  // console.log(chatId, senderId, text, senderModel);
 
   // Validate the request data
   if (!chatId || !senderId || !text || !senderModel) {
