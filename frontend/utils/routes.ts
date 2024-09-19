@@ -19,6 +19,7 @@ export function toBeRedirectedRoutes(pathname: string): boolean {
 const changeToAdminDashboardRoutes = new Set([
   "/admin/dashboard",
   "/admin/approval",
+  "/admin/user",
 ]);
 
 export function isProtectedAdminRoute(pathname: string): boolean {

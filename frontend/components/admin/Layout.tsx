@@ -75,9 +75,9 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
             </li>
             <li className="px-6 py-3">
               <Link
-                href="/admin/users"
+                href="/admin/user"
                 className={`rounded-lg block text-xl p-3 font-semibold ${
-                  isActive("/admin/users")
+                  isActive("/admin/user")
                     ? "bg-blue-700 text-white"
                     : "hover:bg-gray-200"
                 }`}

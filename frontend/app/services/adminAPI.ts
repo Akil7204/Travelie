@@ -33,4 +33,22 @@ export const approvalAPI = async (companyId: string, token: string) => {
   });
 };
 
+export const getAllUsersAPI = async (token: string) => {
+  try {
+    const response = await commonAPI(
+      "GET",
+      `${server_URL_admin}/getAllUsers`,
+      undefined,
+      {
+        Authorization: `Bearer ${token}`,
+      }
+    );
+    console.log(response);
+
+    return response;
+  } catch (error) {
+    throw new Error("Failed to fetch users");
+  }
+};
+
 
