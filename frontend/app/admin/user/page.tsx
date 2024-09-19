@@ -1,6 +1,6 @@
 "use client";
 
-import { getAllUsersAPI } from "@/app/services/adminAPI";
+import { blockUserAPI, getAllUsersAPI, unblockUserAPI } from "@/app/services/adminAPI";
 import Layout from "@/components/admin/Layout";
 import Table from "@/components/page/Table";
 import React, { useEffect, useState } from "react";
@@ -14,7 +14,7 @@ interface User {
 
 const AdminUserPage: React.FC = () => {
   const [users, setUsers] = useState<User[]>([]);
-
+  const [currentUser, setCurrentUser] = useState<User | null>(null);
   useEffect(() => {
     const fetchUsers = async () => {
       try {
@@ -42,6 +42,41 @@ const AdminUserPage: React.FC = () => {
     );
   };
 
+  const handleConfirmAction = async (user: any) => {
+    if (user) {
+      try {
+        const token = localStorage.getItem("adminToken");
+        if (!token) throw new Error("No token found");
+
+        // Update the UI optimistically
+        setUsers((prevUsers) =>
+          prevUsers.map((users) =>
+            users._id === user._id
+              ? { ...users, isBlocked: !users.isBlocked }
+              : users
+          )
+        );
+        setCurrentUser(user)
+        console.log({user});
+        console.log({currentUser});
+        
+        
+
+        // Call the appropriate API based on the current status
+        if (currentUser?.isBlocked) {
+          await unblockUserAPI(currentUser._id, token);
+        //   toast.success("User unblocked successfully");
+        } else {
+          await blockUserAPI(currentUser?._id, token);
+        //   toast.success("User blocked successfully");
+        }
+      } catch (err) {
+        console.error("Failed to update user status", err);
+        // setError("Failed to update user status");
+      }
+    }
+  };
+
   const headers = ["ID", "Name", "Email", "Status", "Action"];
 
   const renderUserRow = (user: User) => (
@@ -65,7 +100,8 @@ const AdminUserPage: React.FC = () => {
           className={`px-4 py-2 text-sm font-medium ${
             user.isBlocked ? "bg-green-500 text-white" : "bg-red-500 text-white"
           } rounded-lg focus:outline-none hover:opacity-90 transition`}
-          onClick={() => handleToggleBlock(user._id)}
+        //   onClick={() => handleToggleBlock(user._id)}
+        onClick={() => handleConfirmAction(user)}
         >
           {user.isBlocked ? "Unblock" : "Block"}
         </button>
