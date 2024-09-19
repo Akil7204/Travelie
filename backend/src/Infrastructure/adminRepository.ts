@@ -1,6 +1,7 @@
 import mongoose, { Schema, Document } from "mongoose";
 import { Admin } from "../domain/admin";
 import { Company, CompanyModel } from "../domain/company";
+import { User, UserModel } from "../domain/user";
 
 // Define the Mongoose schema for the User
 const AdminSchema: Schema<Admin> = new Schema({
@@ -34,4 +35,9 @@ export const updateCompanyFromDB = async (id: string) => {
       upsert: false, 
     }
   );
+};
+
+// Fetch all users
+export const findAllUsers = async (): Promise<User[]> => {
+  return UserModel.find(); 
 };

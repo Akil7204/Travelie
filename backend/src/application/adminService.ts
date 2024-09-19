@@ -1,12 +1,14 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import {
+  findAllUsers,
   findUserByEmailAdmin,
   getAllUnapprovalFromDB,
   updateCompanyFromDB,
 } from "../Infrastructure/adminRepository";
 import { Admin } from "../domain/admin";
 import { errorHandler } from "../uilts/errorHandler"; // Assuming errorHandler is a utility function
+import { User } from "../domain/user";
 
 export const loginUser = async (
   email: string,
@@ -39,5 +41,10 @@ export const getAllUnapprovalCompany = async () => {
 export const updateApproval = async (id: string) => {
   return await updateCompanyFromDB(id);
 }
+
+// Fetch all users
+export const getAllUsers = async (): Promise<User[]> => {
+  return findAllUsers();
+};
 
 

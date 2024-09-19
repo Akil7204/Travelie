@@ -1,5 +1,5 @@
 import express  from "express";
-import { adminlogin, getCompanyUnapproval, updateCompanyApproval } from "../controllers/adminController";
+import { adminlogin, getCompanyUnapproval, getUsersList, updateCompanyApproval } from "../controllers/adminController";
 import adminJwtMiddleware from "../MiddleWare/adminJWT";
 
 
@@ -12,6 +12,8 @@ router.post("/login", adminlogin);
 router.get("/approval", adminJwtMiddleware, getCompanyUnapproval);
 
 router.put("/approval/:id", adminJwtMiddleware, updateCompanyApproval);
+
+router.get("/getAllUsers", adminJwtMiddleware, getUsersList);
 
 
 

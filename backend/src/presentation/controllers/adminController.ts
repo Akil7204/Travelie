@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import {
   getAllUnapprovalCompany,
+  getAllUsers,
   loginUser,
   updateApproval,
 } from "../../application/adminService";
@@ -50,5 +51,19 @@ export const updateCompanyApproval = async (req: Request, res: Response) => {
     console.log(error);
 
     res.status(500).json({ message: error.message });
+  }
+};
+
+// Get all users
+export const getUsersList = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
+  try {
+    const users = await getAllUsers();
+    res.status(200).json(users);
+  } catch (error) {
+    next(error);
   }
 };

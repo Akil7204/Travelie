@@ -8,6 +8,7 @@ export interface User {
   profileImage?: string;
   otp?: string;
   otpVerified?: boolean;
+  isBlocked?: boolean; 
 }
 
 const UserSchema: Schema<User> = new Schema({
@@ -18,6 +19,7 @@ const UserSchema: Schema<User> = new Schema({
   profileImage: { type: String, default: "/img/DefaultProfilePicMale.png" },
   otp: { type: String },
   otpVerified: { type: Boolean, default: false },
+  isBlocked: { type: Boolean, default: false }, 
 });
 
 // Create the Mongoose model
