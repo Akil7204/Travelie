@@ -77,3 +77,22 @@ export const blockUserAPI = async (userId: any, token: string) => {
   );
 };
 
+
+export const getAllCompanyAPI = async (token: string) => {
+  try {
+    const response = await commonAPI(
+      "GET",
+      `${server_URL_admin}/getAllCompanies`,
+      undefined,
+      {
+        Authorization: `Bearer ${token}`,
+      }
+    );
+    console.log(response);
+
+    return response;
+  } catch (error) {
+    throw new Error("Failed to fetch users");
+  }
+};
+

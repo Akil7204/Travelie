@@ -34,13 +34,6 @@ const AdminUserPage: React.FC = () => {
     fetchUsers();
   }, []);
 
-  const handleToggleBlock = (id: string) => {
-    setUsers((prevUsers) =>
-      prevUsers.map((user) =>
-        user._id === id ? { ...user, isBlocked: !user.isBlocked } : user
-      )
-    );
-  };
 
   const handleConfirmAction = async (user: any) => {
     if (user) {
