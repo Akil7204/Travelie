@@ -1,14 +1,17 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import {
+  blockUserById,
   findAllUsers,
   findUserByEmailAdmin,
   getAllUnapprovalFromDB,
+  unblockUserById,
   updateCompanyFromDB,
 } from "../Infrastructure/adminRepository";
 import { Admin } from "../domain/admin";
 import { errorHandler } from "../uilts/errorHandler"; // Assuming errorHandler is a utility function
 import { User } from "../domain/user";
+import { findUserById } from "../Infrastructure/userRepository";
 
 export const loginUser = async (
   email: string,
@@ -47,4 +50,31 @@ export const getAllUsers = async (): Promise<User[]> => {
   return findAllUsers();
 };
 
+// Function to block a user
+export const blockUser = async (userId: string): Promise<User | null> => {
+  const user = await findUserById(userId);
+  if (!user) {
+    throw errorHandler(404, "User not found");
+  }
 
+  if (user.isBlocked) {
+    throw errorHandler(400, "User is already blocked");
+  }
+
+  return blockUserById(userId);
+};
+
+
+// Function to unblock a user
+export const unblockUser = async (userId: string): Promise<User | null> => {
+  const user = await findUserById(userId);
+  if (!user) {
+    throw errorHandler(404, "User not found");
+  }
+
+  if (!user.isBlocked) {
+    throw errorHandler(400, "User is not blocked");
+  }
+
+  return unblockUserById(userId);
+};

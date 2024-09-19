@@ -3,7 +3,7 @@
 import { blockUserAPI, getAllUsersAPI, unblockUserAPI } from "@/app/services/adminAPI";
 import Layout from "@/components/admin/Layout";
 import Table from "@/components/page/Table";
-import React, { useEffect, useState } from "react";
+import React, { use, useEffect, useState } from "react";
 
 interface User {
   _id: string;
@@ -14,7 +14,7 @@ interface User {
 
 const AdminUserPage: React.FC = () => {
   const [users, setUsers] = useState<User[]>([]);
-  const [currentUser, setCurrentUser] = useState<User | null>(null);
+  const [currentUser, setCurrentUser] = useState<User>();
   useEffect(() => {
     const fetchUsers = async () => {
       try {
@@ -57,17 +57,17 @@ const AdminUserPage: React.FC = () => {
           )
         );
         setCurrentUser(user)
-        console.log({user});
-        console.log({currentUser});
-        
-        
 
         // Call the appropriate API based on the current status
-        if (currentUser?.isBlocked) {
-          await unblockUserAPI(currentUser._id, token);
+        if (user?.isBlocked) {
+          await unblockUserAPI(user._id, token);
+          console.log("unblock success");
+          
         //   toast.success("User unblocked successfully");
         } else {
-          await blockUserAPI(currentUser?._id, token);
+          await blockUserAPI(user?._id, token);
+          console.log("block success");
+
         //   toast.success("User blocked successfully");
         }
       } catch (err) {

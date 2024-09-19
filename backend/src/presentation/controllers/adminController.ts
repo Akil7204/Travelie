@@ -1,8 +1,10 @@
 import { Request, Response, NextFunction } from "express";
 import {
+  blockUser,
   getAllUnapprovalCompany,
   getAllUsers,
   loginUser,
+  unblockUser,
   updateApproval,
 } from "../../application/adminService";
 
@@ -63,6 +65,30 @@ export const getUsersList = async (
   try {
     const users = await getAllUsers();
     res.status(200).json(users);
+  } catch (error) {
+    next(error);
+  }
+};
+
+// Block a user
+export const blockUserController = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const userId = req.params.id;
+    console.log("backend", userId);
+    
+    const blockedUser = await blockUser(userId);
+    res.status(200).json({ message: "User blocked successfully", user: blockedUser });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// Unblock a user
+export const unblockUserController = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const userId = req.params.id;
+    const unblockedUser = await unblockUser(userId);
+    res.status(200).json({ message: "User unblocked successfully", user: unblockedUser });
   } catch (error) {
     next(error);
   }

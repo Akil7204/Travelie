@@ -41,3 +41,13 @@ export const updateCompanyFromDB = async (id: string) => {
 export const findAllUsers = async (): Promise<User[]> => {
   return UserModel.find(); 
 };
+
+// Function to block a user by ID
+export const blockUserById = async (userId: string) => {
+  return UserModel.findByIdAndUpdate(userId, { isBlocked: true }, { new: true });
+};
+
+// Function to unblock a user by ID
+export const unblockUserById = async (userId: string) => {
+  return UserModel.findByIdAndUpdate(userId, { isBlocked: false }, { new: true });
+};
