@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import {
   blockUser,
+  getAllCompanies,
   getAllUnapprovalCompany,
   getAllUsers,
   loginUser,
@@ -91,5 +92,14 @@ export const unblockUserController = async (req: Request, res: Response, next: N
     res.status(200).json({ message: "User unblocked successfully", user: unblockedUser });
   } catch (error) {
     next(error);
+  }
+};
+
+export const getAllcompanyController = async (req: Request, res: Response) => {
+  try {
+    const allWorkers = await getAllCompanies();
+    res.status(200).json(allWorkers);
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to retrieve workers' });
   }
 };

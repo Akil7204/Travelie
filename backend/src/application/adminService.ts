@@ -4,6 +4,7 @@ import {
   blockUserById,
   findAllUsers,
   findUserByEmailAdmin,
+  getAllCompaniesFromDB,
   getAllUnapprovalFromDB,
   unblockUserById,
   updateCompanyFromDB,
@@ -77,4 +78,9 @@ export const unblockUser = async (userId: string): Promise<User | null> => {
   }
 
   return unblockUserById(userId);
+};
+
+// Function to Get all workers
+export const getAllCompanies = async () => {
+  return await getAllCompaniesFromDB();
 };
