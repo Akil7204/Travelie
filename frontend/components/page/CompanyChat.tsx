@@ -50,16 +50,16 @@ const ChatBox: React.FC<ChatBoxProps> = ({
       const response = await messageSend(messageData)
       console.log({response});
       
-      if (response.status === 200) {
-        const message: ChatMessage = {
-          text: newMessage,
-          sender: selectedUser,
-          time: new Date().toISOString(),
-        };
+      // if (response.status === 200) {
+      //   const message: ChatMessage = {
+      //     text: newMessage,
+      //     sender: selectedUser,
+      //     time: new Date().toISOString(),
+      //   };
 
-        // onNewMessage(message);
-        setNewMessage("");
-      }
+      //   // onNewMessage(message);
+      // }
+      setNewMessage("");
     } catch (error) {
       console.error("Error sending message:", error);
     }
@@ -67,11 +67,11 @@ const ChatBox: React.FC<ChatBoxProps> = ({
 
   return (
     <div className="w-3/4 h-full p-4 flex flex-col justify-between bg-white shadow-lg">
-      {/* <div className="overflow-y-auto space-y-4">
+      <div className="overflow-y-auto space-y-4">
         <h2 className="text-2xl font-semibold mb-4 text-gray-700">{selectedUser}</h2>
         <hr className="border-gray-300 mb-4" />
 
-        {messages.map((message, index) => (
+        {/* {messages.map((message, index) => (
           <div
             key={index}
             className={`flex ${message.sender === selectedUser ? "justify-end" : "justify-start"}`}
@@ -81,8 +81,8 @@ const ChatBox: React.FC<ChatBoxProps> = ({
               <span className="text-xs mt-2 block text-right">{message.time}</span>
             </div>
           </div>
-        ))}
-      </div> */}
+        ))} */}
+      </div>
 
       <div className="border-t p-4 flex items-center">
         <input
