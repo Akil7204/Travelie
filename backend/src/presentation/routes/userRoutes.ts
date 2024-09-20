@@ -5,6 +5,7 @@ import {
   detailTrip,
   fetchBookedData,
   getAllTrips,
+  getUserBookings,
   googleLoginHandler,
   login,
   payment,
@@ -41,6 +42,7 @@ router.post("/bookingSeat", verifyUser, upload.none(), bookingSeat);
 
 router.get("/bookedTrip/:id", verifyUser, fetchBookedData);
 
+router.get("/bookings", verifyUser, getUserBookings);
 
 // Payment Routes;
 router.post('/payment', verifyUser, payment);

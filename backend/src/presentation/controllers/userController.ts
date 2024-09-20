@@ -7,6 +7,7 @@ import {
   fetchbookingSeat,
   fetchDetailTrip,
   findBookingTrip,
+  getBookingsByUser,
   googleLogin,
   loginUser,
   registerUser,
@@ -294,11 +295,24 @@ export const saveData = async (req: Request, res: Response) => {
         await chat.save();
       }
       res.status(200).json(bookedTripId?._id);
-    } else if (status == "failure"){
+    } else if (status == "failure") {
       console.log(status);
-
     }
   } catch (error) {
     console.log(error);
+  }
+};
+
+export const getUserBookings = async (req: any, res: Response) => {
+  const userId = req.userId;
+  console.log(userId);
+
+  try {
+    const bookings = await getBookingsByUser(userId);
+    console.log(bookings);
+
+    res.status(200).json(bookings);
+  } catch (error: any) {
+    res.status(500).json({ message: error.message });
   }
 };

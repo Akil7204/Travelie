@@ -2,6 +2,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import {
   allTripsFromDB,
+  BookingsByUser,
   createBookingformDB,
   createUser,
   findUserByEmail,
@@ -237,4 +238,8 @@ export const fetchbookingData = async (txnid: string, productinfo: string, statu
   const bookedTrip = await updateBookedTrip(productinfo, txnid, status);
   // console.log(AllTripDetails?.price);
   return bookedTrip;
+};
+
+export const getBookingsByUser = async (userId: string) => {
+  return await BookingsByUser(userId);
 };

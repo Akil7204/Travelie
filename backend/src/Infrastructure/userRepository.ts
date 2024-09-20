@@ -135,3 +135,7 @@ export const updateBookedTrip = async (
     
   }
 };
+
+export const BookingsByUser = async (userId: string) => {
+  return await bookedModal.find({ userId, paymentStatus: 'success' }).populate('tripId'); // Assuming tripId is populated with trip data
+};

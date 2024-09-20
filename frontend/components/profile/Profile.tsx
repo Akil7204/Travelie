@@ -67,7 +67,7 @@ const Profile: React.FC<LayoutProps> = ({ children }) => {
                 Manage account
               </Link>
               <Link
-                href="#"
+                href="/myTrips"
                 className={`rounded-lg block text-xl p-3 font-semibold ${
                   isActive("/company/trips")
                     ? "text-blue-700 bg-blue-200"

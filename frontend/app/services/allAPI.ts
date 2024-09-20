@@ -102,3 +102,15 @@ export const fetchingBookingDetails = async (bookingId: any) => {
     throw error;
   }
 };
+
+export const getUserBookingsAPI = async () => {
+  try {
+    const response = await axios.get(`${SERVER_URL}/bookings`, { withCredentials: true });
+    // console.log(response.data);
+    
+    return response.data;
+  } catch (error) {
+    console.error("Failed to fetch bookings:", error);
+    throw error;
+  }
+};
