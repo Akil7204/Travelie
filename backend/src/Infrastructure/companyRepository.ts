@@ -192,6 +192,10 @@ export const updateingCategory = async (companyId: string, body: any, categoryId
   }
 };
 
+export const findCompanyById = async (companyId: string) => {
+  return CompanyModel.findById(companyId);
+};
+
 
 
 

@@ -1,11 +1,13 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import {
+  blockCompanyById,
   blockUserById,
   findAllUsers,
   findUserByEmailAdmin,
   getAllCompaniesFromDB,
   getAllUnapprovalFromDB,
+  unblockCompanyById,
   unblockUserById,
   updateCompanyFromDB,
 } from "../Infrastructure/adminRepository";
@@ -13,6 +15,8 @@ import { Admin } from "../domain/admin";
 import { errorHandler } from "../uilts/errorHandler"; // Assuming errorHandler is a utility function
 import { User } from "../domain/user";
 import { findUserById } from "../Infrastructure/userRepository";
+import { Company } from "../domain/company";
+import { findCompanyById } from "../Infrastructure/companyRepository";
 
 export const loginUser = async (
   email: string,
@@ -83,4 +87,30 @@ export const unblockUser = async (userId: string): Promise<User | null> => {
 // Function to Get all workers
 export const getAllCompanies = async () => {
   return await getAllCompaniesFromDB();
+};
+
+export const blockCompany = async (companyId: string): Promise<Company | null> => {
+  const company = await findCompanyById(companyId);
+  if (!company) {
+    throw errorHandler(404, "company not found");
+  }
+
+  if (company.isBlocked) {
+    throw errorHandler(400, "company is already blocked");
+  }
+
+  return blockCompanyById(companyId);
+};
+
+export const unblockCompany = async (companyId: string): Promise<Company | null> => {
+  const company = await findCompanyById(companyId);
+  if (!company) {
+    throw errorHandler(404, "company not found");
+  }
+
+  if (!company.isBlocked) {
+    throw errorHandler(400, "company is not blocked");
+  }
+
+  return unblockCompanyById(companyId);
 };

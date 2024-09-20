@@ -98,7 +98,7 @@ export const getAllCompanyAPI = async (token: string) => {
 
 export const unblockCompanyAPI = async (userId: string, token: string) => {
   return await axios.put(
-    `${server_URL_admin}/unblockUser/${userId}`,
+    `${server_URL_admin}/company/unblockUser/${userId}`,
     {},
     {
       headers: {
@@ -110,7 +110,7 @@ export const unblockCompanyAPI = async (userId: string, token: string) => {
 
 export const blockCompanyAPI = async (userId: any, token: string) => {
   return await axios.put(
-    `${server_URL_admin}/blockUser/${userId}`,
+    `${server_URL_admin}/company/blockUser/${userId}`,
     {},
     {
       headers: {

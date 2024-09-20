@@ -1,10 +1,12 @@
 import { Request, Response, NextFunction } from "express";
 import {
+  blockCompany,
   blockUser,
   getAllCompanies,
   getAllUnapprovalCompany,
   getAllUsers,
   loginUser,
+  unblockCompany,
   unblockUser,
   updateApproval,
 } from "../../application/adminService";
@@ -101,5 +103,28 @@ export const getAllcompanyController = async (req: Request, res: Response) => {
     res.status(200).json(allWorkers);
   } catch (err) {
     res.status(500).json({ error: 'Failed to retrieve workers' });
+  }
+};
+
+export const blockCompanyController = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const companyId = req.params.id;
+    console.log("backend", companyId);
+    
+    const blockedCompany = await blockCompany(companyId);
+
+    res.status(200).json({ message: "Company blocked successfully", company: blockedCompany });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const unblockCompanyController = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const CompanyId = req.params.id;
+    const unblockedCompany = await unblockCompany(CompanyId);
+    res.status(200).json({ message: "Company unblocked successfully", company: unblockedCompany });
+  } catch (error) {
+    next(error);
   }
 };

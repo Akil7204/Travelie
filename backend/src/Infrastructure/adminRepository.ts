@@ -55,3 +55,11 @@ export const unblockUserById = async (userId: string) => {
 export const getAllCompaniesFromDB = async () => {
   return CompanyModel.find().sort({ createdAt: -1 })
 };
+
+export const blockCompanyById = async (companyId: string) => {
+  return CompanyModel.findByIdAndUpdate(companyId, { isBlocked: true }, { new: true });
+};
+
+export const unblockCompanyById = async (companyId: string) => {
+  return CompanyModel.findByIdAndUpdate(companyId, { isBlocked: false }, { new: true });
+};

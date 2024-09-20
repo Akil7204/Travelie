@@ -1,5 +1,5 @@
 import express  from "express";
-import { adminlogin, blockUserController, getAllcompanyController, getCompanyUnapproval, getUsersList, unblockUserController, updateCompanyApproval } from "../controllers/adminController";
+import { adminlogin, blockCompanyController, blockUserController, getAllcompanyController, getCompanyUnapproval, getUsersList, unblockCompanyController, unblockUserController, updateCompanyApproval } from "../controllers/adminController";
 import adminJwtMiddleware from "../MiddleWare/adminJWT";
 
 
@@ -18,6 +18,7 @@ router.put("/blockUser/:id", adminJwtMiddleware, blockUserController);
 router.put("/unblockUser/:id", adminJwtMiddleware, unblockUserController);
 
 router.get("/getAllCompanies", adminJwtMiddleware, getAllcompanyController);
-
+router.put("/company/blockUser/:id", adminJwtMiddleware, blockCompanyController);
+router.put("/company/unblockUser/:id", adminJwtMiddleware, unblockCompanyController);
 
 export default router;
