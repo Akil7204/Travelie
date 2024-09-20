@@ -37,7 +37,7 @@ const Profile: React.FC<LayoutProps> = ({ children }) => {
     <>
       <div className="min-h-screen bg-gray-50 pt-16">
         {/* Profile Header */}
-        <div className="bg-blue-100 py-6 px-4">
+        <div className="bg-gray-200 py-6 px-4">
           <div className="max-w-4xl mx-auto flex items-center space-x-6">
             <div className="w-16 h-16 rounded-full overflow-hidden">
               {userProfile && (
@@ -60,7 +60,7 @@ const Profile: React.FC<LayoutProps> = ({ children }) => {
                 href="/profile"
                 className={`rounded-lg block text-xl p-3 font-semibold ${
                   isActive("/profile")
-                    ? "text-blue-700 bg-blue-200"
+                    ? "text-white bg-blue-700"
                     : "hover:bg-gray-200"
                 }`}
               >
@@ -70,7 +70,7 @@ const Profile: React.FC<LayoutProps> = ({ children }) => {
                 href="/myTrips"
                 className={`rounded-lg block text-xl p-3 font-semibold ${
                   isActive("/myTrips")
-                    ? "text-blue-700 bg-blue-200"
+                    ? "text-white bg-blue-700"
                     : "hover:bg-gray-200"
                 }`}
               >
@@ -80,7 +80,7 @@ const Profile: React.FC<LayoutProps> = ({ children }) => {
                 href="/chat"
                 className={`rounded-lg block text-xl p-3 font-semibold ${
                   isActive("/chat")
-                    ? "text-blue-700 bg-blue-200"
+                    ? "text-white bg-blue-700"
                     : "hover:bg-gray-200"
                 }`}
               >
@@ -90,7 +90,7 @@ const Profile: React.FC<LayoutProps> = ({ children }) => {
                 href="/company/reward"
                 className={`rounded-lg block text-xl p-3 font-semibold ${
                   isActive("/company/reward")
-                    ? "text-blue-700 bg-blue-200"
+                    ? "text-white bg-blue-700"
                     : "hover:bg-gray-200"
                 }`}
               >
@@ -100,7 +100,7 @@ const Profile: React.FC<LayoutProps> = ({ children }) => {
                 href="/company/signout"
                 className={`rounded-lg block text-xl p-3 font-semibold ${
                   isActive("/company/signout")
-                    ? "text-blue-700 bg-blue-200"
+                    ? "text-white bg-blue-700"
                     : "hover:bg-gray-200"
                 }`}
               >
