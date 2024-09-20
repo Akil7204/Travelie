@@ -210,6 +210,9 @@ const MyTrips: React.FC = () => {
                   <button className="w-full py-2 mt-4 bg-blue-500 text-white font-semibold rounded-md shadow-md hover:bg-blue-600 transition">
                     Download Ticket
                   </button>
+                  <button className="w-full py-2 mt-4 bg-blue-500 text-white font-semibold rounded-md shadow-md hover:bg-blue-600 transition">
+                    Cancel Ticket
+                  </button>
                 </div>
               </div>
             </div>

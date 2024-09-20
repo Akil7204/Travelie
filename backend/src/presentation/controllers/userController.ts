@@ -297,6 +297,7 @@ export const saveData = async (req: Request, res: Response) => {
       }
       res.status(200).json(bookedTripId?._id);
     } else if (status == "failure") {
+      res.json("booking failed");
       console.log(status);
     }
   } catch (error) {

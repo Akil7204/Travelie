@@ -63,7 +63,7 @@ export const createBookingformDB = async (
   tripId: string,
   seatCount: number,
   totalAmount: number,
-  userId: string
+  userId: string,
 ) => {
   try {
     // Create a new booking document
@@ -78,9 +78,7 @@ export const createBookingformDB = async (
     const bookedTripSaved = await bookedTrip.save();
     // console.log("Booking ID: ", bookedTripSaved._id);
 
-   
-
-    // console.log("Updated Trip: ", updatedTrip);
+    console.log("Updated Trip: ", bookedTripSaved);
 
     return bookedTripSaved._id;
   } catch (error) {
