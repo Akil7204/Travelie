@@ -1,13 +1,13 @@
 "use client";
-import { getAllCompanyAPI } from "@/app/services/adminAPI";
+import { blockCompanyAPI, getAllCompanyAPI, unblockCompanyAPI } from "@/app/services/adminAPI";
 import Layout from "@/components/admin/Layout";
 import Table from "@/components/page/Table";
 import { useEffect, useState } from "react";
 
 interface Company {
   _id: string;
-  name: string;
-  industry: string;
+  companyname: string;
+  email: string;
   isBlocked: boolean;
 }
 
@@ -22,6 +22,8 @@ const AdminCompanyPage: React.FC = () => {
         if (!token) throw new Error("No token found");
 
         const response = await getAllCompanyAPI(token);
+        console.log(response);
+        
         setCompanies(response);
       } catch (err) {
         console.error("Error fetching users:", err);
@@ -60,17 +62,17 @@ const AdminCompanyPage: React.FC = () => {
         );
 
         // Call the appropriate API based on the current status
-        // if (companies?.isBlocked) {
-        //   await unblockUserAPI(user._id, token);
-        //   console.log("unblock success");
+        if (user.isBlocked) {
+          await unblockCompanyAPI(user._id, token);
+          console.log("unblock success");
           
-        // //   toast.success("User unblocked successfully");
-        // } else {
-        //   await blockUserAPI(user?._id, token);
-        //   console.log("block success");
+        //   toast.success("User unblocked successfully");
+        } else {
+          await blockCompanyAPI(user?._id, token);
+          console.log("block success");
 
-        // //   toast.success("User blocked successfully");
-        // }
+        //   toast.success("User blocked successfully");
+        }
       } catch (err) {
         console.error("Failed to update user status", err);
         // setError("Failed to update user status");
@@ -83,8 +85,8 @@ const AdminCompanyPage: React.FC = () => {
   const renderCompanyRow = (company: Company) => (
     <>
       <td className="px-6 py-4 border-b">{company._id}</td>
-      <td className="px-6 py-4 border-b">{company.name}</td>
-      <td className="px-6 py-4 border-b">{company.industry}</td>
+      <td className="px-6 py-4 border-b">{company.companyname}</td>
+      <td className="px-6 py-4 border-b">{company.email}</td>
       <td className="px-6 py-4 border-b">
         <span
           className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
@@ -103,7 +105,7 @@ const AdminCompanyPage: React.FC = () => {
               ? "bg-green-500 text-white"
               : "bg-red-500 text-white"
           } rounded-lg focus:outline-none hover:opacity-90 transition`}
-          onClick={() => handleToggleBlock(company._id)}
+          onClick={() => handleConfirmAction(company)}
         >
           {company.isBlocked ? "Unblock" : "Block"}
         </button>

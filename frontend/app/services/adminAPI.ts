@@ -96,3 +96,26 @@ export const getAllCompanyAPI = async (token: string) => {
   }
 };
 
+export const unblockCompanyAPI = async (userId: string, token: string) => {
+  return await axios.put(
+    `${server_URL_admin}/unblockUser/${userId}`,
+    {},
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+};
+
+export const blockCompanyAPI = async (userId: any, token: string) => {
+  return await axios.put(
+    `${server_URL_admin}/blockUser/${userId}`,
+    {},
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+};
