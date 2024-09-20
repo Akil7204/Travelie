@@ -114,3 +114,9 @@ export const editTripApi = async (data: any, tripId: string) => {
     withCredentials: true,
   });
 };
+
+export const editCategoryApi = async (data: any, categoryId: string) => {
+  return await axios.post(`${SERVER_URL_COMPANY}/editCategory/${categoryId}`, data, {
+    withCredentials: true,
+  });
+};

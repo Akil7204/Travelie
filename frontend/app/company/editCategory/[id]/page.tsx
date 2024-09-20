@@ -1,6 +1,6 @@
 "use client";
 
-import { addCategoryAPI, addTripAPI, getCategoryByIdAPI } from "@/app/services/companyAPI";
+import { addCategoryAPI, addTripAPI, editCategoryApi, getCategoryByIdAPI } from "@/app/services/companyAPI";
 import Layout from "@/components/company/Layout";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -60,27 +60,27 @@ const EditCategory = () => {
     console.log("Form Data:", data);
     console.log(data.categoryName);
 
-    // Create a new FormData object
-    const formData = new FormData();
+    // // Create a new FormData object
+    // const formData = new FormData();
 
     // formData.append("categoryName", data.categoryName);
 
     // console.log(formData);
 
-    // try {
-    //   const result = await addCategoryAPI(formData);
-    //   if (result) {
-    //     toast.success("Category added successfully");
-    //     setTimeout(() => {
-    //       router.push(`/company/categorys`);
-    //     }, 3000);
-    //   } else {
-    //     toast.error("somthing went worng");
-    //   }
-    // } catch (error: any) {
-    //   console.log(error);
-    //   toast.error(error.message);
-    // }
+    try {
+      const result = await editCategoryApi(data, categoryId);
+      if (result) {
+        toast.success("Category edited successfully");
+        setTimeout(() => {
+          router.push(`/company/categorys`);
+        }, 3000);
+      } else {
+        toast.error("somthing went worng");
+      }
+    } catch (error: any) {
+      console.log(error);
+      toast.error(error.message);
+    }
 
     // TODO: Submit the form data to the backend
   };

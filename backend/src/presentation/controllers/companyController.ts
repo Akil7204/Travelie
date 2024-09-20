@@ -9,6 +9,7 @@ import {
   getTotalCountCategory,
   loginCompany,
   registerCompany,
+  updateCategory,
   updateTrip,
   uploadCategory,
   uploadImage,
@@ -230,3 +231,23 @@ export const editTripById = async (req: any, res: Response): Promise<void> => {
   }
 };
 
+
+export const editCategoryById = async (req: any, res: Response): Promise<void> => {
+  try {
+    const categoryId = req.params.id;
+    const body = req.body;
+    const companyId = req.companyId;
+    // Update the trip with the new data
+    const updatedCategoryData = await updateCategory(companyId, body, categoryId);
+    console.log( {updatedCategoryData});
+    
+    // Send the updated trip as a response
+    res.status(200).json({
+      message: "Category updated successfully",
+      data: updatedCategoryData
+    });
+  } catch (error: any) {
+    console.error("Error updating Category:", error);
+    res.status(500).json({ message: "Failed to update category", error: error.message });
+  }
+};

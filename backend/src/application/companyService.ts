@@ -12,6 +12,7 @@ import {
   getCategoryById,
   getTripById,
   updateCompany,
+  updateingCategory,
   updateingTrip,
 } from "../Infrastructure/companyRepository";
 import { Company } from "../domain/company";
@@ -166,6 +167,23 @@ export const updateTrip = async (
     const tripsadd = await updateingTrip(companyId, data, images, tripId);
     // console.log(tripsadd);
     return tripsadd;
+  } catch (error: any) {
+    throw new Error(error.message);
+  }
+};
+
+export const updateCategory = async (
+  companyId: string,
+  data: any,
+  categoryId: string
+) => {
+  try {
+    const categoryData = { companyId, data };
+
+    categoryData.data.seats = Number(categoryData?.data?.seats);
+    const categorysadd = await updateingCategory(companyId, data, categoryId);
+    // console.log(tripsadd);
+    return categorysadd;
   } catch (error: any) {
     throw new Error(error.message);
   }

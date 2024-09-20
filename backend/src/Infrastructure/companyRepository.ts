@@ -170,4 +170,28 @@ export const updateingTrip = async (companyId: string, body: any, imageUrl: stri
   }
 };
 
+export const updateingCategory = async (companyId: string, body: any, categoryId: string) => {
+  try {
+    // Find the existing category
+    const category = await Category.findOne({ _id: categoryId, companyId });
+    
+    if (!category) {
+      throw new Error('Category not found or you are not authorized to edit this category');
+    }
+
+    // Update fields
+    category.name = body.categoryName || category.name;
+
+    // Save the updated category
+    const updatedCategory = await category.save();
+
+    return updatedCategory;
+  } catch (error: any) {
+    console.error("Error updating category:", error);
+    throw new Error(error.message);
+  }
+};
+
+
+
 
