@@ -1,5 +1,7 @@
-import { getMessages, sendMessage } from '@/app/services/chatAPI';
-import React, { useEffect, useState } from 'react';
+"use client"
+import { getMessages, sendMessage } from "@/app/services/chatAPI";
+import React, { useEffect, useState } from "react";
+import io, { Socket } from "socket.io-client";
 
 interface Message {
   _id: string;
@@ -16,48 +18,117 @@ interface ChatAreaProps {
   chatId: any;
   senderId: string; // Current user (admin/user) ID
   senderModel: string;
-  chat: any
+  chat: any;
 }
 
-const ChatArea: React.FC<ChatAreaProps> = ({ chatId, senderId, senderModel, chat }) => {
+const ChatArea: React.FC<ChatAreaProps> = ({
+  chatId,
+  senderId,
+  senderModel,
+  chat,
+}) => {
   const [messages, setMessages] = useState<Message[]>([]); // State to hold fetched messages
   const [companyName, setCompanyName] = useState<string | undefined>();
-  const [companyProfileImage, setCompanyProfileImage] = useState<string | undefined>();
-  const [newMessage, setNewMessage] = useState<string>('');
+  const [companyProfileImage, setCompanyProfileImage] = useState<
+    string | undefined
+  >();
+  const [newMessage, setNewMessage] = useState<string>("");
+  const [socket, setSocket] = useState<Socket | null>(null);
+
+  useEffect(() => {
+    const socketConnection = io("http://localhost:4000", {
+      transports: ["websocket"],
+      autoConnect: false,
+    });
+
+    socketConnection.connect();
+    setSocket(socketConnection);
+
+    
+
+    // // Emit user online status when user connects
+    // socketConnection.emit("userOnline", senderId);
+
+    return () => {
+      if (socketConnection) {
+        // Emit user offline status when user disconnects
+        // socketConnection.emit("userOffline", senderId);
+        socketConnection.disconnect();
+      }
+    };
+  }, [senderId]);
+
+
+  useEffect(() => {
+    if (socket) {
+      socket.on("message", (newMessage: Message) => {
+        setMessages((prevMessages) => [...prevMessages, newMessage]);
+      });
+
+      // socket.on("onlineStatus", (onlineUsers: string[]) => {
+      //   console.log("Online Users:", onlineUsers);
+      // });
+
+      return () => {
+        socket.off("message");
+        // socket.off("onlineStatus");
+      };
+    }
+  }, [socket]);
+
+
+  useEffect(() => {
+    if (socket) {
+      socket.emit("joinRoom", chatId._id);
+    }
+  }, [chatId, socket]);
 
   // Fetch both chat messages and company details based on chatId
   useEffect(() => {
     const fetchChatDetails = async () => {
       try {
-        
         const response = await getMessages(chatId._id);
         const messagesData = response?.data || [];
         // console.log(messagesData);
-        
+
         setMessages(messagesData); // Set messages in the state
         // console.log(chat);
-        setCompanyName(chatId.companyId.companyname)
+        setCompanyName(chatId.companyId.companyname);
       } catch (error) {
         setMessages([]);
-        setCompanyName("")
-        console.error('Failed to fetch chat details:', error);
+        setCompanyName("");
+        console.error("Failed to fetch chat details:", error);
       }
     };
 
     fetchChatDetails();
-  }, [chatId]);
+    if (socket) {
+      socket.emit("joinRoom", chatId._id);
+    }
+  }, [chatId, socket]);
 
   const handleSendMessage = async () => {
     if (!newMessage.trim()) return;
-
+  
     try {
-      const result = await sendMessage(chatId, senderId, newMessage, senderModel);
-      console.log('Message sent:', result);
       
-      // Optionally, you can refresh messages here or append the new message
-      setNewMessage('');
+      const result = await sendMessage(chatId, senderId, newMessage, senderModel);
+  
+      setNewMessage("");
+  
+      if (socket) {
+        socket.emit("message", {
+          chatId: chatId._id,
+          text: result.text,
+          senderId: {
+            _id: senderId,
+            username: result.senderId.username, // Ensure you're using the username here
+          },
+          senderModel,
+        });
+      }
     } catch (error) {
-      console.error('Error sending message:', error);
+      console.error("Error sending message:", error);
     }
   };
 
@@ -66,7 +137,7 @@ const ChatArea: React.FC<ChatAreaProps> = ({ chatId, senderId, senderModel, chat
       {/* Header with profile info */}
       <div className="flex items-center space-x-4 p-4 bg-gray-100 rounded-lg mb-4">
         <img
-          src={companyProfileImage || '/img/DefaultProfilePicMale.png'}
+          src={companyProfileImage || "/img/DefaultProfilePicMale.png"}
           alt={`${companyName}'s profile`}
           className="rounded-full bg-gray-300 h-10 w-10"
         />
@@ -80,8 +151,19 @@ const ChatArea: React.FC<ChatAreaProps> = ({ chatId, senderId, senderModel, chat
       <div className="bg-white p-4 rounded-lg shadow-lg flex-grow mb-4 overflow-y-auto h-1/2">
         {messages.length > 0 ? (
           messages.map((msg) => (
-            <div key={msg._id} className={`flex ${msg.senderModel === 'User' ? 'justify-end' : 'justify-start'} mb-2`}>
-              <div className={`max-w-xs p-2 rounded-lg ${msg.senderModel === 'User' ? 'bg-blue-500 text-white' : 'bg-gray-100 text-gray-800'}`}>
+            <div
+              key={msg._id}
+              className={`flex ${
+                msg.senderModel === "User" ? "justify-end" : "justify-start"
+              } mb-2`}
+            >
+              <div
+                className={`max-w-xs p-2 rounded-lg ${
+                  msg.senderModel === "User"
+                    ? "bg-blue-500 text-white"
+                    : "bg-gray-100 text-gray-800"
+                }`}
+              >
                 <p>{msg.text}</p>
               </div>
             </div>

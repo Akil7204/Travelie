@@ -20,8 +20,12 @@ export const sendMessage = async (
       text,
       senderModel,
     });
+    console.log(response)
+
+    // Return the response data from the API
     return response.data;
   } catch (error: any) {
+    console.error("Error while sending message:", error);
     throw new Error(error.response?.data?.message || "Failed to send message");
   }
 };

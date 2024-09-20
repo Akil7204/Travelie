@@ -20,7 +20,7 @@ export const PayU = {
   export const NOTIFICATION_SERVICE_URL = `${NOTIFICATION_SERVICE_DOMAIN}/api/notification-service`;
   export const ADS_SERVICE_URL = `${PAYMENT_SERVICE_DOMAIN}/api/ads-service`;
   
-  export const SOCKET_URI = MESSAGE_SERVICE_DOMAIN;
+  export const SOCKET_URI = "http://localhost:3000";
   
   
   export const JWT_SECRET =process.env.JWT_SECRET

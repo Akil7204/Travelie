@@ -48,22 +48,6 @@ const MessagePage = () => {
     }
   }, [users]);
 
-  // Fetch messages when a chat is selected
-  // useEffect(() => {
-  //   const fetchMessages = async () => {
-  //     console.log(selectedChatId);
-      
-  //     if (selectedChatId) {
-  //       try {
-  //         const response = await getMessages(selectedChatId); // Fetch messages for the selected chat
-  //         setMessages(response?.data); // Set the fetched messages
-  //       } catch (error: any) {
-  //         console.log(error);
-  //       }
-  //     }
-  //   };
-  //   fetchMessages();
-  // }, [selectedChatId]);
 
   // While loading, show a loading message or spinner
   if (loading) {
