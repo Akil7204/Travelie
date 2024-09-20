@@ -103,9 +103,9 @@ export const fetchingBookingDetails = async (bookingId: any) => {
   }
 };
 
-export const getUserBookingsAPI = async () => {
+export const getUserBookingsAPI = async (page: number, bookingPerPage: number) => {
   try {
-    const response = await axios.get(`${SERVER_URL}/bookings`, { withCredentials: true });
+    const response = await axios.get(`${SERVER_URL}/bookings`,  { params: { page, limit: bookingPerPage },withCredentials: true });
     // console.log(response.data);
     
     return response.data;

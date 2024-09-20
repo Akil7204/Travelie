@@ -8,6 +8,7 @@ import {
   fetchDetailTrip,
   findBookingTrip,
   getBookingsByUser,
+  getTotalCountBooking,
   googleLogin,
   loginUser,
   registerUser,
@@ -307,11 +308,16 @@ export const getUserBookings = async (req: any, res: Response) => {
   const userId = req.userId;
   console.log(userId);
 
+  const page = parseInt(req.query.page) || 1;
+  const limit = parseInt(req.query.limit) || 10;
+  const skip = (page - 1) * limit;
+
   try {
-    const bookings = await getBookingsByUser(userId);
+    const bookings = await getBookingsByUser(userId, skip, limit);
+    const totalCount = await getTotalCountBooking(userId);
     console.log(bookings);
 
-    res.status(200).json(bookings);
+    res.status(200).json({bookings, totalCount});
   } catch (error: any) {
     res.status(500).json({ message: error.message });
   }

@@ -136,6 +136,17 @@ export const updateBookedTrip = async (
   }
 };
 
-export const BookingsByUser = async (userId: string) => {
-  return await bookedModal.find({ userId, paymentStatus: 'success' }).populate('tripId'); // Assuming tripId is populated with trip data
+export const BookingsByUser = async (userId: string, skip: number, limit: number) => {
+  return await bookedModal.find({ userId, paymentStatus: 'success' }).populate('tripId').skip(skip).limit(limit).sort({
+    createdAt: -1,
+  });// Assuming tripId is populated with trip data
+};
+
+export const getAllCountBookingFromDb = async (userId: string): Promise<number> => {
+  try {
+    return await bookedModal.countDocuments({userId, paymentStatus: "success" }); // Count all documents in the Trip collection
+  } catch (error) {
+    console.error("Error fetching count from database:", error);
+    throw error;
+  }
 };

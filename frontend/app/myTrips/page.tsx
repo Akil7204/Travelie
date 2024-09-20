@@ -5,6 +5,8 @@ import Link from "next/link"; // Assuming you have a Layout component
 import Profile from "@/components/profile/Profile";
 import Footer from "@/components/Footer";
 import { getUserBookingsAPI } from "../services/allAPI";
+import Pagination from "@/components/page/Pagination";
+import Navbar from "@/components/NavBar";
 
 interface Trip {
   _id: string;
@@ -27,25 +29,33 @@ interface Booking {
 
 const MyTrips: React.FC = () => {
   const [bookings, setBookings] = useState<Booking[]>([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1); // Total pages will be dynamic
+  const bookingPerPage = 5;
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
 
   // Fetch bookings for the user
-  const fetchBookings = async () => {
+  const fetchBookings = async (page: number) => {
     try {
-      const response = await getUserBookingsAPI(); // Replace `userId` with the current logged-in user's ID
-      setBookings(response);
+      const response: any = await getUserBookingsAPI(page, bookingPerPage); // Replace `userId` with the current logged-in user's ID
+      setBookings(response.bookings);
       console.log(response);
-      
+      setTotalPages(Math.ceil(response.totalCount / bookingPerPage));
     } catch (error) {
-      console.error('Error fetching bookings:', error);
+      console.error("Error fetching bookings:", error);
     }
   };
 
   useEffect(() => {
-    fetchBookings();
-  }, []);
+    fetchBookings(currentPage);
+  }, [currentPage]);
 
   return (
     <>
+      <Navbar />
       <Profile>
         <div className="p-8 bg-gray-100 min-h-screen">
           <h1 className="text-3xl font-bold mb-8">My Trips</h1>
@@ -74,10 +84,7 @@ const MyTrips: React.FC = () => {
                       Starting date:{" "}
                       {new Date(booking.tripId.startingDate).toDateString()}
                     </p>
-                    <p>
-                      Total seats:{" "}
-                      {booking.seats}
-                    </p>
+                    <p>Total seats: {booking.seats}</p>
                     <p>{booking.tripId.days} Days trip</p>
                   </div>
                 </div>
@@ -102,6 +109,13 @@ const MyTrips: React.FC = () => {
           ) : (
             <p>No trips booked yet.</p>
           )}
+        </div>
+        <div className="mt-4 flex justify-between items-center">
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={handlePageChange}
+          />
         </div>
       </Profile>
       <Footer />

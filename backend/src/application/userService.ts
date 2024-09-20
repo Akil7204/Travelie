@@ -6,6 +6,7 @@ import {
   createBookingformDB,
   createUser,
   findUserByEmail,
+  getAllCountBookingFromDb,
   getBookingDetail,
   getDetailTrip,
   updateBookedTrip,
@@ -240,6 +241,10 @@ export const fetchbookingData = async (txnid: string, productinfo: string, statu
   return bookedTrip;
 };
 
-export const getBookingsByUser = async (userId: string) => {
-  return await BookingsByUser(userId);
+export const getBookingsByUser = async (userId: string, skip: number, limit: number,) => {
+  return await BookingsByUser(userId, skip, limit);
 };
+
+export const getTotalCountBooking = async(userId: string) => {
+  return await getAllCountBookingFromDb(userId);
+}
