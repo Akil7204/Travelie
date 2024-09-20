@@ -2,7 +2,11 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import Layout from "@/components/company/Layout";
-import { getAllCategoryAPI, getAllTripsAPI } from "@/app/services/companyAPI";
+import {
+  getAllCategoryAPI,
+  getAllTripsAPI,
+  softDeleteCategoryAPI,
+} from "@/app/services/companyAPI";
 import { AxiosResponse } from "axios";
 import Pagination from "@/components/page/Pagination";
 // import { FaEdit, FaTrash } from 'react-icons/fa';
@@ -11,7 +15,6 @@ interface Category {
   _id: string;
   name: string;
 }
-
 
 const TripList: React.FC = () => {
   const [categorys, setCategory] = useState<Category[]>([]);
@@ -43,6 +46,21 @@ const TripList: React.FC = () => {
     fetchTrips(currentPage);
   }, [currentPage]);
 
+  const handleSoftDelete = async (categoryId: string) => {
+    const isConfirmed = window.confirm(
+      "Are you sure you want to delete this category?"
+    );
+    try {
+      if (isConfirmed) {
+        const deleted = await softDeleteCategoryAPI(categoryId); // Call the soft delete API
+        console.log(deleted);
+        
+        fetchTrips(currentPage); // Re-fetch the categories to reflect changes
+      }
+    } catch (error) {
+      console.error("Failed to delete category:", error);
+    }
+  };
 
   return (
     <Layout>
@@ -77,16 +95,29 @@ const TripList: React.FC = () => {
                   <td className="py-3 px-4">{category._id}</td>
                   <td className="py-3 px-4">{category.name}</td>
                   <td className="py-3 px-4 flex space-x-2">
-                    <Link href={`/company/editCategory/${category._id}`} passHref>
+                    <Link
+                      href={`/company/editCategory/${category._id}`}
+                      passHref
+                    >
                       edit
                     </Link>
+                    <button
+                      onClick={() => handleSoftDelete(category._id)}
+                      className="text-red-600"
+                    >
+                      delete
+                    </button>
                   </td>
                 </tr>
               ))}
             </tbody>
           </table>
           <div className="mt-4 flex justify-between items-center">
-            <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange} />
+            <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={handlePageChange}
+            />
           </div>
         </div>
       </div>

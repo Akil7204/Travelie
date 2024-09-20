@@ -4,6 +4,7 @@ import mongoose, { Schema, Document } from "mongoose";
 export interface ICategory extends Document {
   name: string;
   companyId: mongoose.Schema.Types.ObjectId;
+  isDeleted: boolean;
 }
 
 const CategorySchema: Schema = new Schema(
@@ -14,6 +15,7 @@ const CategorySchema: Schema = new Schema(
       ref: "Company", // it is reference of company
       required: true,
     },
+    isDeleted: { type: Boolean, default: false },
   },
   { timestamps: true }
 );

@@ -19,6 +19,7 @@ import {
 import { findCompanyByEmail } from "../../Infrastructure/companyRepository";
 import { sendEmail } from "../../uilts/sendEmail";
 import { IMulterFile } from "../../types/types";
+import { Category } from "../../domain/category";
 
 interface CustomRequest extends Request {
   companyId?: string;
@@ -251,3 +252,28 @@ export const editCategoryById = async (req: any, res: Response): Promise<void> =
     res.status(500).json({ message: "Failed to update category", error: error.message });
   }
 };
+
+export const softDeleteCategory = async (req: any, res: Response) => {
+  try {
+    const categoryId = req.params.id;
+    const companyId = req.companyId;
+    console.log(categoryId, companyId);
+    
+    const category = await Category.findOne({ _id: categoryId, companyId });
+    
+    if (!category) {
+      throw new Error('Category not found');
+    }
+
+    category.isDeleted = true; // Soft delete
+    const updatedCategory = await category.save();
+    console.log(updatedCategory);
+    res.status(200).json({
+      message: "Category Deleted successfully",
+    });
+  } catch (error: any) {
+    console.error("Error soft deleting category:", error);
+    throw new Error(error.message);
+  }
+};
+

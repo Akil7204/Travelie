@@ -120,3 +120,8 @@ export const editCategoryApi = async (data: any, categoryId: string) => {
     withCredentials: true,
   });
 };
+
+export const softDeleteCategoryAPI = async (categoryId: string) => {
+  const response = await axios.put(`${SERVER_URL_COMPANY}/category/softDelete/${categoryId}`, null, { withCredentials: true });
+  return response.data;
+};

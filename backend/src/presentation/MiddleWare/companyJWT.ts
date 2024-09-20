@@ -4,6 +4,7 @@ import jwt from "jsonwebtoken";
 export function verifycompany(req: any, res: Response, next: NextFunction) {
     
   const companyToken = req.cookies?.companyToken;
+    console.log(companyToken);
     
   if (!companyToken) {
     return res.status(401).send("JWT not found in the cookies");

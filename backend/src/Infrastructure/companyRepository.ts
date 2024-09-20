@@ -114,7 +114,7 @@ export const CreatingCategory = async (categoryData: any) => {
 
 export const getAllCategoryFromDB = async (comapanyId: string, skip: number, limit: number) => {
 
-  return await Category.find({companyId: comapanyId}).skip(skip).limit(limit).sort({
+  return await Category.find({companyId: comapanyId, isDeleted: false}).skip(skip).limit(limit).sort({
     createdAt: -1,
   });
 };
