@@ -1,4 +1,4 @@
-const protectedRoutes = new Set(["/profile"]);
+const protectedRoutes = new Set(["/profile", "/chat", "/bookingSucessful"]);
 
 const paymentRoute = /^\/payment\/[^/]+\/?.*$/;
 
