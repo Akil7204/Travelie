@@ -16,7 +16,7 @@ interface Message {
 
 interface MessageListProps {
   messages: Message[];
-  onChatSelect: (chatId: string) => void; // Callback to handle chat selection
+  onChatSelect: any ; // Callback to handle chat selection
 }
 
 const defaultProfileImage = '/img/DefaultProfilePicMale.png'; // Default profile image URL
@@ -37,7 +37,7 @@ const MessageList: React.FC<MessageListProps> = ({ messages, onChatSelect }) => 
             className={`flex items-center p-3 mb-2 rounded-lg ${
               msg.active ? 'bg-blue-400' : 'bg-white'
             }`}
-            onClick={() => onChatSelect(msg._id)} // Call the selection function on click
+            onClick={() => onChatSelect(msg)} // Call the selection function on click
           >
             {/* Display profile image */}
             <img
@@ -48,7 +48,7 @@ const MessageList: React.FC<MessageListProps> = ({ messages, onChatSelect }) => 
             <div className="flex-grow">
               <p
                 className="font-semibold text-blue-600 hover:text-blue-800 cursor-pointer"
-                onClick={() => onChatSelect(msg._id)} // Ensure the click still selects the chat
+                onClick={() => onChatSelect(msg)} // Ensure the click still selects the chat
               >
                 {msg.companyId.companyname}
               </p>

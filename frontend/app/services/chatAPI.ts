@@ -27,7 +27,6 @@ export const sendMessage = async (
 };
 
 export const getMessages = (id: string) => {
-  console.log({id});
   try {
     return axios.get(`${SERVER_URL_MESSAGE}/message/${id}`);
   } catch (error: any) {

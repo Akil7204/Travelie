@@ -36,7 +36,6 @@ export const addMessage = async (req: Request, res: Response) => {
 // Get messages for a specific chat
 export const getMessage = async (req: Request, res: Response) => {
   const { chatId } = req.params;
-  console.log(chatId);
   
   try {
     // Find messages by chatId and populate senderId to get details of the sender

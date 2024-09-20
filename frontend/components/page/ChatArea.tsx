@@ -13,7 +13,7 @@ interface Message {
 }
 
 interface ChatAreaProps {
-  chatId: string;
+  chatId: any;
   senderId: string; // Current user (admin/user) ID
   senderModel: string;
   chat: any
@@ -29,21 +29,14 @@ const ChatArea: React.FC<ChatAreaProps> = ({ chatId, senderId, senderModel, chat
   useEffect(() => {
     const fetchChatDetails = async () => {
       try {
-        const response = await getMessages(chatId);
+        
+        const response = await getMessages(chatId._id);
         const messagesData = response?.data || [];
-        console.log(messagesData);
+        // console.log(messagesData);
         
         setMessages(messagesData); // Set messages in the state
-        console.log(chat);
-        
-        // setCompanyName(chat.companyId.companyname)
-
-        // Extract company details from the first company message
-        // const companyMessage = messagesData.find((msg: Message) => msg.senderModel === 'Company');
-        // if (companyMessage) {
-        //   setCompanyName(companyMessage.senderId.companyname); // Set company name
-        //   setCompanyProfileImage(companyMessage.senderId.profileImage || '/img/DefaultProfilePicMale.png'); // Set profile image
-        // }
+        // console.log(chat);
+        setCompanyName(chatId.companyId.companyname)
       } catch (error) {
         setMessages([]);
         setCompanyName("")
