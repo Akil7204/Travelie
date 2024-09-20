@@ -236,7 +236,6 @@ export const addTransactionDetails = async (
 export const fetchbookingData = async (txnid: string, productinfo: string, status: string) => {
 
   const bookedTrip = await updateBookedTrip(productinfo, txnid, status);
-  // console.log(AllTripDetails?.price);
   return bookedTrip;
 };
 
