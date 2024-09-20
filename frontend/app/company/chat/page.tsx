@@ -88,6 +88,7 @@ const ChatApp = () => {
     //   setChats((prevChats) => [...prevChats, newMessage]);
     // };
 
+
   return (
     <Layout>
       <div className="h-screen flex">
@@ -104,8 +105,8 @@ const ChatApp = () => {
           <ChatBox
             // messages={filteredMessages}
             selectedUser={selectedUser}
-            chat={chats} // Update to correctly pass chat messages
-            // onNewMessage={handleNewMessage}
+            chat={chats.filter((chat) => chat.userId.username === selectedUser)} // Update to correctly pass chat messages
+            senderId={users?._id} senderModel="Company"
           />
         ) : (
           <div className="w-3/4 h-full p-4">Select a user to view chats.</div>
