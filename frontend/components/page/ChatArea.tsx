@@ -1,68 +1,85 @@
-import { sendMessage } from '@/app/services/chatAPI';
+import { getMessages, sendMessage } from '@/app/services/chatAPI';
 import React, { useEffect, useState } from 'react';
 
 interface Message {
   _id: string;
-  content: string;
-  fromMe: boolean; // Indicates if the message is from the current user
+  text: string;
+  senderId: {
+    _id: string;
+    username: string;
+    profileImage?: string;
+  };
+  senderModel: string; // 'User' or 'Company'
 }
 
 interface ChatAreaProps {
-  chatId: string; // Chat ID for the current chat
-  messages: Message[]; // Array of messages for the chat
-  senderId: string; // Current user (sender) ID
-  senderModel: string
+  chatId: string;
+  senderId: string; // Current user (admin/user) ID
+  senderModel: string;
+  chat: any
 }
 
-const ChatArea: React.FC<ChatAreaProps> = ({ chatId, messages, senderId, senderModel}) => {
-  const [companyName, setCompanyName] = useState<string>(''); // State for the company name
-  const [profileImage, setProfileImage] = useState<string | undefined>(undefined); // State for the profile image
-  const [newMessage, setNewMessage] = useState<string>(''); // State for the new message
+const ChatArea: React.FC<ChatAreaProps> = ({ chatId, senderId, senderModel, chat }) => {
+  const [messages, setMessages] = useState<Message[]>([]); // State to hold fetched messages
+  const [companyName, setCompanyName] = useState<string | undefined>();
+  const [companyProfileImage, setCompanyProfileImage] = useState<string | undefined>();
+  const [newMessage, setNewMessage] = useState<string>('');
 
-  // Fetch company details based on chatId (you can adjust this based on your API)
+  // Fetch both chat messages and company details based on chatId
   useEffect(() => {
-    const fetchCompanyDetails = async () => {
+    const fetchChatDetails = async () => {
       try {
-        const response = await fetch(`/api/company/${chatId}`); // Update with your actual API endpoint
-        const data = await response.json();
-        setCompanyName(data.companyName); // Set the company name
-        setProfileImage(data.profileImage); // Set the profile image
+        const response = await getMessages(chatId);
+        const messagesData = response?.data || [];
+        console.log(messagesData);
+        
+        setMessages(messagesData); // Set messages in the state
+        console.log(chat);
+        
+        // setCompanyName(chat.companyId.companyname)
+
+        // Extract company details from the first company message
+        // const companyMessage = messagesData.find((msg: Message) => msg.senderModel === 'Company');
+        // if (companyMessage) {
+        //   setCompanyName(companyMessage.senderId.companyname); // Set company name
+        //   setCompanyProfileImage(companyMessage.senderId.profileImage || '/img/DefaultProfilePicMale.png'); // Set profile image
+        // }
       } catch (error) {
-        console.error('Failed to fetch company details:', error);
+        setMessages([]);
+        setCompanyName("")
+        console.error('Failed to fetch chat details:', error);
       }
     };
 
-    fetchCompanyDetails();  
-  }, [chatId]); // Fetch company details when chatId changes
+    fetchChatDetails();
+  }, [chatId]);
 
-  // Function to handle sending the message
   const handleSendMessage = async () => {
-    if (!newMessage.trim()) return; // Prevent sending empty messages
+    if (!newMessage.trim()) return;
 
     try {
       const result = await sendMessage(chatId, senderId, newMessage, senderModel);
       console.log('Message sent:', result);
-
-      // Optionally update the message list here
-      // Example: append the new message to the `messages` array
-      setNewMessage(''); // Clear the input field
+      
+      // Optionally, you can refresh messages here or append the new message
+      setNewMessage('');
     } catch (error) {
       console.error('Error sending message:', error);
     }
   };
 
   return (
-    <div className="ml-1/3 flex-grow h-screen mt-0 ">
+    <div className="ml-1/3 flex-grow h-screen mt-0">
       {/* Header with profile info */}
       <div className="flex items-center space-x-4 p-4 bg-gray-100 rounded-lg mb-4">
         <img
-          src={profileImage || '/img/DefaultProfilePicMale.png'}
+          src={companyProfileImage || '/img/DefaultProfilePicMale.png'}
           alt={`${companyName}'s profile`}
           className="rounded-full bg-gray-300 h-10 w-10"
         />
         <div>
           <p className="font-semibold">{companyName}</p>
-          <p className="text-sm text-gray-500">Active Now</p>
+          <p className="text-sm text-gray-500">Company</p>
         </div>
       </div>
 
@@ -70,9 +87,9 @@ const ChatArea: React.FC<ChatAreaProps> = ({ chatId, messages, senderId, senderM
       <div className="bg-white p-4 rounded-lg shadow-lg flex-grow mb-4 overflow-y-auto h-1/2">
         {messages.length > 0 ? (
           messages.map((msg) => (
-            <div key={msg._id} className={`flex ${msg.fromMe ? 'justify-end' : 'justify-start'} mb-2`}>
-              <div className={`max-w-xs p-2 rounded-lg ${msg.fromMe ? 'bg-blue-500 text-white' : 'bg-gray-100 text-gray-800'}`}>
-                <p>{msg.content}</p>
+            <div key={msg._id} className={`flex ${msg.senderModel === 'User' ? 'justify-end' : 'justify-start'} mb-2`}>
+              <div className={`max-w-xs p-2 rounded-lg ${msg.senderModel === 'User' ? 'bg-blue-500 text-white' : 'bg-gray-100 text-gray-800'}`}>
+                <p>{msg.text}</p>
               </div>
             </div>
           ))
@@ -90,11 +107,11 @@ const ChatArea: React.FC<ChatAreaProps> = ({ chatId, messages, senderId, senderM
           placeholder="Type your message"
           className="flex-grow p-2 border rounded-lg"
           value={newMessage}
-          onChange={(e) => setNewMessage(e.target.value)} // Update the state with the new message
+          onChange={(e) => setNewMessage(e.target.value)}
         />
         <button
           className="bg-blue-500 text-white px-4 py-2 rounded-lg ml-2"
-          onClick={handleSendMessage} // Send the message on click
+          onClick={handleSendMessage}
         >
           Send
         </button>

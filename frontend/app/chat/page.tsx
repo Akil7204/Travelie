@@ -5,7 +5,7 @@ import Navbar from "@/components/NavBar";
 import ChatArea from "@/components/page/ChatArea";
 import MessageList from "@/components/page/MessageList";
 import Profile from "@/components/profile/Profile";
-import { userChats } from "../services/chatAPI"; // Assume getMessages is the function to fetch messages for a chat
+import { getMessages, userChats } from "../services/chatAPI"; // Assume getMessages is the function to fetch messages for a chat
 
 interface User {
   _id: string;
@@ -33,6 +33,8 @@ const MessagePage = () => {
       try {
         if (users) {
           const { data } = await userChats(users._id); // Fetch user chats by user ID
+          console.log({data});
+          
           setChats(data); // Set the fetched chats
         }
       } catch (error: any) {
@@ -47,19 +49,21 @@ const MessagePage = () => {
   }, [users]);
 
   // Fetch messages when a chat is selected
-  useEffect(() => {
-    const fetchMessages = async () => {
-      if (selectedChatId) {
-        try {
-          // const { data } = await getMessages(selectedChatId); // Fetch messages for the selected chat
-          // setMessages(data); // Set the fetched messages
-        } catch (error: any) {
-          console.log(error);
-        }
-      }
-    };
-    fetchMessages();
-  }, [selectedChatId]);
+  // useEffect(() => {
+  //   const fetchMessages = async () => {
+  //     console.log(selectedChatId);
+      
+  //     if (selectedChatId) {
+  //       try {
+  //         const response = await getMessages(selectedChatId); // Fetch messages for the selected chat
+  //         setMessages(response?.data); // Set the fetched messages
+  //       } catch (error: any) {
+  //         console.log(error);
+  //       }
+  //     }
+  //   };
+  //   fetchMessages();
+  // }, [selectedChatId]);
 
   // While loading, show a loading message or spinner
   if (loading) {
@@ -102,7 +106,7 @@ const MessagePage = () => {
           <div className="flex-grow p-4">
             {selectedChatId && users?._id ? (
               // Show ChatArea if a chat is selected
-              <ChatArea chatId={selectedChatId} messages={messages} senderId={users?._id} senderModel="User" />
+              <ChatArea chatId={selectedChatId}  senderId={users?._id} senderModel="User" chat={chats} />
             ) : (
               // Show default message if no chat is selected
               <div className="flex items-center justify-center h-full">
