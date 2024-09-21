@@ -66,7 +66,6 @@ const ChatArea: React.FC<ChatAreaProps> = ({
 
       return () => {
         socket.off("message");
-       
       };
     }
   }, [socket]);
@@ -101,14 +100,13 @@ const ChatArea: React.FC<ChatAreaProps> = ({
       senderModel: senderModel,
       text: newMessage,
     };
-console.log(messageData);
 
     try {
       const result = await messageSend(messageData);
       console.log(result);
       
       setNewMessage(""); 
-      socket?.emit("sendMessage", result); 
+      
     } catch (error) {
       console.error("Failed to send message:", error);
     }

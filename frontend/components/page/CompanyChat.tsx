@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { getMessages, messageSend } from "@/app/services/chatAPI";
-import { io, Socket } from "socket.io-client"; 
+import { io, Socket } from "socket.io-client";
 
 interface ChatMessage {
   text: string;
@@ -21,7 +21,7 @@ interface Message {
 
 interface ChatBoxProps {
   selectedUser: string;
-  chat: Message[]; 
+  chat: Message[];
   senderId: any;
   senderModel: string;
 }
@@ -50,31 +50,51 @@ const ChatBox: React.FC<ChatBoxProps> = ({
   }, []);
 
   useEffect(() => {
+    if (socket) {
+      socket.emit("joinRoom", chat[0]._id);
+    }
+  }, [chat[0], socket]);
+
+  useEffect(() => {
     const fetchChatDetails = async () => {
       try {
         const response = await getMessages(chat[0]?._id);
         const messagesData = response?.data || [];
-        setMessages(messagesData); 
+        setMessages(messagesData);
       } catch (error) {
         setMessages([]);
         console.error("Failed to fetch chat details:", error);
       }
 
-     
-      socket?.on("message", (newMessage: Message) => {
-        setMessages((prevMessages: any) => [...prevMessages, newMessage]);
-      });
+      // socket?.on("message", (newMessage: Message) => {
+      //   console.log('came here');
+      //   setMessages((prevMessages: any) => [...prevMessages, newMessage]);
+      // });
     };
 
-    if (socket && chat[0]) {
+    // if (socket && chat[0]) {
       fetchChatDetails();
-    }
+    // }
 
-    return () => {
-      socket?.off("message");
-    };
-  }, [chat[0], socket]);
-  
+    // return () => {
+    //   socket?.off("message");
+    // };
+  }, [chat[0]]);
+
+  useEffect(() => {
+    if (socket) {
+      socket.on("message", (newMessage: Message) => {
+        console.log("got it");
+        setMessages((prevMessages: any) => [...prevMessages, newMessage]);
+        console.log(newMessage);
+        
+      });
+
+      return () => {
+        socket.off("message");
+      };
+    }
+  }, [socket]);
 
   const handleSendMessage = async () => {
     if (!newMessage.trim()) return;
@@ -90,19 +110,16 @@ const ChatBox: React.FC<ChatBoxProps> = ({
 
     try {
       const result = await messageSend(messageData);
-      console.log({result});
-
-      // Emit the message to the server via the socket
-      // socket?.emit("message", messageData);
+      // console.log({ messages });
 
       // socket?.emit("message", result);
-      console.log(socket?.emit("message", messageData));
-      
-      setNewMessage(""); // Clear input after sending the message
 
+      // setMessages((prevState: any) => [...prevState, messageData]);
+      setNewMessage(""); // Clear input after sending the message
     } catch (error) {
       console.error("Error sending message:", error);
     }
+    
   };
 
   return (
@@ -117,14 +134,14 @@ const ChatBox: React.FC<ChatBoxProps> = ({
           <div
             key={index}
             className={`flex ${
-              message.senderId.username !== selectedUser
+              message.senderModel !== "User"
                 ? "justify-end"
                 : "justify-start"
             }`}
           >
             <div
               className={`bg-${
-                message.senderId.username !== selectedUser
+                message.senderModel !== "User"
                   ? "blue-500 text-white"
                   : "gray-200 text-black"
               } p-4 rounded-lg max-w-xs`}
