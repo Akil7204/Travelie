@@ -105,7 +105,7 @@ const ChatApp = () => {
           <ChatBox
             // messages={filteredMessages}
             selectedUser={selectedUser}
-            chat={chats.filter((chat) => chat.userId.username === selectedUser)} // Update to correctly pass chat messages
+            chat={chats.filter((chat) => chat.userId.username === selectedUser)} 
             senderId={users?._id} senderModel="Company"
           />
         ) : (

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { getMessages, messageSend } from "@/app/services/chatAPI";
-import { io, Socket } from "socket.io-client"; // Use io to initialize a socket
+import { io, Socket } from "socket.io-client"; 
 
 interface ChatMessage {
   text: string;
@@ -21,7 +21,7 @@ interface Message {
 
 interface ChatBoxProps {
   selectedUser: string;
-  chat: Message[]; // Should hold chat messages
+  chat: Message[]; 
   senderId: any;
   senderModel: string;
 }
@@ -44,7 +44,6 @@ const ChatBox: React.FC<ChatBoxProps> = ({
       console.log("Socket connected:", socketInstance.id);
     });
 
-    // Cleanup on unmount
     return () => {
       socketInstance.disconnect();
     };
@@ -55,13 +54,13 @@ const ChatBox: React.FC<ChatBoxProps> = ({
       try {
         const response = await getMessages(chat[0]?._id);
         const messagesData = response?.data || [];
-        setMessages(messagesData); // Set messages in the state
+        setMessages(messagesData); 
       } catch (error) {
         setMessages([]);
         console.error("Failed to fetch chat details:", error);
       }
 
-      // Listen for new messages on the socket connection
+     
       socket?.on("message", (newMessage: Message) => {
         setMessages((prevMessages: any) => [...prevMessages, newMessage]);
       });
@@ -71,11 +70,11 @@ const ChatBox: React.FC<ChatBoxProps> = ({
       fetchChatDetails();
     }
 
-    // Cleanup socket listeners when the component unmounts
     return () => {
       socket?.off("message");
     };
   }, [chat[0], socket]);
+  
 
   const handleSendMessage = async () => {
     if (!newMessage.trim()) return;
@@ -96,8 +95,10 @@ const ChatBox: React.FC<ChatBoxProps> = ({
       // Emit the message to the server via the socket
       // socket?.emit("message", messageData);
 
+      // socket?.emit("message", result);
+      console.log(socket?.emit("message", messageData));
+      
       setNewMessage(""); // Clear input after sending the message
-      socket?.emit("message", result.text);
 
     } catch (error) {
       console.error("Error sending message:", error);

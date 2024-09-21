@@ -95,12 +95,7 @@ export const companyAddMessage = async (req: any, res: any) => {
     const result = await message.save();
     console.log({result});
 
-    io.to(chatId).emit("message", {
-      _id: result?._id,
-      text: result.text,
-      senderId: result.senderId,
-      senderModel: result.senderModel
-    });
+    io.to(chatId).emit("message", result);
     
     res.status(200).json(result);
   } catch (error: any) {

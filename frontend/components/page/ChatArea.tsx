@@ -44,15 +44,8 @@ const ChatArea: React.FC<ChatAreaProps> = ({
     socketConnection.connect();
     setSocket(socketConnection);
 
-    
-
-    // // Emit user online status when user connects
-    // socketConnection.emit("userOnline", senderId);
-
     return () => {
       if (socketConnection) {
-        // Emit user offline status when user disconnects
-        // socketConnection.emit("userOffline", senderId);
         socketConnection.disconnect();
       }
     };
@@ -73,13 +66,11 @@ const ChatArea: React.FC<ChatAreaProps> = ({
 
       return () => {
         socket.off("message");
-        // socket.off("onlineStatus");
+       
       };
     }
   }, [socket]);
 
-
-  // Fetch both chat messages and company details based on chatId
   useEffect(() => {
     const fetchChatDetails = async () => {
       try {
@@ -87,7 +78,7 @@ const ChatArea: React.FC<ChatAreaProps> = ({
         const messagesData = response?.data || [];
         // console.log(messagesData);
 
-        setMessages(messagesData); // Set messages in the state
+        setMessages(messagesData); 
         // console.log(chat);
         setCompanyName(chatId.companyId.companyname);
       } catch (error) {
@@ -116,8 +107,8 @@ console.log(messageData);
       const result = await messageSend(messageData);
       console.log(result);
       
-      setNewMessage(""); // Clear the input field
-      socket?.emit("sendMessage", result.text); // Emit the message through socket
+      setNewMessage(""); 
+      socket?.emit("sendMessage", result); 
     } catch (error) {
       console.error("Failed to send message:", error);
     }
