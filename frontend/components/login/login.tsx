@@ -8,6 +8,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { useRouter } from "next/navigation";
 import { GoogleAuthProvider, signInWithPopup, getAuth } from "firebase/auth";
 import { app } from "@/firebase/firebase";
+import { deleteCookie } from "@/utils/deleteCookie";
 
 type Inputs = {
   email: string;
@@ -27,14 +28,22 @@ const Login: React.FC = () => {
 
     try {
       const result = await LoginAPI(data);
-      console.log("LoginAPI result:", result); // Debugging line
+      console.log("LoginAPI result:", result.user); // Debugging line
 
       if (result && result.user && result.token) {
-        localStorage.setItem("token", result.token);
-        localStorage.setItem("user", JSON.stringify(result.user));
 
-        toast.success("Login Successful!");
-        router.push("/");
+        console.log("isBlocked is: ", result.user);
+
+        if (result.user.isBlocked === true) {
+          deleteCookie("token");
+          toast.success("You are blocked");
+        } else {
+          localStorage.setItem("token", result.token);
+          localStorage.setItem("user", JSON.stringify(result.user));
+
+          toast.success("Login Successful!");
+          router.push("/");
+        }
         // navigate("/");
       } else {
         toast.error("Invalid login credentials. Please try again.");
@@ -51,7 +60,7 @@ const Login: React.FC = () => {
       const auth = getAuth(app);
       const result = await signInWithPopup(auth, provider);
       console.log(result);
-  
+
       const googleLoginResult = await GoogleLoginAPI({
         email: result.user.email!,
         username: result.user.displayName!,
