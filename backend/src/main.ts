@@ -8,10 +8,10 @@ import companyRoutes from "./presentation/routes/companyRoutes";
 import adminRoutes from "./presentation/routes/adminRoutes";
 import chatRoutes from "./presentation/routes/chatRoutes";
 import messageRoutes from "./presentation/routes/messageRoutes";
-import http from "http";
-import { Server as SocketIOServer } from "socket.io";
+import http, { createServer, Server } from "http";
 import cookieParser from "cookie-parser"; // Import the socket handler from the new file
 import { socketHandler } from "./presentation/socket/chat";
+import { Server as serverSocket} from 'socket.io';
 
 // Load environment variables
 dotenv.config();
@@ -41,15 +41,14 @@ app.use('/api/chat', chatRoutes);
 app.use('/api/message', messageRoutes);
 
 // Create HTTP server and attach the Express app
-const server = http.createServer(app);
+const httpServer = createServer(app);
 
-// Create WebSocket server and attach it to the HTTP server
-const io = new SocketIOServer(server, {
+// Initialize Socket.IO
+export const io = new serverSocket(httpServer, {
   cors: {
-    origin: "http://localhost:3000",  // Frontend origin
-    methods: ["GET", "POST"],
-    credentials: true
-  }
+    origin: "http://localhost:3000" || '*', // Adjust as needed
+    methods: ['GET', 'POST'], // Allowed methods
+  },
 });
 
 // Call the socket handler to manage socket connections
@@ -58,6 +57,6 @@ socketHandler(io);
 // Start the server on the correct port
 const PORT = process.env.PORT || 4000;
 
-server.listen(PORT, () => {
+httpServer.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });

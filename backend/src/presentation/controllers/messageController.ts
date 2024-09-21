@@ -1,9 +1,13 @@
 import { NextFunction, Request, Response } from "express";
 import { messageModel } from "../../domain/messageModel";
+import { io } from "../../main";
 
 // Add a new message to the chat
 export const addMessage = (io: any) => async (req: any, res: Response) => {
   const { chatId, senderId, text, senderModel } = req.body;
+
+  console.log({chatId,senderId,text,senderModel});
+  
 
   // Log to see if the request data is received correctly
   console.log("Received message data:", { chatId, senderId, text, senderModel });
@@ -67,17 +71,15 @@ export const getMessage = async (req: Request, res: Response) => {
   }
 };
 
-export const companyAddMessage = async (req: Request, res: Response) => {
-  const { chatId, senderId, text, senderModel } = req.body.messageData; // Include senderModel
+export const companyAddMessage = async (req: any, res: any) => {
+  const { chatId, senderId, text, senderModel } = req.body.messageData; 
 
-  // console.log(chatId, senderId, text, senderModel);
+  console.log(chatId, senderId, text, senderModel);
 
-  // Validate the request data
   if (!chatId || !senderId || !text || !senderModel) {
     return res.status(400).json({ message: "All fields are required" });
   }
 
-  // Ensure senderModel is either "User" or "Company"
   if (!["User", "Company"].includes(senderModel)) {
     return res.status(400).json({ message: "Invalid senderModel" });
   }
@@ -87,11 +89,19 @@ export const companyAddMessage = async (req: Request, res: Response) => {
       chatId,
       senderId,
       text,
-      senderModel, // Add senderModel when creating the message
+      senderModel, 
     });
 
-    // Save the new message
     const result = await message.save();
+    console.log({result});
+
+    io.to(chatId).emit("message", {
+      _id: result?._id,
+      text: result.text,
+      senderId: result.senderId,
+      senderModel: result.senderModel
+    });
+    
     res.status(200).json(result);
   } catch (error: any) {
     res

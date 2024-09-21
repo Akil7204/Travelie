@@ -14,13 +14,19 @@ export const sendMessage = async (
   try {
     console.log(chatId, senderId, text);
 
-    const response = await axios.post(`${SERVER_URL_MESSAGE}/message`, {
-      chatId,
-      senderId,
-      text,
-      senderModel,
-    });
-    console.log(response)
+    const response = await axios.post(
+      `${SERVER_URL_MESSAGE}/message`,
+      {
+        chatId,
+        senderId,
+        text,
+        senderModel,
+      },
+      {
+        withCredentials: true, 
+      }
+    );
+    console.log(response);
 
     // Return the response data from the API
     return response.data;
@@ -50,7 +56,7 @@ export const messageSend = async (
   try {
     console.log({messageData});
 
-    const response = await axios.post(`${SERVER_URL_MESSAGE}/company/message`, {
+    const response = await axios.post(`${SERVER_URL_MESSAGE}/message`, {
       messageData
     });
     return response.data;

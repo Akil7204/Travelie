@@ -1,5 +1,5 @@
 "use client"
-import { getMessages, sendMessage } from "@/app/services/chatAPI";
+import { getMessages, messageSend, sendMessage } from "@/app/services/chatAPI";
 import React, { useEffect, useState } from "react";
 import io, { Socket } from "socket.io-client";
 
@@ -58,16 +58,18 @@ const ChatArea: React.FC<ChatAreaProps> = ({
     };
   }, [senderId]);
 
+  useEffect(() => {
+    if (socket) {
+      socket.emit("joinRoom", chatId._id);
+    }
+  }, [chatId, socket]);
+
 
   useEffect(() => {
     if (socket) {
       socket.on("message", (newMessage: Message) => {
         setMessages((prevMessages) => [...prevMessages, newMessage]);
       });
-
-      // socket.on("onlineStatus", (onlineUsers: string[]) => {
-      //   console.log("Online Users:", onlineUsers);
-      // });
 
       return () => {
         socket.off("message");
@@ -76,12 +78,6 @@ const ChatArea: React.FC<ChatAreaProps> = ({
     }
   }, [socket]);
 
-
-  useEffect(() => {
-    if (socket) {
-      socket.emit("joinRoom", chatId._id);
-    }
-  }, [chatId, socket]);
 
   // Fetch both chat messages and company details based on chatId
   useEffect(() => {
@@ -102,33 +98,28 @@ const ChatArea: React.FC<ChatAreaProps> = ({
     };
 
     fetchChatDetails();
-    if (socket) {
-      socket.emit("joinRoom", chatId._id);
-    }
-  }, [chatId, socket]);
+    
+  }, [chatId]);
 
   const handleSendMessage = async () => {
     if (!newMessage.trim()) return;
-  
+
+    const messageData = {
+      chatId: chatId._id,
+      senderId: senderId,
+      senderModel: senderModel,
+      text: newMessage,
+    };
+console.log(messageData);
+
     try {
+      const result = await messageSend(messageData);
+      console.log(result);
       
-      const result = await sendMessage(chatId, senderId, newMessage, senderModel);
-  
-      setNewMessage("");
-  
-      if (socket) {
-        socket.emit("message", {
-          chatId: chatId._id,
-          text: result.text,
-          senderId: {
-            _id: senderId,
-            username: result.senderId.username, // Ensure you're using the username here
-          },
-          senderModel,
-        });
-      }
+      setNewMessage(""); // Clear the input field
+      socket?.emit("sendMessage", result.text); // Emit the message through socket
     } catch (error) {
-      console.error("Error sending message:", error);
+      console.error("Failed to send message:", error);
     }
   };
 

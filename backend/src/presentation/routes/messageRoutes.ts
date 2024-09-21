@@ -3,12 +3,12 @@ import { addMessage, companyAddMessage, getMessage } from "../controllers/messag
 
 const router = express.Router();
 
-router.post("/message", addMessage);
+// router.post("/message", addMessage);
 router.get('/message/:chatId', getMessage);
 
 
 // company side;
-router.post("/company/message", companyAddMessage)
+router.post("/message", companyAddMessage)
 
 
 

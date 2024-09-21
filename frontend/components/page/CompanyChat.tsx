@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { getMessages, messageSend } from "@/app/services/chatAPI";
+import { io, Socket } from "socket.io-client"; // Use io to initialize a socket
 
 interface ChatMessage {
   text: string;
@@ -21,45 +22,60 @@ interface Message {
 interface ChatBoxProps {
   selectedUser: string;
   chat: Message[]; // Should hold chat messages
-  // messages: ChatMessage[];
   senderId: any;
   senderModel: string;
 }
 
 const ChatBox: React.FC<ChatBoxProps> = ({
   selectedUser,
-  chat, // Consider renaming this to messages for clarity
-  // messages,
+  chat,
   senderId,
   senderModel,
 }) => {
   const [newMessage, setNewMessage] = useState("");
   const [messages, setMessages] = useState<any>([]);
+  const [socket, setSocket] = useState<Socket | null>(null);
 
-  console.log({selectedUser});
-  console.log({chat});
+  useEffect(() => {
+    const socketInstance = io("http://localhost:4000");
+    setSocket(socketInstance);
+
+    socketInstance.on("connect", () => {
+      console.log("Socket connected:", socketInstance.id);
+    });
+
+    // Cleanup on unmount
+    return () => {
+      socketInstance.disconnect();
+    };
+  }, []);
 
   useEffect(() => {
     const fetchChatDetails = async () => {
       try {
-        
         const response = await getMessages(chat[0]?._id);
         const messagesData = response?.data || [];
-        console.log({messagesData});
-        
         setMessages(messagesData); // Set messages in the state
-        // console.log(chat);
       } catch (error) {
         setMessages([]);
-        console.error('Failed to fetch chat details:', error);
+        console.error("Failed to fetch chat details:", error);
       }
+
+      // Listen for new messages on the socket connection
+      socket?.on("message", (newMessage: Message) => {
+        setMessages((prevMessages: any) => [...prevMessages, newMessage]);
+      });
     };
 
-    fetchChatDetails();
-  }, [chat[0]]);
+    if (socket && chat[0]) {
+      fetchChatDetails();
+    }
 
-
-  
+    // Cleanup socket listeners when the component unmounts
+    return () => {
+      socket?.off("message");
+    };
+  }, [chat[0], socket]);
 
   const handleSendMessage = async () => {
     if (!newMessage.trim()) return;
@@ -72,22 +88,17 @@ const ChatBox: React.FC<ChatBoxProps> = ({
       senderModel: "Company",
       text: newMessage,
     };
-    console.log({ messageData });
 
     try {
-      const response = await messageSend(messageData);
-      console.log({ response });
+      const result = await messageSend(messageData);
+      console.log({result});
 
-      // if (response.status === 200) {
-      //   const message: ChatMessage = {
-      //     text: newMessage,
-      //     sender: selectedUser,
-      //     time: new Date().toISOString(),
-      //   };
+      // Emit the message to the server via the socket
+      // socket?.emit("message", messageData);
 
-      //   // onNewMessage(message);
-      // }
-      setNewMessage("");
+      setNewMessage(""); // Clear input after sending the message
+      socket?.emit("message", result.text);
+
     } catch (error) {
       console.error("Error sending message:", error);
     }
@@ -104,11 +115,23 @@ const ChatBox: React.FC<ChatBoxProps> = ({
         {messages.map((message: any, index: any) => (
           <div
             key={index}
-            className={`flex ${message.senderId.username !== selectedUser ? "justify-end" : "justify-start"}`}
+            className={`flex ${
+              message.senderId.username !== selectedUser
+                ? "justify-end"
+                : "justify-start"
+            }`}
           >
-            <div className={`bg-${message.senderId.username !== selectedUser ? "blue-500 text-white" : "gray-200 text-black"} p-4 rounded-lg max-w-xs`}>
+            <div
+              className={`bg-${
+                message.senderId.username !== selectedUser
+                  ? "blue-500 text-white"
+                  : "gray-200 text-black"
+              } p-4 rounded-lg max-w-xs`}
+            >
               <p>{message.text}</p>
-              <span className="text-xs mt-2 block text-right">{message.time}</span>
+              <span className="text-xs mt-2 block text-right">
+                {message.time}
+              </span>
             </div>
           </div>
         ))}
