@@ -31,7 +31,7 @@ const discover: React.FC = () => {
   const [trips, setTrips] = useState<Trip[]>([]);
   const [filteredTrips, setFilteredTrips] = useState<Trip[]>([]);
   const [searchTerm, setSearchTerm] = useState<string>("");
-  const [budgetRange, setBudgetRange] = useState<string[]>([]); // Track selected budget filters
+  const [budgetRange, setBudgetRange] = useState<string[]>([]); 
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -39,7 +39,7 @@ const discover: React.FC = () => {
       try {
         const response = await allTripsAPI();
         setTrips(response);
-        setFilteredTrips(response); // Initialize filtered trips
+        setFilteredTrips(response); 
         setLoading(false);
       } catch (error) {
         setLoading(false);

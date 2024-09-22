@@ -12,6 +12,7 @@ import http, { createServer, Server } from "http";
 import cookieParser from "cookie-parser"; // Import the socket handler from the new file
 import { socketHandler } from "./presentation/socket/chat";
 import { Server as serverSocket} from 'socket.io';
+import {checkUserStatusRouter} from "./presentation/MiddleWare/verfiy";
 
 // Load environment variables
 dotenv.config();
@@ -39,6 +40,7 @@ app.use('/api/company', companyRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/chat', chatRoutes);
 app.use('/api/message', messageRoutes);
+app.use('/api', checkUserStatusRouter);
 
 // Create HTTP server and attach the Express app
 const httpServer = createServer(app);

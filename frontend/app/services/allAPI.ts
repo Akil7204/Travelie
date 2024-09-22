@@ -1,5 +1,5 @@
 import { commonAPI } from "./commonAPI";
-import { SERVER_URL } from "./serverURL";
+import { SERVER_URL, SERVER_URL_ISBLOCKED } from "./serverURL";
 
 import axios from "axios";
 
@@ -113,4 +113,9 @@ export const getUserBookingsAPI = async (page: number, bookingPerPage: number) =
     console.error("Failed to fetch bookings:", error);
     throw error;
   }
+};
+
+
+export const isBlockedApi = async (data: any) => {
+  return axios.get(`${SERVER_URL_ISBLOCKED}/isBlockedApi/${data}`,  {withCredentials: true});
 };

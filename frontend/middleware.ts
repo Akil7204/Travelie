@@ -9,6 +9,7 @@ import {
   toBeRedirectedCompanyRoutes,
   toBeRedirectedRoutes,
 } from "./utils/routes";
+import { isBlockedApi } from "./app/services/allAPI";
 
 export async function middleware(req: NextRequest) {
   const pathname = req.nextUrl.pathname;
@@ -103,8 +104,16 @@ async function verifyToken(
     );
 
     if (payload) {
-      // console.log(payload);
-      
+      console.log(payload);
+      try {
+        // const result = await isBlockedApi(payload.userId);
+        // console.log(result);
+        
+      } catch (error) {
+        console.log(error);
+        
+      }
+
     } else {
     }
     return Boolean(payload);
@@ -113,3 +122,5 @@ async function verifyToken(
     return false;
   }
 }
+
+
