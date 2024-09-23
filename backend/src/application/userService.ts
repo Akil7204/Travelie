@@ -7,11 +7,15 @@ import {
   createUser,
   findUserByEmail,
   getAllCountBookingFromDb,
+  getBookingById,
   getBookingDetail,
   getDetailTrip,
+  getUserWallet,
   updateBookedTrip,
+  updateBookingStatus,
   updateUser,
   updateUserProfile,
+  updateWallet,
 } from "../Infrastructure/userRepository";
 
 import { User } from "../domain/user";
@@ -246,3 +250,52 @@ export const getBookingsByUser = async (userId: string, skip: number, limit: num
 export const getTotalCountBooking = async(userId: string) => {
   return await getAllCountBookingFromDb(userId);
 }
+
+export const cancelTripUseCase = async (bookingId: string, userId: string) => {
+
+  const booking = await getBookingById(bookingId);
+
+  if (!booking) {
+    throw new Error('Booking not found');
+  }
+
+  if (booking.paymentStatus === 'cancelled') {
+    throw new Error('This trip has already been cancelled');
+  }
+
+  booking.paymentStatus = 'cancelled';
+  await updateBookingStatus(booking);
+
+  
+  let userWallet: any = await getUserWallet(userId);
+
+  
+  const refundAmount = booking.totalAmount;
+  if (!userWallet) {
+    userWallet = {
+      userId,
+      balance: 0,
+      transactions: [],
+    };
+  }
+
+  
+  userWallet.balance += refundAmount;
+
+  
+  userWallet.transactions.push({
+    type: 'credit',
+    amount: refundAmount,
+    description: `Refund for cancelled trip: ${booking.tripId}`,
+    date: new Date(),
+  });
+
+  // Save the updated wallet
+  await updateWallet(userWallet);
+
+  return {
+    message: 'Trip cancelled and amount refunded to wallet',
+    refundAmount,
+    walletBalance: userWallet.balance,
+  };
+};

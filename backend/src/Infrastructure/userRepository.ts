@@ -2,6 +2,7 @@ import  {  Document } from "mongoose";
 import { User, UserModel } from "../domain/user";
 import { Trip, Trips } from "../domain/trips";
 import { bookedModal } from "../domain/bookedTrip";
+import { WalletModel } from "../domain/walletModel";
 // Extending the User interface with mongoose Document
 interface UserModel extends User, Document {
   otp?: string;
@@ -149,4 +150,20 @@ export const getAllCountBookingFromDb = async (userId: string): Promise<number> 
     console.error("Error fetching count from database:", error);
     throw error;
   }
+};
+
+export const getBookingById = async (bookingId: string) => {
+  return bookedModal.findById(bookingId);
+};
+
+export const updateBookingStatus = async (booking: any) => {
+  return booking.save();
+};
+
+export const getUserWallet = async (userId: string) => {
+  return WalletModel.findOne({ userId });
+};
+
+export const updateWallet = async (wallet: any) => {
+  return wallet.save();
 };

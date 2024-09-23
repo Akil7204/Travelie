@@ -3,6 +3,7 @@ import { otpGenerator } from "../../uilts/otpGenerator";
 import {
   addTransactionDetails,
   allTrips,
+  cancelTripUseCase,
   fetchbookingData,
   fetchbookingSeat,
   fetchDetailTrip,
@@ -322,5 +323,22 @@ export const getUserBookings = async (req: any, res: Response) => {
     res.status(200).json({bookings, totalCount});
   } catch (error: any) {
     res.status(500).json({ message: error.message });
+  }
+};
+
+export const cancelTrip = async (req: Request, res: Response) => {
+  try {
+    const { bookingId } = req.params;
+    const userId = req.body.userId;
+
+    const result = await cancelTripUseCase(bookingId, userId);
+
+    res.status(200).json({
+      message: result.message,
+      refundAmount: result.refundAmount,
+      walletBalance: result.walletBalance,
+    });
+  } catch (error) {
+    res.status(500).json({ message: 'Error cancelling trip', error });
   }
 };

@@ -2,6 +2,7 @@ import express from "express";
 import {
   addTransaction,
   bookingSeat,
+  cancelTrip,
   detailTrip,
   fetchBookedData,
   getAllTrips,
@@ -43,6 +44,8 @@ router.post("/bookingSeat", verifyUser, upload.none(), bookingSeat);
 router.get("/bookedTrip/:id", verifyUser, fetchBookedData);
 
 router.get("/bookings", verifyUser, getUserBookings);
+
+router.post('/cancel-trip/:bookingId', verifyUser, cancelTrip);
 
 // Payment Routes;
 router.post('/payment', verifyUser, payment);
