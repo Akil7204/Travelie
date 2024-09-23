@@ -1,11 +1,10 @@
-const protectedRoutes = new Set(["/profile", "/chat", "/bookingSucessful", "/myTrips"]);
+const protectedRoutes = new Set(["/profile", "/chat", "/bookingSucessful", "/myTrips", "/wallet"]);
 
 const paymentRoute = /^\/payment\/[^/]+\/?.*$/;
 
 const changeToHomeRoutes = new Set(["/login", "/signup"]);
 
 export function isProtectedRoute(pathname: string): boolean {
-  // console.log(pathname);
 
   return protectedRoutes.has(pathname) || paymentRoute.test(pathname);
 }

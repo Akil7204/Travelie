@@ -87,19 +87,19 @@ const Profile: React.FC<LayoutProps> = ({ children }) => {
                 Message
               </Link>
               <Link
-                href="/company/reward"
+                href="/wallet"
                 className={`rounded-lg block text-xl p-3 font-semibold ${
-                  isActive("/company/reward")
+                  isActive("/wallet")
                     ? "text-white bg-blue-700"
                     : "hover:bg-gray-200"
                 }`}
               >
-                Reward and wallet
+                wallet
               </Link>
               <Link
-                href="/company/signout"
+                href="#"
                 className={`rounded-lg block text-xl p-3 font-semibold ${
-                  isActive("/company/signout")
+                  isActive("#")
                     ? "text-white bg-blue-700"
                     : "hover:bg-gray-200"
                 }`}
