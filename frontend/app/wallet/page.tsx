@@ -15,7 +15,6 @@ const WalletPage = () => {
     const fetchWalletData = async () => {
       try {
         const userData = JSON.parse(localStorage.getItem("user") || "{}");
-        console.log(userData);
         
         const userId = userData._id;
         const response = await fetchingWallet(userId);
@@ -40,8 +39,8 @@ const WalletPage = () => {
       <Profile>
         <div className="container mx-auto px-4 py-8">
           <h1 className="text-3xl font-bold mb-6">Wallet</h1>
-          <WalletBalance />
-          <TransactionHistory />
+          <WalletBalance balance={walletBalance} />
+          <TransactionHistory transactions={transactions} />
         </div>
       </Profile>
     </>

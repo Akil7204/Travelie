@@ -1,13 +1,20 @@
 
 import React from 'react';
 
-const transactions = [
-  { amount: '500 Rs', direction: 'Credited', date: '03/04/2024', type: 'Add by bank account', balance: '₹23000', status: 'credited' },
-  { amount: '400 Rs', direction: 'Debited', date: '03/04/2024', type: 'Trip booking', balance: '₹22000', status: 'debited' },
-  { amount: '500 Rs', direction: 'Credited', date: '03/04/2024', type: 'by cancellation of trip', balance: '₹23000', status: 'credited' },
-];
+interface Transaction {
+  amount: number;
+  description: string;
+  date: string;
+  type: string;
+  balance: number;
+  status: string;
+}
 
-const TransactionHistory = () => {
+interface TransactionHistoryProps {
+  transactions: Transaction[];
+}
+
+const TransactionHistory: React.FC<TransactionHistoryProps> = ({ transactions }) => {
   return (
     <div className="mt-8">
       <h2 className="text-xl font-semibold mb-4">Transaction History</h2>
@@ -17,8 +24,7 @@ const TransactionHistory = () => {
             <th className="px-4 py-3">Amount</th>
             <th className="px-4 py-3">Direction</th>
             <th className="px-4 py-3">Date</th>
-            <th className="px-4 py-3">Type</th>
-            <th className="px-4 py-3">Balance</th>
+            <th className="px-4 py-3">Description</th>
           </tr>
         </thead>
         <tbody>
@@ -28,17 +34,16 @@ const TransactionHistory = () => {
               <td className="px-4 py-3">
                 <span
                   className={`inline-block px-2 py-1 text-sm font-medium rounded-lg ${
-                    transaction.status === 'credited'
+                    transaction.type === 'credit'
                       ? 'bg-green-100 text-green-600'
                       : 'bg-red-100 text-red-600'
                   }`}
                 >
-                  {transaction.direction}
+                  {transaction.type}
                 </span>
               </td>
-              <td className="px-4 py-3">{transaction.date}</td>
-              <td className="px-4 py-3">{transaction.type}</td>
-              <td className="px-4 py-3">{transaction.balance}</td>
+              <td className="px-4 py-3">{new Date(transaction.date).toLocaleDateString()}</td>
+              <td className="px-4 py-3">{transaction.description}</td>
             </tr>
           ))}
         </tbody>
