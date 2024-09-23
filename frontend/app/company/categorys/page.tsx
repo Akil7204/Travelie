@@ -20,28 +20,28 @@ const TripList: React.FC = () => {
   const [categorys, setCategory] = useState<Category[]>([]);
   const [formattedDates, setFormattedDates] = useState<string[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1); // Total pages will be dynamic
-  const categoyPerPage = 5; // Adjust as needed
+  const [totalPages, setTotalPages] = useState(1); 
+  const categoyPerPage = 5; 
 
-  // Handle page change in pagination
+  
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
   };
 
-  // Fetch trips with pagination
+ 
   const fetchTrips = async (page: number) => {
     try {
-      const response = await getAllCategoryAPI(page, categoyPerPage); // Fetch trips from API with pagination
-      console.log("API Response:", response); // Log API response
+      const response = await getAllCategoryAPI(page, categoyPerPage); 
+      console.log("API Response:", response); 
 
-      setCategory(response.allCategory); // Set fetched trips
-      setTotalPages(Math.ceil(response.totalCount / categoyPerPage)); // Calculate total pages dynamically
+      setCategory(response.allCategory); 
+      setTotalPages(Math.ceil(response.totalCount / categoyPerPage)); 
     } catch (error) {
       console.error("Failed to fetch trips:", error);
     }
   };
 
-  // Fetch trips whenever currentPage changes
+  
   useEffect(() => {
     fetchTrips(currentPage);
   }, [currentPage]);
@@ -52,10 +52,10 @@ const TripList: React.FC = () => {
     );
     try {
       if (isConfirmed) {
-        const deleted = await softDeleteCategoryAPI(categoryId); // Call the soft delete API
+        const deleted = await softDeleteCategoryAPI(categoryId); 
         console.log(deleted);
         
-        fetchTrips(currentPage); // Re-fetch the categories to reflect changes
+        fetchTrips(currentPage); 
       }
     } catch (error) {
       console.error("Failed to delete category:", error);

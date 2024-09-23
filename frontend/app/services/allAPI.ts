@@ -130,9 +130,9 @@ export const cancelBooking = async (bookingId: any) => {
   }
 };
 
-export const fetchingWallet = async (userId: any) => {
+export const fetchingWallet = async (userId: string, page: number, tranctionPerPage: number) => {
   try {
-    const response = await axios.get(`${SERVER_URL}/wallet/${userId}`, { withCredentials: true}); 
+    const response = await axios.get(`${SERVER_URL}/wallet/${userId}`, { params: {  page, limit: tranctionPerPage }, withCredentials: true}); 
     return response
   } catch (error) {
     console.error("Error fetching wallet data:", error);

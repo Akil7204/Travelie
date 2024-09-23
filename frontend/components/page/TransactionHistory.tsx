@@ -1,5 +1,6 @@
 
 import React from 'react';
+import Pagination from './Pagination';
 
 interface Transaction {
   amount: number;
@@ -48,6 +49,7 @@ const TransactionHistory: React.FC<TransactionHistoryProps> = ({ transactions })
           ))}
         </tbody>
       </table>
+      
     </div>
   );
 };

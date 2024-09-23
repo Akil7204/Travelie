@@ -1,4 +1,4 @@
-import  {  Document } from "mongoose";
+import  mongoose, {  Document, Mongoose } from "mongoose";
 import { User, UserModel } from "../domain/user";
 import { Trip, Trips } from "../domain/trips";
 import { bookedModal } from "../domain/bookedTrip";
@@ -168,6 +168,32 @@ export const updateWallet = async (wallet: any) => {
   return wallet.save();
 };
 
-export const getWalletByUserId = async (userId: string) => {
-  return await WalletModel.findOne({ userId });
+export const getWalletByUserId = async (userId: string, skip: number, limit: number) => {
+  const wallet = await WalletModel.aggregate([
+    { $match: { userId: new mongoose.Types.ObjectId(userId) } },
+    {
+      $project: {
+        userId: 1,
+        balance: 1,
+        transactions: { $slice: ["$transactions", skip, limit] } 
+      }
+    }
+  ]);
+
+  return wallet.length > 0 ? wallet[0] : null;
+};
+
+export const getTransactionCount = async (userId: string, ): Promise<number> => {
+  try {
+    const wallet = await WalletModel.findOne({ userId }).select('transactions');
+
+    if (!wallet) {
+      throw new Error("Wallet not found for the given user");
+    }
+
+    return wallet.transactions.length;
+  } catch (error) {
+    console.error("Error fetching transaction count from database:", error);
+    throw error;
+  }
 };

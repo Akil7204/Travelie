@@ -10,6 +10,7 @@ import {
   getBookingById,
   getBookingDetail,
   getDetailTrip,
+  getTransactionCount,
   getUserWallet,
   getWalletByUserId,
   updateBookedTrip,
@@ -272,11 +273,11 @@ export const cancelTripUseCase = async (bookingId: string, userId: string) => {
     if (booking.paymentStatus === "cancelled") {
       throw new Error("This trip has already been cancelled");
     }
-console.log({booking});
+    console.log({ booking });
 
     booking.paymentStatus = "cancelled";
     const bookingStatus = await updateBookingStatus(booking);
-    console.log({bookingStatus});
+    console.log({ bookingStatus });
 
     let userWallet = await getUserWallet(userId);
     const refundAmount = booking.totalAmount;
@@ -318,10 +319,15 @@ console.log({booking});
   }
 };
 
-
-export const getWalletDetails = async (userId: string) => {
-  const wallet = await getWalletByUserId(userId);
-
+export const getWalletDetails = async (
+  userId: string,
+  skip: number,
+  limit: number
+) => {
+  const wallet = await getWalletByUserId(userId, skip, limit);
+  const totalCount = await getTransactionCount(userId);
+  console.log(wallet);
+  
   if (!wallet) {
     throw new Error("Wallet not found");
   }
@@ -329,7 +335,6 @@ export const getWalletDetails = async (userId: string) => {
   return {
     balance: wallet.balance,
     transactions: wallet.transactions,
+    totalCount: totalCount,
   };
 };
-
-

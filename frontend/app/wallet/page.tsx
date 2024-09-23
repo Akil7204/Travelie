@@ -5,32 +5,40 @@ import Profile from "@/components/profile/Profile";
 import TransactionHistory from "@/components/page/TransactionHistory";
 import Navbar from "@/components/NavBar";
 import { fetchingWallet } from "../services/allAPI";
+import Pagination from "@/components/page/Pagination";
 
 const WalletPage = () => {
   const [walletBalance, setWalletBalance] = useState<number>(0);
   const [transactions, setTransactions] = useState<any[]>([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1); 
+  const tranctionPerPage = 5;
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
 
   useEffect(() => {
-    // Fetch wallet balance and transaction history
-    const fetchWalletData = async () => {
+    const fetchWalletData = async (page: number) => {
       try {
         const userData = JSON.parse(localStorage.getItem("user") || "{}");
         
         const userId = userData._id;
-        const response = await fetchingWallet(userId);
+        const response = await fetchingWallet(userId, page, tranctionPerPage);
         console.log(response);
         
-        const { balance, transactions } = response.data;
+        const { balance, transactions, totalCount } = response.data;
 
         setWalletBalance(balance);
         setTransactions(transactions);
+        setTotalPages(Math.ceil(totalCount / tranctionPerPage)); 
       } catch (error) {
         console.error("Error fetching wallet data:", error);
       }
     };
 
-    fetchWalletData();
-  }, []);
+    fetchWalletData(currentPage);
+  }, [currentPage]);
 
 
   return (
@@ -41,6 +49,11 @@ const WalletPage = () => {
           <h1 className="text-3xl font-bold mb-6">Wallet</h1>
           <WalletBalance balance={walletBalance} />
           <TransactionHistory transactions={transactions} />
+          <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={handlePageChange}
+            />
         </div>
       </Profile>
     </>

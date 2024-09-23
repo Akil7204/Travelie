@@ -345,13 +345,17 @@ export const cancelTrip = async (req: any, res: Response) => {
 };
 
 
-export const fetchWalletDetails = async (req: Request, res: Response) => {
+export const fetchWalletDetails = async (req: any, res: any) => {
   try {
     const { userId } = req.params;
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const skip = (page - 1) * limit;
     console.log(userId);
     
-    const walletDetails = await getWalletDetails(userId);
+    const walletDetails = await getWalletDetails(userId, skip, limit);
     console.log({walletDetails});
+
     
     res.status(200).json(walletDetails);
   } catch (error: any) {
