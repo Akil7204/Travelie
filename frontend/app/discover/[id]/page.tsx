@@ -75,25 +75,23 @@ const TripPage: React.FC = () => {
     } else {
       console.error("Trip data is not available for proceeding to payment.");
     }
-    
-    try {
 
+    try {
       const result = await bookingApi(reqBody, {
         "Content-Type": "multipart/form-data", // You can include this header, but axios sets it automatically
       });
 
-      if(result.status == 401){
-        router.push("/login")
+      if (result.status == 401) {
+        router.push("/login");
       }
 
       router.push(`/payment/${result.bookedSeatId}`);
       console.log(result);
-      
     } catch (error: any) {
       console.log(error.status);
-      
-      if(error.status == 401){
-        router.push("/login")
+
+      if (error.status == 401) {
+        router.push("/login");
       }
     }
   };
@@ -146,17 +144,25 @@ const TripPage: React.FC = () => {
                 </div>
               </div>
             </div>
+            <div className="mt-8 flex justify-between items-start">
+              <div>
+                {tripData?.tripName && (
+                  <h1 className="text-4xl font-bold text-blue-600 capitalize">
+                    {tripData.tripName}
+                  </h1>
+                )}
+              </div>
 
-            <div className="mt-8">
-              {tripData?.tripName && (
-                <h1 className="text-4xl font-bold text-blue-600 capitalize">
-                  {tripData.tripName}
-                </h1>
-              )}
-              <p className="text-gray-600 mt-2">
-                <i className="fas fa-map-marker-alt"></i> {tripData?.tripName}
-              </p>
+              {/* Report Button */}
+              <div>
+                <button className="bg-blue-200 text-gray-800 py-2 px-4 rounded-md hover:bg-gray-300">
+                  Report
+                </button>
+              </div>
             </div>
+
+            {/* Divider Line */}
+            <hr className="my-6 border-gray-300" />
 
             <div className="mt-6">
               <h2 className="text-2xl font-semibold">Overview</h2>
