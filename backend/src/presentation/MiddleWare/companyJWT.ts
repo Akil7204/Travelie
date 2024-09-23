@@ -19,10 +19,6 @@ export function verifycompany(req: any, res: Response, next: NextFunction) {
     const decoded: any = jwt.verify(companyToken, secret);
     req.companyId = decoded?.companyId;
     
-    // if (!decoded?.role || decoded.role != "Travelie-company") {
-    //   return res.status(401).send("Invalid JWT");
-    // }
-    
     next();
   } catch (err: any) {
     console.log(err);

@@ -9,8 +9,6 @@ router.post("/", createChat);
 router.get("/:userId", userChat);
 router.get("/find/:firstId/:secondId", findChat);
 
-
-
 //company routes;
 
 router.get("/company/:companyId", companyChat);
