@@ -20,6 +20,7 @@ import {
 
 import { User } from "../domain/user";
 import { Trip } from "../domain/trips";
+import { WalletModel } from "../domain/walletModel";
 
 // registerUser new User
 export const registerUser = async (user: User) => {
@@ -164,23 +165,30 @@ export const fetchDetailTrip = async (tripId: string): Promise<Trip> => {
   return trip;
 };
 
-export const fetchbookingSeat = async (tripId: string, seatCount: number, userId: string) => {
+export const fetchbookingSeat = async (
+  tripId: string,
+  seatCount: number,
+  userId: string
+) => {
   const AllTripDetails = await getDetailTrip(tripId);
   // console.log(AllTripDetails?.price);
   let totalAmount;
   if (AllTripDetails) {
     totalAmount = seatCount * AllTripDetails?.price;
   }
-  const createBooking = await createBookingformDB(tripId, seatCount, totalAmount?totalAmount:0, userId)
+  const createBooking = await createBookingformDB(
+    tripId,
+    seatCount,
+    totalAmount ? totalAmount : 0,
+    userId
+  );
   return createBooking;
 };
 
-
 export const findBookingTrip = async (bookingId: string) => {
-  const bookingDetails = await getBookingDetail(bookingId)
+  const bookingDetails = await getBookingDetail(bookingId);
   return bookingDetails;
-}
-
+};
 
 export const addTransactionDetails = async (
   email: string,
@@ -192,11 +200,9 @@ export const addTransactionDetails = async (
     // if (!PayUOrderData) throw new Error("PayU Order Data not found");
     // console.log("Got order id");
     // console.log(PayUOrderData);
-
     // const userData = await userServices.getUserDataByEmail(email);
     // if (!userData) throw new Error("User Data not found.");
     // const userId = userData._id.toString();
-
     // const transaction = await adsRepository.addTransaction(
     //   userId,
     //   PayUOrderId,
@@ -207,7 +213,6 @@ export const addTransactionDetails = async (
     // console.log("Added transaction");
     // console.log(transaction);
     // if (!transaction) throw new Error("Transaction Data not found");
-
     // if (status === "success") {
     //   const postId = PayUOrderData?.productinfo;
     //   const WeNetAdsData = await adsRepository.createWenetAds(
@@ -217,11 +222,9 @@ export const addTransactionDetails = async (
     //   );
     //   console.log("created WeNetAdsData");
     //   console.log(WeNetAdsData);
-
     //   const postData = await adsRepository.addAdDataToPost(postId);
     //   console.log("Added ad data to post ");
     //   console.log(postData);
-
     //   try {
     //     await adsRepository.sendPostAdDataToMQ(
     //       postData._id.toString(),
@@ -235,67 +238,81 @@ export const addTransactionDetails = async (
   } catch (error: any) {
     throw new Error(error.message);
   }
-}
+};
 
-export const fetchbookingData = async (txnid: string, productinfo: string, status: string) => {
-
+export const fetchbookingData = async (
+  txnid: string,
+  productinfo: string,
+  status: string
+) => {
   const bookedTrip = await updateBookedTrip(productinfo, txnid, status);
   return bookedTrip;
 };
 
-export const getBookingsByUser = async (userId: string, skip: number, limit: number,) => {
+export const getBookingsByUser = async (
+  userId: string,
+  skip: number,
+  limit: number
+) => {
   return await BookingsByUser(userId, skip, limit);
 };
 
-export const getTotalCountBooking = async(userId: string) => {
+export const getTotalCountBooking = async (userId: string) => {
   return await getAllCountBookingFromDb(userId);
-}
+};
 
 export const cancelTripUseCase = async (bookingId: string, userId: string) => {
+  try {
+    const booking = await getBookingById(bookingId);
+    if (!booking) {
+      throw new Error("Booking not found");
+    }
 
-  const booking = await getBookingById(bookingId);
+    if (booking.paymentStatus === "cancelled") {
+      throw new Error("This trip has already been cancelled");
+    }
+console.log({booking});
 
-  if (!booking) {
-    throw new Error('Booking not found');
-  }
+    booking.paymentStatus = "cancelled";
+    const bookingStatus = await updateBookingStatus(booking);
+    console.log({bookingStatus});
 
-  if (booking.paymentStatus === 'cancelled') {
-    throw new Error('This trip has already been cancelled');
-  }
+    let userWallet = await getUserWallet(userId);
+    const refundAmount = booking.totalAmount;
 
-  booking.paymentStatus = 'cancelled';
-  await updateBookingStatus(booking);
+    if (!userWallet) {
+      userWallet = new WalletModel({
+        userId,
+        balance: refundAmount,
+        transactions: [
+          {
+            type: "credit",
+            amount: refundAmount,
+            description: `Refund for cancelled trip: ${booking.tripId}`,
+            date: new Date(),
+          },
+        ],
+      });
+    } else {
+      userWallet.balance += refundAmount;
+      userWallet.transactions.push({
+        type: "credit",
+        amount: refundAmount,
+        description: `Refund for cancelled trip: ${booking.tripId}`,
+        date: new Date(),
+      });
+    }
 
-  
-  let userWallet: any = await getUserWallet(userId);
+    const savedWallet = await userWallet.save();
+    // console.log("Updated Wallet:", savedWallet);
 
-  
-  const refundAmount = booking.totalAmount;
-  if (!userWallet) {
-    userWallet = {
-      userId,
-      balance: 0,
-      transactions: [],
+    return {
+      message: "Trip cancelled and amount refunded to wallet",
+      refundAmount,
+      walletBalance: savedWallet.balance,
     };
+  } catch (error: any) {
+    console.error("Error in cancelTripUseCase:", error);
+    throw new Error(error.message);
   }
-
-  
-  userWallet.balance += refundAmount;
-
-  
-  userWallet.transactions.push({
-    type: 'credit',
-    amount: refundAmount,
-    description: `Refund for cancelled trip: ${booking.tripId}`,
-    date: new Date(),
-  });
-
-  // Save the updated wallet
-  await updateWallet(userWallet);
-
-  return {
-    message: 'Trip cancelled and amount refunded to wallet',
-    refundAmount,
-    walletBalance: userWallet.balance,
-  };
 };

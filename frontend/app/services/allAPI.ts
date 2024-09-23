@@ -119,3 +119,13 @@ export const getUserBookingsAPI = async (page: number, bookingPerPage: number) =
 export const isBlockedApi = async (data: any) => {
   return axios.get(`${SERVER_URL_ISBLOCKED}/isBlockedApi/${data}`,  {withCredentials: true});
 };
+
+export const cancelBooking = async (bookingId: any) => {
+  try {
+    const response = await axios.post(`${SERVER_URL}/cancel-trip/${bookingId}`,null, { withCredentials: true}); 
+    return response
+  } catch (error) {
+    console.error("Error fetching booking data:", error);
+    throw error;
+  }
+};

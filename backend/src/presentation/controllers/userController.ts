@@ -309,7 +309,6 @@ export const saveData = async (req: Request, res: Response) => {
 
 export const getUserBookings = async (req: any, res: Response) => {
   const userId = req.userId;
-  console.log(userId);
 
   const page = parseInt(req.query.page) || 1;
   const limit = parseInt(req.query.limit) || 10;
@@ -318,7 +317,7 @@ export const getUserBookings = async (req: any, res: Response) => {
   try {
     const bookings = await getBookingsByUser(userId, skip, limit);
     const totalCount = await getTotalCountBooking(userId);
-    console.log(bookings);
+    // console.log(bookings);
 
     res.status(200).json({bookings, totalCount});
   } catch (error: any) {
@@ -326,17 +325,18 @@ export const getUserBookings = async (req: any, res: Response) => {
   }
 };
 
-export const cancelTrip = async (req: Request, res: Response) => {
+export const cancelTrip = async (req: any, res: Response) => {
   try {
     const { bookingId } = req.params;
-    const userId = req.body.userId;
+    const userId = req.userId;
+    
 
     const result = await cancelTripUseCase(bookingId, userId);
-
+    
     res.status(200).json({
-      message: result.message,
-      refundAmount: result.refundAmount,
-      walletBalance: result.walletBalance,
+      message: result?.message,
+      refundAmount: result?.refundAmount,
+      walletBalance: result?.walletBalance,
     });
   } catch (error) {
     res.status(500).json({ message: 'Error cancelling trip', error });

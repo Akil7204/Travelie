@@ -1,10 +1,11 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { getUserBookingsAPI } from "../services/allAPI";
+import { cancelBooking, getUserBookingsAPI } from "../services/allAPI";
 import Pagination from "@/components/page/Pagination";
 import Navbar from "@/components/NavBar";
 import Profile from "@/components/profile/Profile";
 import Footer from "@/components/Footer";
+import { useRouter } from "next/navigation";
 
 interface Trip {
   _id: string;
@@ -35,6 +36,8 @@ const MyTrips: React.FC = () => {
   const [totalPages, setTotalPages] = useState(1);
   const bookingPerPage = 5;
 
+  const router = useRouter();
+
   // Modal state
   const [isOpen, setIsOpen] = useState(false);
   const [selectedBooking, setSelectedBooking] = useState<Booking | null>(null);
@@ -57,6 +60,8 @@ const MyTrips: React.FC = () => {
     try {
       const response: any = await getUserBookingsAPI(page, bookingPerPage);
       setBookings(response.bookings);
+      console.log(response.bookings);
+      
       setTotalPages(Math.ceil(response.totalCount / bookingPerPage));
     } catch (error) {
       console.error("Error fetching bookings:", error);
@@ -66,6 +71,29 @@ const MyTrips: React.FC = () => {
   useEffect(() => {
     fetchBookings(currentPage);
   }, [currentPage]);
+
+  const cancelTripAPI = async (bookingId: string) => {
+    try {
+      console.log(bookingId);
+      
+      const response = await cancelBooking(bookingId);
+
+      if (!response) {
+        throw new Error("Failed to cancel trip");
+      }
+
+      // const result = await response.json();
+      if(response.statusText == "OK"){
+        router.push("/myTrips")
+        console.log("Trip cancelled:", response);
+        closeModal()
+        fetchBookings(currentPage)
+      }
+
+    } catch (error) {
+      console.error("Error cancelling trip:", error);
+    }
+  };
 
   return (
     <>
@@ -82,7 +110,7 @@ const MyTrips: React.FC = () => {
                 <div className="flex items-center">
                   {/* Trip Image */}
                   <img
-                    src={booking.tripId.images[0]} // Assuming `images` is an array
+                    src={booking.tripId.images[0]} 
                     alt={booking.tripId.tripName}
                     className="w-32 h-32 rounded-lg object-cover"
                   />
@@ -98,6 +126,9 @@ const MyTrips: React.FC = () => {
                     </p>
                     <p>Total seats: {booking.seats}</p>
                     <p>{booking.tripId.days} Days trip</p>
+                    {booking.paymentStatus === "cancelled" && (
+                      <p className="text-red-500 font-bold mt-2">Cancelled</p>
+                    )}
                   </div>
                 </div>
                 <div className="text-right">
@@ -206,13 +237,24 @@ const MyTrips: React.FC = () => {
                       {selectedBooking.tripId.description}
                     </p>
                   </div>
-
-                  <button className="w-full py-2 mt-4 bg-blue-500 text-white font-semibold rounded-md shadow-md hover:bg-blue-600 transition">
-                    Download Ticket
-                  </button>
-                  <button className="w-full py-2 mt-4 bg-blue-500 text-white font-semibold rounded-md shadow-md hover:bg-blue-600 transition">
-                    Cancel Trip
-                  </button>
+                  {selectedBooking.paymentStatus === "cancelled" ? (
+                    <div className="text-red-500 font-bold">
+                      Your trip is cancelled, and your amount will be added to
+                      your wallet.
+                    </div>
+                  ) : (
+                    <>
+                      <button className="w-full py-2 mt-4 bg-blue-500 text-white font-semibold rounded-md shadow-md hover:bg-blue-600 transition">
+                        Download Ticket
+                      </button>
+                      <button
+                        className="w-full py-2 mt-4 bg-blue-500 text-white font-semibold rounded-md shadow-md hover:bg-blue-600 transition"
+                        onClick={() => cancelTripAPI(selectedBooking?._id)}
+                      >
+                        Cancel Trip
+                      </button>
+                    </>
+                  )}
                 </div>
               </div>
             </div>
