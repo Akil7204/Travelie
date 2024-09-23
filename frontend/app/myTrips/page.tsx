@@ -211,7 +211,7 @@ const MyTrips: React.FC = () => {
                     Download Ticket
                   </button>
                   <button className="w-full py-2 mt-4 bg-blue-500 text-white font-semibold rounded-md shadow-md hover:bg-blue-600 transition">
-                    Cancel Ticket
+                    Cancel Trip
                   </button>
                 </div>
               </div>
