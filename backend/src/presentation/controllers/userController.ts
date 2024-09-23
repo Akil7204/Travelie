@@ -10,6 +10,7 @@ import {
   findBookingTrip,
   getBookingsByUser,
   getTotalCountBooking,
+  getWalletDetails,
   googleLogin,
   loginUser,
   registerUser,
@@ -340,5 +341,20 @@ export const cancelTrip = async (req: any, res: Response) => {
     });
   } catch (error) {
     res.status(500).json({ message: 'Error cancelling trip', error });
+  }
+};
+
+
+export const fetchWalletDetails = async (req: Request, res: Response) => {
+  try {
+    const { userId } = req.params;
+    console.log(userId);
+    
+    const walletDetails = await getWalletDetails(userId);
+    console.log({walletDetails});
+    
+    res.status(200).json(walletDetails);
+  } catch (error: any) {
+    res.status(404).json({ message: error.message });
   }
 };

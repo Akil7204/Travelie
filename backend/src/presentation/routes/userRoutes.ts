@@ -5,6 +5,7 @@ import {
   cancelTrip,
   detailTrip,
   fetchBookedData,
+  fetchWalletDetails,
   getAllTrips,
   getUserBookings,
   googleLoginHandler,
@@ -46,6 +47,8 @@ router.get("/bookedTrip/:id", verifyUser, fetchBookedData);
 router.get("/bookings", verifyUser, getUserBookings);
 
 router.post('/cancel-trip/:bookingId', verifyUser, cancelTrip);
+
+router.get("/wallet/:userId", verifyUser, fetchWalletDetails)
 
 // Payment Routes;
 router.post('/payment', verifyUser, payment);

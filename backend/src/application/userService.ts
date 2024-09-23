@@ -11,6 +11,7 @@ import {
   getBookingDetail,
   getDetailTrip,
   getUserWallet,
+  getWalletByUserId,
   updateBookedTrip,
   updateBookingStatus,
   updateUser,
@@ -316,3 +317,19 @@ console.log({booking});
     throw new Error(error.message);
   }
 };
+
+
+export const getWalletDetails = async (userId: string) => {
+  const wallet = await getWalletByUserId(userId);
+
+  if (!wallet) {
+    throw new Error("Wallet not found");
+  }
+
+  return {
+    balance: wallet.balance,
+    transactions: wallet.transactions,
+  };
+};
+
+

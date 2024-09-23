@@ -167,3 +167,7 @@ export const getUserWallet = async (userId: string) => {
 export const updateWallet = async (wallet: any) => {
   return wallet.save();
 };
+
+export const getWalletByUserId = async (userId: string) => {
+  return await WalletModel.findOne({ userId });
+};

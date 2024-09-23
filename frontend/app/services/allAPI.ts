@@ -129,3 +129,13 @@ export const cancelBooking = async (bookingId: any) => {
     throw error;
   }
 };
+
+export const fetchingWallet = async (userId: any) => {
+  try {
+    const response = await axios.get(`${SERVER_URL}/wallet/${userId}`, { withCredentials: true}); 
+    return response
+  } catch (error) {
+    console.error("Error fetching wallet data:", error);
+    throw error;
+  }
+};
