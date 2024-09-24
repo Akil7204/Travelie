@@ -2,6 +2,9 @@ import { Request, Response, NextFunction } from "express";
 import {
   blockCompany,
   blockUser,
+  changeReportStatus,
+  createNewReport,
+  fetchAllReports,
   getAllCompanies,
   getAllUnapprovalCompany,
   getAllUsers,
@@ -128,3 +131,38 @@ export const unblockCompanyController = async (req: Request, res: Response, next
     next(error);
   }
 };
+
+
+export const createReportController = async (req: Request, res: Response) => {
+  const { companyId, userId, message } = req.body;
+
+  try {
+    const report = await createNewReport(companyId, userId, message);
+    res.status(201).json({ success: true, data: report });
+  } catch (error) {
+    res.status(500).json({ success: false, message: "Failed to create report", error });
+  }
+};
+
+
+export const getReport = async (req: Request, res: Response) => {
+  try {
+    const reports = await fetchAllReports();
+    res.status(200).json({ success: true, data: reports });
+  } catch (error) {
+    res.status(500).json({ success: false, message: "Failed to fetch reports", error });
+  }
+};
+
+
+export const updateReportStatusController = async (req: Request, res: Response) => {
+  const { reportId } = req.params;
+  const { status } = req.body;
+  try {
+    const updatedReport = await changeReportStatus(reportId, status);
+    res.status(200).json({ success: true, data: updatedReport });
+  } catch (error) {
+    res.status(500).json({ success: false, message: "Failed to update report status", error });
+  }
+};
+

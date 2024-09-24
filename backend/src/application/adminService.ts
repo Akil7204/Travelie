@@ -6,17 +6,20 @@ import {
   findAllUsers,
   findUserByEmailAdmin,
   getAllCompaniesFromDB,
+  getAllReports,
   getAllUnapprovalFromDB,
   unblockCompanyById,
   unblockUserById,
   updateCompanyFromDB,
+  updateReportStatus,
 } from "../Infrastructure/adminRepository";
 import { Admin } from "../domain/admin";
 import { errorHandler } from "../uilts/errorHandler"; // Assuming errorHandler is a utility function
 import { User } from "../domain/user";
-import { findUserById } from "../Infrastructure/userRepository";
+import { createReport, findUserById } from "../Infrastructure/userRepository";
 import { Company } from "../domain/company";
 import { findCompanyById } from "../Infrastructure/companyRepository";
+import mongoose from "mongoose";
 
 export const loginUser = async (
   email: string,
@@ -113,4 +116,25 @@ export const unblockCompany = async (companyId: string): Promise<Company | null>
   }
 
   return unblockCompanyById(companyId);
+};
+
+// Service to handle creating a report
+export const createNewReport = async (
+  companyId: string,
+  userId: string,
+  userMessage: string
+) => {
+
+  return await createReport(companyId, userId, userMessage);
+};
+
+
+export const fetchAllReports = async () => {
+  return await getAllReports();
+};
+
+
+export const changeReportStatus = async (reportId: string, status: "Pending" | "Resolved" | "Dismissed") => {
+  const reportObjectId = new mongoose.Types.ObjectId(reportId);
+  return await updateReportStatus(reportObjectId, status);
 };

@@ -20,6 +20,7 @@ const changeToAdminDashboardRoutes = new Set([
   "/admin/approval",
   "/admin/user",
   "/admin/company",
+  "/admin/reports"
 ]);
 
 export function isProtectedAdminRoute(pathname: string): boolean {

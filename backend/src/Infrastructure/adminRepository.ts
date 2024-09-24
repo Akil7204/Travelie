@@ -2,6 +2,7 @@ import mongoose, { Schema, Document } from "mongoose";
 import { Admin } from "../domain/admin";
 import { Company, CompanyModel } from "../domain/company";
 import { User, UserModel } from "../domain/user";
+import { IReport, ReportModel } from "../domain/ReportModel";
 
 // Define the Mongoose schema for the User
 const AdminSchema: Schema<Admin> = new Schema({
@@ -62,4 +63,31 @@ export const blockCompanyById = async (companyId: string) => {
 
 export const unblockCompanyById = async (companyId: string) => {
   return CompanyModel.findByIdAndUpdate(companyId, { isBlocked: false }, { new: true });
+};
+
+// Create a new report
+export const createReport = async (
+  companyId: mongoose.Types.ObjectId,
+  userId: mongoose.Types.ObjectId,
+  userMessage: string
+): Promise<IReport> => {
+  const newReport = new ReportModel({ companyId, userId, userMessage });
+  return await newReport.save();
+};
+
+// Get all reports
+export const getAllReports = async (): Promise<IReport[]> => {
+  return await ReportModel.find().populate("companyId").populate("userId").exec();
+};
+
+// Update report status
+export const updateReportStatus = async (
+  reportId: mongoose.Types.ObjectId,
+  status: "Pending" | "Resolved" | "Dismissed"
+): Promise<IReport | null> => {
+  return await ReportModel.findByIdAndUpdate(
+    reportId,
+    { status },
+    { new: true }
+  );
 };
