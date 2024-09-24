@@ -5,10 +5,16 @@ import Image from "next/image";
 import Navbar from "@/components/NavBar";
 import Footer from "@/components/Footer";
 import { useParams, useRouter } from "next/navigation";
-import { bookingApi, detailTripsAPI } from "@/app/services/allAPI";
+import {
+  bookingApi,
+  detailTripsAPI,
+  submitReportAPI,
+} from "@/app/services/allAPI";
 import { DNA, InfinitySpin } from "react-loader-spinner";
 import Modal from "@/components/page/ModalSection";
 import ReportModal from "@/components/page/ReportModal";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 interface Trip {
   _id: string;
@@ -81,7 +87,7 @@ const TripPage: React.FC = () => {
 
     try {
       const result = await bookingApi(reqBody, {
-        "Content-Type": "multipart/form-data", // You can include this header, but axios sets it automatically
+        "Content-Type": "multipart/form-data",
       });
 
       if (result.status == 401) {
@@ -113,11 +119,14 @@ const TripPage: React.FC = () => {
         companyId: tripData?.companyId._id,
         message,
       };
-
-      // const response = await submitReportAPI(reportData);
-      // console.log("Report submitted successfully", response);
-    } catch (error) {
+      const response = await submitReportAPI(reportData);
+      console.log("Report submitted successfully", response);
+      toast.success("Report submitted successfully");
+    } catch (error: any) {
       console.error("Failed to submit report", error);
+      if (error.response.status == 401) {
+        router.push("/login");
+      }
     }
   };
 
@@ -138,6 +147,17 @@ const TripPage: React.FC = () => {
           </div>
         ) : (
           <>
+            <ToastContainer
+              position="top-center"
+              autoClose={5000}
+              hideProgressBar={false}
+              newestOnTop={false}
+              closeOnClick
+              rtl={false}
+              pauseOnFocusLoss
+              draggable
+              pauseOnHover
+            />
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
               {/* Main Image */}
               <div className="col-span-1">
@@ -266,8 +286,8 @@ const TripPage: React.FC = () => {
       <ReportModal
         isOpen={isReportModalOpen}
         onClose={handleCloseReportModal}
-        companyName={tripData?.companyId.companyname || "Unknown"} 
-        onSubmitReport={handleSubmitReport} 
+        companyName={tripData?.companyId.companyname || "Unknown"}
+        onSubmitReport={handleSubmitReport}
       />
     </>
   );

@@ -139,3 +139,13 @@ export const fetchingWallet = async (userId: string, page: number, tranctionPerP
     throw error;
   }
 };
+
+export const submitReportAPI = async (reportData: any) => {
+  try {
+    const response = await axios.post(`${SERVER_URL}/report`, reportData, { withCredentials: true}); 
+    return response
+  } catch (error) {
+    console.error("Error fetching report data:", error);
+    throw error;
+  }
+};

@@ -63,7 +63,7 @@ const AddCategory = () => {
       toast.error(error.message);
     }
 
-    // TODO: Submit the form data to the backend
+    
   };
 
   return (

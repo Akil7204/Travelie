@@ -52,14 +52,14 @@ const discover: React.FC = () => {
   useEffect(() => {
     let newFilteredTrips = trips;
 
-    // Filter by search term
+    
     if (searchTerm) {
       newFilteredTrips = newFilteredTrips.filter((trip) =>
         trip.tripName.toLowerCase().includes(searchTerm.toLowerCase())
       );
     }
 
-    // Filter by budget range
+    
     if (budgetRange.length > 0) {
       newFilteredTrips = newFilteredTrips.filter((trip) => {
         return budgetRange.some((range) => {
