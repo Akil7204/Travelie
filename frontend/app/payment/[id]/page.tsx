@@ -13,11 +13,11 @@ const BookingConfirmation = () => {
   const bookingId: any = params.id;
   console.log(bookingId);
 
-  // Fetch booking details from the API
+  
   useEffect(() => {
     const fetchBookingDetails = async () => {
       try {
-        const response = await fetchBookedData(bookingId); // Adjust the API endpoint accordingly
+        const response = await fetchBookedData(bookingId); 
         console.log(response);
 
         setBookingDetails(response);

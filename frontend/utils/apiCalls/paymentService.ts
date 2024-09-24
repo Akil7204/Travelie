@@ -1,5 +1,4 @@
 import axios from "axios";
-import { PAYMENT_SERVICE_DOMAIN } from "../constants";
 import { SERVER_URL } from "@/app/services/serverURL";
 
 const apiClient = axios.create({

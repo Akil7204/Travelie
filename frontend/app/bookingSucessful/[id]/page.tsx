@@ -14,18 +14,17 @@ interface BookingDetails {
 const BookingSuccess: React.FC = () => {
   const params = useParams();
   const router = useRouter();
-  const  id  = params.id; // Get the bookingId from the URL query
-  console.log(id);
+  const  id  = params.id; 
   const [bookingDetails, setBookingDetails] = useState<BookingDetails | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     if (id) {
-      // Fetch booking details by ID when the component mounts
+      
       const fetchBookingDetails = async () => {
         try {
-          const response = await fetchingBookingDetails(id); // API call to get booking details
+          const response = await fetchingBookingDetails(id); 
           console.log(response);
           
           setBookingDetails(response);
