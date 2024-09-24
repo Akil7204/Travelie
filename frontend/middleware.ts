@@ -104,7 +104,6 @@ async function verifyToken(
     );
 
     if (payload) {
-      console.log(payload);
       try {
         // const result = await isBlockedApi(payload.userId);
         // console.log(result);

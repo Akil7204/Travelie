@@ -169,18 +169,35 @@ export const updateWallet = async (wallet: any) => {
 };
 
 export const getWalletByUserId = async (userId: string, skip: number, limit: number) => {
-  const wallet = await WalletModel.aggregate([
-    { $match: { userId: new mongoose.Types.ObjectId(userId) } },
-    {
-      $project: {
-        userId: 1,
-        balance: 1,
-        transactions: { $slice: ["$transactions", skip, limit] } 
+  try {
+    const wallet = await WalletModel.aggregate([
+      { $match: { userId: new mongoose.Types.ObjectId(userId) } },
+      {
+        $project: {
+          userId: 1,
+          balance: 1,
+          transactions: {
+            $slice: [
+              {
+                $filter: {
+                  input: { $sortArray: { input: "$transactions", sortBy: { date: -1 } } },  
+                  as: "transaction",
+                  cond: {}  
+                }
+              },
+              skip,
+              limit
+            ]
+          }
+        }
       }
-    }
-  ]);
+    ]);
 
-  return wallet.length > 0 ? wallet[0] : null;
+    return wallet.length > 0 ? wallet[0] : null;
+  } catch (error) {
+    console.error('Error fetching wallet:', error);
+    throw new Error('Could not fetch wallet');
+  }
 };
 
 export const getTransactionCount = async (userId: string, ): Promise<number> => {
