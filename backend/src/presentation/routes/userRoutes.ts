@@ -9,6 +9,7 @@ import {
   getAllTrips,
   getUserBookings,
   googleLoginHandler,
+  handleReportSubmit,
   login,
   payment,
   register,
@@ -48,7 +49,9 @@ router.get("/bookings", verifyUser, getUserBookings);
 
 router.post('/cancel-trip/:bookingId', verifyUser, cancelTrip);
 
-router.get("/wallet/:userId", verifyUser, fetchWalletDetails)
+router.get("/wallet/:userId", verifyUser, fetchWalletDetails);
+
+router.post("/report", verifyUser, handleReportSubmit);
 
 // Payment Routes;
 router.post('/payment', verifyUser, payment);

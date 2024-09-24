@@ -4,6 +4,7 @@ import {
   allTripsFromDB,
   BookingsByUser,
   createBookingformDB,
+  createReport,
   createUser,
   findUserByEmail,
   getAllCountBookingFromDb,
@@ -327,7 +328,7 @@ export const getWalletDetails = async (
   const wallet = await getWalletByUserId(userId, skip, limit);
   const totalCount = await getTransactionCount(userId);
   console.log(wallet);
-  
+
   if (!wallet) {
     throw new Error("Wallet not found");
   }
@@ -337,4 +338,20 @@ export const getWalletDetails = async (
     transactions: wallet.transactions,
     totalCount: totalCount,
   };
+};
+
+export const submitReport = async (
+  companyId: string,
+  userId: string,
+  message: string
+) => {
+  try {
+    if (!message || message.trim() === "") {
+      throw new Error("Message is required to submit a report.");
+    }
+
+    return await createReport(companyId, userId, message);
+  } catch (error) {
+    console.log("error in userService: ", error);
+  }
 };

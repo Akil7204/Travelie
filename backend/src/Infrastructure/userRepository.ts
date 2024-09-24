@@ -1,8 +1,9 @@
-import  mongoose, {  Document, Mongoose } from "mongoose";
+import mongoose, { Document, Mongoose } from "mongoose";
 import { User, UserModel } from "../domain/user";
 import { Trip, Trips } from "../domain/trips";
 import { bookedModal } from "../domain/bookedTrip";
 import { WalletModel } from "../domain/walletModel";
+import { ReportModel } from "../domain/ReportModel";
 // Extending the User interface with mongoose Document
 interface UserModel extends User, Document {
   otp?: string;
@@ -64,7 +65,7 @@ export const createBookingformDB = async (
   tripId: string,
   seatCount: number,
   totalAmount: number,
-  userId: string,
+  userId: string
 ) => {
   try {
     // Create a new booking document
@@ -110,42 +111,53 @@ export const getBookingDetail = async (id: string) => {
 export const updateBookedTrip = async (
   productinfo: string,
   txnid: string,
-  status: string,
+  status: string
 ) => {
   try {
-    
     const bookedData = await bookedModal.findByIdAndUpdate(
       productinfo, // The ID of the document to update
       { txnId: txnid, paymentStatus: status }, // The fields to update
       { new: true } // Return the updated document
-    )
+    );
     // const tripId = bookedData?.tripId
     // console.log({tripId})
-     // // Find the trip by tripId and increment the bookedSeat field by seatCount
+    // // Find the trip by tripId and increment the bookedSeat field by seatCount
     const updatedTrip = await Trips.findByIdAndUpdate(
       bookedData?.tripId,
       { $inc: { bookedSeats: bookedData?.seats } }, // Increment the bookedSeat field by seatCount
       { new: true } // Return the updated document
     );
-    console.log({bookedData});
+    console.log({ bookedData });
 
-    
-    return bookedData
+    return bookedData;
   } catch (error) {
     console.log(error);
-    
   }
 };
 
-export const BookingsByUser = async (userId: string, skip: number, limit: number) => {
-  return await bookedModal.find({ userId, paymentStatus: { $ne: "pending" } }).populate('tripId').skip(skip).limit(limit).sort({
-    createdAt: -1,
-  });
+export const BookingsByUser = async (
+  userId: string,
+  skip: number,
+  limit: number
+) => {
+  return await bookedModal
+    .find({ userId, paymentStatus: { $ne: "pending" } })
+    .populate("tripId")
+    .skip(skip)
+    .limit(limit)
+    .sort({
+      createdAt: -1,
+    });
 };
 
-export const getAllCountBookingFromDb = async (userId: string): Promise<number> => {
+export const getAllCountBookingFromDb = async (
+  userId: string
+): Promise<number> => {
   try {
-    return await bookedModal.countDocuments({userId, paymentStatus: { $ne: "pending" } }); 
+    return await bookedModal.countDocuments({
+      userId,
+      paymentStatus: { $ne: "pending" },
+    });
   } catch (error) {
     console.error("Error fetching count from database:", error);
     throw error;
@@ -168,7 +180,11 @@ export const updateWallet = async (wallet: any) => {
   return wallet.save();
 };
 
-export const getWalletByUserId = async (userId: string, skip: number, limit: number) => {
+export const getWalletByUserId = async (
+  userId: string,
+  skip: number,
+  limit: number
+) => {
   try {
     const wallet = await WalletModel.aggregate([
       { $match: { userId: new mongoose.Types.ObjectId(userId) } },
@@ -180,29 +196,34 @@ export const getWalletByUserId = async (userId: string, skip: number, limit: num
             $slice: [
               {
                 $filter: {
-                  input: { $sortArray: { input: "$transactions", sortBy: { date: -1 } } },  
+                  input: {
+                    $sortArray: {
+                      input: "$transactions",
+                      sortBy: { date: -1 },
+                    },
+                  },
                   as: "transaction",
-                  cond: {}  
-                }
+                  cond: {},
+                },
               },
               skip,
-              limit
-            ]
-          }
-        }
-      }
+              limit,
+            ],
+          },
+        },
+      },
     ]);
 
     return wallet.length > 0 ? wallet[0] : null;
   } catch (error) {
-    console.error('Error fetching wallet:', error);
-    throw new Error('Could not fetch wallet');
+    console.error("Error fetching wallet:", error);
+    throw new Error("Could not fetch wallet");
   }
 };
 
-export const getTransactionCount = async (userId: string, ): Promise<number> => {
+export const getTransactionCount = async (userId: string): Promise<number> => {
   try {
-    const wallet = await WalletModel.findOne({ userId }).select('transactions');
+    const wallet = await WalletModel.findOne({ userId }).select("transactions");
 
     if (!wallet) {
       throw new Error("Wallet not found for the given user");
@@ -212,5 +233,24 @@ export const getTransactionCount = async (userId: string, ): Promise<number> => 
   } catch (error) {
     console.error("Error fetching transaction count from database:", error);
     throw error;
+  }
+};
+
+export const createReport = async (
+  companyId: string,
+  userId: string,
+  message: string
+) => {
+  try {
+    const report = new ReportModel({
+      companyId,
+      userId,
+      message,
+    });
+    console.log({report});
+    
+    return await report.save();
+  } catch (error) {
+    console.log(error);
   }
 };

@@ -14,6 +14,7 @@ import {
   googleLogin,
   loginUser,
   registerUser,
+  submitReport,
   updateUserProfileSER,
   verifyAndSaveUser,
 } from "../../application/userService";
@@ -360,5 +361,21 @@ export const fetchWalletDetails = async (req: any, res: any) => {
     res.status(200).json(walletDetails);
   } catch (error: any) {
     res.status(404).json({ message: error.message });
+  }
+};
+
+export const handleReportSubmit = async (req: any, res: Response) => {
+  const { companyId, message } = req.body;
+  const userId = req.userId; 
+  
+  if (!companyId || !message || !userId) {
+    return res.status(400).json({ error: "Invalid input" });
+  }
+
+  try {
+    const report = await submitReport(companyId, userId, message);
+    return res.status(201).json({ success: true, data: report });
+  } catch (error: any) {
+    return res.status(500).json({ error: error.message });
   }
 };
