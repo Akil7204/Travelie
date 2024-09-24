@@ -37,7 +37,6 @@ const AddCategory = () => {
     console.log("Form Data:", data);
     console.log(data.categoryName);
     
-    // Create a new FormData object
     const formData = new FormData();
 
 

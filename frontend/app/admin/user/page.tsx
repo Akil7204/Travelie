@@ -41,7 +41,6 @@ const AdminUserPage: React.FC = () => {
         const token = localStorage.getItem("adminToken");
         if (!token) throw new Error("No token found");
 
-        // Update the UI optimistically
         setUsers((prevUsers) =>
           prevUsers.map((users) =>
             users._id === user._id
@@ -51,7 +50,6 @@ const AdminUserPage: React.FC = () => {
         );
         setCurrentUser(user)
 
-        // Call the appropriate API based on the current status
         if (user?.isBlocked) {
           await unblockUserAPI(user._id, token);
           console.log("unblock success");

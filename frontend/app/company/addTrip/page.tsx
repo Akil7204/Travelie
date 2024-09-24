@@ -75,7 +75,7 @@ const AddTrip = () => {
 
       setPhotos((prevPhotos) => [...prevPhotos, ...filesArray]);
 
-      // Update the form with the new photo list
+      
       setValue("images", [...photos, ...filesArray]);
     }
   };
@@ -83,7 +83,7 @@ const AddTrip = () => {
   const removePhoto = (index: number) => {
     const uploadPhotos = photos.filter((_, i) => i !== index);
     setPhotos(uploadPhotos);
-    // Update the form with the updated photo list
+   
     setValue("images", uploadPhotos);
   };
 
@@ -91,7 +91,6 @@ const AddTrip = () => {
     console.log("Form Data:", data);
     console.log(data.images.length);
 
-    // Create a new FormData object
     const formData = new FormData();
 
     formData.append("tripName", data.tripName);
@@ -113,7 +112,6 @@ const AddTrip = () => {
     formData.append("seats", data.seats);
     formData.append("status", data.status);
 
-    // // Append images to formData
     // data.images.forEach((image, index) => {
     //   formData.append(`images[${index}]`, image);
     // });
@@ -144,7 +142,6 @@ const AddTrip = () => {
       toast.error("Trip already exist!");
     }
 
-    // TODO: Submit the form data to the backend
   };
 
   return (

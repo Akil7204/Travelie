@@ -9,7 +9,7 @@ import {
   toBeRedirectedCompanyRoutes,
   toBeRedirectedRoutes,
 } from "./utils/routes";
-import { isBlockedApi } from "./app/services/allAPI";
+import { isBlockedApi } from "./app/services/userAPI";
 
 export async function middleware(req: NextRequest) {
   const pathname = req.nextUrl.pathname;

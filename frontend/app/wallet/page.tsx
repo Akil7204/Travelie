@@ -4,7 +4,7 @@ import WalletBalance from "@/components/page/WalletBalance";
 import Profile from "@/components/profile/Profile";
 import TransactionHistory from "@/components/page/TransactionHistory";
 import Navbar from "@/components/NavBar";
-import { fetchingWallet } from "../services/allAPI";
+import { fetchingWallet } from "../services/userAPI";
 import Pagination from "@/components/page/Pagination";
 
 const WalletPage = () => {

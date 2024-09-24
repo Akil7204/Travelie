@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { cancelBooking, getUserBookingsAPI } from "../services/allAPI";
+import { cancelBooking, getUserBookingsAPI } from "../services/userAPI";
 import Pagination from "@/components/page/Pagination";
 import Navbar from "@/components/NavBar";
 import Profile from "@/components/profile/Profile";
@@ -38,7 +38,7 @@ const MyTrips: React.FC = () => {
 
   const router = useRouter();
 
-  // Modal state
+ 
   const [isOpen, setIsOpen] = useState(false);
   const [selectedBooking, setSelectedBooking] = useState<Booking | null>(null);
 
@@ -55,7 +55,6 @@ const MyTrips: React.FC = () => {
     setCurrentPage(page);
   };
 
-  // Fetch bookings for the user
   const fetchBookings = async (page: number) => {
     try {
       const response: any = await getUserBookingsAPI(page, bookingPerPage);

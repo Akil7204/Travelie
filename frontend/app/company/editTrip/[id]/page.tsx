@@ -32,7 +32,7 @@ type FormValues = {
 };
 
 const EditTrip = () => {
-  const params = useParams(); // Access the dynamic parameters
+  const params = useParams(); 
   const router = useRouter()
   const tripId: any = params.id;
 
@@ -74,7 +74,6 @@ const EditTrip = () => {
 
   const [photos, setPhotos] = useState<File[]>([]);
   const [image, setImage] = useState([])
-  // Fetch the trip details when the component loads
   useEffect(() => {
     const fetchTripDetails = async () => {
       if (!tripId) return console.log("nothing");
@@ -82,15 +81,13 @@ const EditTrip = () => {
       try {
         const tripData = await getTripByIdAPI(tripId);
         console.log({ tripData });
-        // Function to format date from ISO to dd-mm-yyyy
         const formatDateToDDMMYYYY = (isoDate: any) => {
           const date = new Date(isoDate);
-          const day = String(date.getDate()).padStart(2, "0"); // Get day and pad with leading zero if needed
-          const month = String(date.getMonth() + 1).padStart(2, "0"); // Get month (0-based) and pad with leading zero
+          const day = String(date.getDate()).padStart(2, "0"); 
+          const month = String(date.getMonth() + 1).padStart(2, "0"); 
           const year = date.getFullYear();
-          return `${year}-${month}-${day}`; // Return formatted date
-        }; // Extract YYYY-MM-DD
-        // Populate the form with fetched data
+          return `${year}-${month}-${day}`; 
+        }; 
         console.log(tripData.locations);
         tripData.locations = tripData.locations.map((item: any) => ({location: item}))
         
@@ -107,8 +104,6 @@ const EditTrip = () => {
         setValue("seats", tripData.seats);
         setValue("status", tripData.status);
         setImage(tripData.images)
-        // Set images
-        // Handle images logic if necessary
       } catch (error) {
         console.error("Error fetching trip details:", error);
       }

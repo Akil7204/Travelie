@@ -10,7 +10,6 @@ export const LoginAPI = async (reqBody: any) => {
   return response.data
 };
 
-// Get All Users API
 export const getAllUnapprovalAPI = async (token: string) => {
   try {
     const response = await commonAPI('GET', `${server_URL_admin}/approval`, undefined, {
@@ -133,37 +132,7 @@ export const getAllReportsAPI = async (token: string) => {
   }
 };
 
-// export const resolveReportAPI = async (reportId: string, token: string) => {
-//   try {
-//     await axios.patch(
-//       `${server_URL_admin}/reports/${reportId}/resolve`,
-//       {},
-//       {
-//         headers: {
-//           Authorization: `Bearer ${token}`,
-//         },
-//       }
-//     );
-//   } catch (error: any) {
-//     throw new Error(error.response.data.message || "Failed to resolve report");
-//   }
-// };
 
-// export const dismissReportAPI = async (reportId: string, token: string) => {
-//   try {
-//     await axios.patch(
-//       `${server_URL_admin}/reports/${reportId}/dismiss`,
-//       {},
-//       {
-//         headers: {
-//           Authorization: `Bearer ${token}`,
-//         },
-//       }
-//     );
-//   } catch (error: any) {
-//     throw new Error(error.response.data.message || "Failed to dismiss report");
-//   }
-// };
 
 export const updateReportStatusAPI = async (reportId: string, status: "Pending" | "Resolved" | "Dismissed", token: string) => {
   try {

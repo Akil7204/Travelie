@@ -11,7 +11,7 @@ const CheckInbox: React.FC = () => {
       <div className="bg-white p-6 rounded-lg shadow-md text-center max-w-md">
         <div className="mb-4">
           <Image
-            src="/img/inbox.jpeg" // Replace with the path to your image
+            src="/img/inbox.jpeg" 
             alt="Check your Inbox"
             width={150}
             height={150}

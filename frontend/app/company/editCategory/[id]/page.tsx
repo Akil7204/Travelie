@@ -43,11 +43,8 @@ const EditCategory = () => {
       try {
         const categoryData = await getCategoryByIdAPI(categoryId);
         console.log({ categoryData });
-        // Populate the form with fetched data
         setValue("categoryName", categoryData.name);
 
-        // Set images
-        // Handle images logic if necessary
       } catch (error) {
         console.error("Error fetching trip details:", error);
       }
@@ -117,11 +114,10 @@ const EditCategory = () => {
               <input
                 type="text"
                 id="categoryName"
-                // Register the input with React Hook Form
                 {...register("categoryName", {
-                  required: "category Name is required", // Required field validation
+                  required: "category Name is required", 
                   pattern: {
-                    value: /^[A-Za-z0-9]+$/, // Allow alphabets and numbers
+                    value: /^[A-Za-z0-9]+$/, 
                     message: "Only alphabets and numbers are allowed",
                   },
                   validate: (value) =>

@@ -14,7 +14,7 @@ interface Message {
   text: string;
   companyId: string;
   userId: {
-    _id: string; // Ensure _id is present
+    _id: string; 
     username: string;
   };
   time: string;

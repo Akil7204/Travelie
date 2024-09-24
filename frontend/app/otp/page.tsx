@@ -6,7 +6,7 @@ import Head from "next/head";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useRouter, useSearchParams } from "next/navigation";
-import { verifyOtp } from "../services/allAPI";
+import { verifyOtp } from "../services/userAPI";
 
 type OTPFormInputs = {
   otp: string;

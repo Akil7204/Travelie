@@ -31,7 +31,6 @@ const Dashboard: React.FC = () => {
           <p className="text-green-600">📈 1.9% Up from yesterday</p>
         </div>
       </div>
-      {/* Add more dashboard content as needed */}
     </Layout>
   );
 };

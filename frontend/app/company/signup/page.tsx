@@ -39,7 +39,7 @@ const Signup: React.FC = () => {
 
     try {
       const result = await SignUpAPI(reqBody, reqHeader);
-      console.log("SignUpAPI result:", result); // Debugging line
+      console.log("SignUpAPI result:", result); 
 
       if (result.error) {
         toast.error(result.message);

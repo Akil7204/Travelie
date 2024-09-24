@@ -27,7 +27,7 @@ const Login: React.FC = () => {
   const onSubmit: SubmitHandler<LoginFormInputs> = async (data) => {
     try {
       const result = await LoginAPI(data);
-      console.log("LoginAPI result:", result); // Debugging line
+      console.log("LoginAPI result:", result); 
 
       if (result && result.admin && result.adminToken) {
         localStorage.setItem("adminToken", result.adminToken);
@@ -39,7 +39,7 @@ const Login: React.FC = () => {
         toast.error("Invalid login credentials. Please try again.");
       }
     } catch (err) {
-      // console.error('LoginAPI error:', err); // Debugging line
+      // console.error('LoginAPI error:', err); 
       toast.error("An error occurred during login. Please try again.");
     }
   };

@@ -27,7 +27,7 @@ const Login: React.FC = () => {
   const onSubmit: SubmitHandler<LoginFormInputs> = async (data) => {
     try {
       const result = await LoginAPI(data);
-      console.log("LoginAPI result:", result); // Debugging line
+      console.log("LoginAPI result:", result); 
 
       if (result && !result.company.adminVerified) {
         router.push("/company/approval");

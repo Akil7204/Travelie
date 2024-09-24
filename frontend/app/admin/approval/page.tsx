@@ -28,7 +28,7 @@ const CompanyApproval: React.FC = () => {
         const response = await getAllUnapprovalAPI(token);
 
         console.log({ response });
-        setCompanies(response); // Assuming the API response is in the correct format
+        setCompanies(response); 
       } catch (error) {
         console.error("Failed to fetch unapproved companies:", error);
       }
@@ -69,7 +69,7 @@ const CompanyApproval: React.FC = () => {
   const sendEmail = (id: string, status: string) => {
     const company = companies.find((company) => company._id === id);
     if (company) {
-      // Replace with actual email sending logic
+      
       console.log(`Sending ${status} email to ${company.email}`);
     }
   };
