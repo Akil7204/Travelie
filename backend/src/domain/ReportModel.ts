@@ -1,26 +1,45 @@
-import mongoose, { Document, Schema } from "mongoose";
 
-interface Report extends Document {
+import { Schema, Document } from "mongoose";
+import mongoose from "mongoose";
+
+
+export interface IReport extends Document {
   companyId: mongoose.Schema.Types.ObjectId;
+  userId: mongoose.Schema.Types.ObjectId;    
   message: string;
-  userId: mongoose.Schema.Types.ObjectId;
+  status: "Pending" | "Resolved" | "Dismissed";
+  createdAt: Date;
+  updatedAt: Date;
 }
 
-const reportSchema = new Schema<Report>({
-  companyId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Company", 
-    required: true,
-  },
-  message: {
-    type: String,
-    required: true,
-  },
-  userId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "User", 
-    required: true,
-  },
-}, { timestamps: true });
 
-export const ReportModel = mongoose.model<Report>("Report", reportSchema);
+const reportSchema = new Schema<IReport>(
+  {
+    companyId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Company",  
+      required: true,
+    },
+    userId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User", 
+      required: true,
+    },
+    message: {
+      type: String,
+      required: true,
+    },
+    status: {
+      type: String,
+      enum: ["Pending", "Resolved", "Dismissed"],
+      default: "Pending",
+    },
+  },
+  { timestamps: true } 
+);
+
+
+export const ReportModel = mongoose.model<IReport>("Report", reportSchema);
+
+
+

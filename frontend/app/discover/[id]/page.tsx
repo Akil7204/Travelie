@@ -120,8 +120,8 @@ const TripPage: React.FC = () => {
         message,
       };
       const response = await submitReportAPI(reportData);
-      console.log("Report submitted successfully", response);
       toast.success("Report submitted successfully");
+      console.log("Report submitted successfully", response);
     } catch (error: any) {
       console.error("Failed to submit report", error);
       if (error.response.status == 401) {
@@ -132,9 +132,20 @@ const TripPage: React.FC = () => {
 
   return (
     <>
+      <ToastContainer
+        position="top-center"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
       <Navbar />
       <div className="max-w-5xl mx-auto p-6 pt-14">
-        {loading ? ( // Show loader while loading is true
+        {loading ? (
           <div className="flex justify-center items-center min-h-[500px]">
             <DNA
               visible={true}
@@ -147,17 +158,6 @@ const TripPage: React.FC = () => {
           </div>
         ) : (
           <>
-            <ToastContainer
-              position="top-center"
-              autoClose={5000}
-              hideProgressBar={false}
-              newestOnTop={false}
-              closeOnClick
-              rtl={false}
-              pauseOnFocusLoss
-              draggable
-              pauseOnHover
-            />
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
               {/* Main Image */}
               <div className="col-span-1">

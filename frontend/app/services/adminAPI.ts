@@ -119,3 +119,48 @@ export const blockCompanyAPI = async (userId: any, token: string) => {
     }
   );
 };
+
+export const getAllReportsAPI = async (token: string) => {
+  try {
+    const response = await axios.get(`${server_URL_admin}/reports`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (error: any) {
+    throw new Error(error.response.data.message || "Failed to fetch reports");
+  }
+};
+
+export const resolveReportAPI = async (reportId: string, token: string) => {
+  try {
+    await axios.patch(
+      `${server_URL_admin}/reports/${reportId}/resolve`,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+  } catch (error: any) {
+    throw new Error(error.response.data.message || "Failed to resolve report");
+  }
+};
+
+export const dismissReportAPI = async (reportId: string, token: string) => {
+  try {
+    await axios.patch(
+      `${server_URL_admin}/reports/${reportId}/dismiss`,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+  } catch (error: any) {
+    throw new Error(error.response.data.message || "Failed to dismiss report");
+  }
+};

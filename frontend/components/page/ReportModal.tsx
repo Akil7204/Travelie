@@ -30,17 +30,6 @@ const ReportModal: React.FC<ReportModalProps> = ({
 
   return (
     <Transition.Root show={isOpen} as={Fragment}>
-      <ToastContainer
-        position="top-center"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-      />
       <Dialog
         as="div"
         className="fixed z-10 inset-0 overflow-y-auto"
