@@ -53,7 +53,7 @@ export async function middleware(req: NextRequest) {
 
   const tokenVerified = await verifyToken("token", req);
 
-  // Protected Routes logic - redirect to login if it doesn't have token in localstorage
+ 
   const isProtected = isProtectedRoute(pathname);
   // console.log("isprotucted",isProtected);
   // console.log("token is : ", tokenVerified);
@@ -64,7 +64,7 @@ export async function middleware(req: NextRequest) {
     return NextResponse.redirect(loginUrl);
   }
 
-  // ToBeRedirected Routes logic - redirect to feed if it has token in localstorage
+  
   const toBeRedirected = toBeRedirectedRoutes(pathname);
 
   if (toBeRedirected && tokenVerified) {
