@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { cancelBooking, getUserBookingsAPI } from "../services/userAPI";
+import { cancelBooking, getUserBookingsAPI } from "../services/allAPI";
 import Pagination from "@/components/page/Pagination";
 import Navbar from "@/components/NavBar";
 import Profile from "@/components/profile/Profile";

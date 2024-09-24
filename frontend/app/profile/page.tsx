@@ -7,7 +7,7 @@ import Prfile from "@/components/profile/Profile";
 import Navbar from "@/components/NavBar";
 import Footer from "@/components/Footer";
 import { toast } from "react-toastify";
-import { updateUserProfileAPI } from "../services/userAPI";
+import { updateUserProfileAPI } from "../services/allAPI";
 import { useRouter } from "next/navigation";
 
 interface UserProfile {
