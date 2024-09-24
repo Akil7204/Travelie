@@ -8,6 +8,7 @@ import { useParams, useRouter } from "next/navigation";
 import { bookingApi, detailTripsAPI } from "@/app/services/allAPI";
 import { DNA, InfinitySpin } from "react-loader-spinner";
 import Modal from "@/components/page/ModalSection";
+import ReportModal from "@/components/page/ReportModal";
 
 interface Trip {
   _id: string;
@@ -22,7 +23,10 @@ interface Trip {
   price: number;
   locations: string[];
   status: string;
-  companyId: string;
+  companyId: {
+    _id: string;
+    companyname: string;
+  };
   category: string;
   seats: number;
   bookedSeats?: number;
@@ -31,12 +35,11 @@ interface Trip {
 const TripPage: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [tripData, setTripData] = useState<Trip | undefined>();
-  const [bookedSeat, setBookedSeat] = useState();
   const [loading, setLoading] = useState<boolean>(true);
   const params = useParams(); // Access the dynamic parameters
   const [seatCount, setSeatCount] = React.useState(1);
   const [mainImgInd, setMainImgInd] = React.useState(0);
-  const [totalAmout, setTotalAmout] = useState(0);
+  const [isReportModalOpen, setIsReportModalOpen] = useState(false);
 
   const tripId: any = params.id;
   const router = useRouter();
@@ -44,10 +47,10 @@ const TripPage: React.FC = () => {
   useEffect(() => {
     const fetchTrips = async () => {
       try {
-        const response = await detailTripsAPI(tripId); // Fetch trips from API
-        console.log("Detail API:", response); // Log API response
+        const response = await detailTripsAPI(tripId);
+        console.log("Detail API:", response);
 
-        setTripData(response); // Update state with fetched trips;
+        setTripData(response);
         setLoading(false);
         // tripData.endingDate = formatDateToDDMMYYYY(tripData?.endingDate)
       } catch (error) {
@@ -56,7 +59,7 @@ const TripPage: React.FC = () => {
       }
     };
 
-    fetchTrips(); // Call fetch function when component mounts
+    fetchTrips();
   }, []);
 
   const handleBookClick = () => {
@@ -93,6 +96,28 @@ const TripPage: React.FC = () => {
       if (error.status == 401) {
         router.push("/login");
       }
+    }
+  };
+
+  const handleReportClick = () => {
+    setIsReportModalOpen(true);
+  };
+
+  const handleCloseReportModal = () => {
+    setIsReportModalOpen(false);
+  };
+
+  const handleSubmitReport = async (message: string) => {
+    try {
+      const reportData = {
+        companyId: tripData?.companyId._id,
+        message,
+      };
+
+      // const response = await submitReportAPI(reportData);
+      // console.log("Report submitted successfully", response);
+    } catch (error) {
+      console.error("Failed to submit report", error);
     }
   };
 
@@ -155,7 +180,10 @@ const TripPage: React.FC = () => {
 
               {/* Report Button */}
               <div>
-                <button className="bg-blue-200 text-gray-800 py-2 px-4 rounded-md hover:bg-gray-300">
+                <button
+                  className="bg-blue-200 text-gray-800 py-2 px-4 rounded-md hover:bg-gray-300"
+                  onClick={handleReportClick}
+                >
                   Report
                 </button>
               </div>
@@ -234,6 +262,12 @@ const TripPage: React.FC = () => {
         onProceed={handleProceedToPayment}
         setSeatCount={setSeatCount}
         seatCount={seatCount}
+      />
+      <ReportModal
+        isOpen={isReportModalOpen}
+        onClose={handleCloseReportModal}
+        companyName={tripData?.companyId.companyname || "Unknown"} 
+        onSubmitReport={handleSubmitReport} 
       />
     </>
   );
