@@ -126,3 +126,8 @@ export const softDeleteCategoryAPI = async (categoryId: string) => {
   return response.data;
 };
 
+
+export const getCompanyBookingsAPI = async () => {
+  const response = await axios.get(`${SERVER_URL_COMPANY}/bookings`, {withCredentials: true});
+  return response;
+};
