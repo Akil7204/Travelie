@@ -200,7 +200,7 @@ export const findCompanyById = async (companyId: string) => {
 export const getAllBookingFromDB = async (companyId: string, skip: number, limit: number) => {
   try {
     const bookings = await bookedModal
-      .find()
+      .find({paymentStatus: "success"})
       .populate({
         path: "tripId", 
         match: { companyId }, 
@@ -220,7 +220,7 @@ export const getAllBookingFromDB = async (companyId: string, skip: number, limit
 export const getAllCountBookingFromDb = async (companyId: string) => {
   try {
     const totalCount = await bookedModal
-      .find()
+      .find({paymentStatus: "success"})
       .populate({
         path: "tripId",
         match: { companyId },

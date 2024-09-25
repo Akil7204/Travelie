@@ -93,9 +93,9 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
               </li>
               <li className="px-6 py-3">
                 <Link
-                  href="/company/booking-list"
+                  href="/company/bookingList"
                   className={`rounded-lg block text-xl p-3 font-semibold ${
-                    isActive("/company/booking-list")
+                    isActive("/company/bookingList")
                       ? "text-blue-700 bg-blue-200"
                       : "hover:bg-gray-200"
                   }`}

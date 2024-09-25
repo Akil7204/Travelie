@@ -52,10 +52,10 @@ export const getAllTripsAPI = async (page: number, tripsPerPage: number) => {
       withCredentials: true,
     });
 
-    return response.data; // Make sure this returns both `trips` and `totalCount` from your backend
+    return response.data;
   } catch (error) {
     console.error("Error fetching trips:", error);
-    throw error; // Throw the error to be handled in the calling function
+    throw error;
   }
 };
 
@@ -81,7 +81,10 @@ export const addCategoryAPI = async (data: any) => {
   });
 };
 
-export const getAllCategoryAPI = async (page: number, categoyPerPage: number) => {
+export const getAllCategoryAPI = async (
+  page: number,
+  categoyPerPage: number
+) => {
   try {
     const response = await axios.get(`${SERVER_URL_COMPANY}/categorys`, {
       params: { page, limit: categoyPerPage },
@@ -101,13 +104,12 @@ export const getCategoryByIdAPI = async (categoryId: string) => {
       `${SERVER_URL_COMPANY}/editCategory/${categoryId}`,
       { withCredentials: true }
     );
-    return response.data; // Axios automatically parses the JSON response
+    return response.data;
   } catch (error) {
     console.error("Failed to fetch trip data:", error);
     throw error;
   }
 };
-
 
 export const editTripApi = async (data: any, tripId: string) => {
   return await axios.post(`${SERVER_URL_COMPANY}/editTrip/${tripId}`, data, {
@@ -116,18 +118,31 @@ export const editTripApi = async (data: any, tripId: string) => {
 };
 
 export const editCategoryApi = async (data: any, categoryId: string) => {
-  return await axios.post(`${SERVER_URL_COMPANY}/editCategory/${categoryId}`, data, {
-    withCredentials: true,
-  });
+  return await axios.post(
+    `${SERVER_URL_COMPANY}/editCategory/${categoryId}`,
+    data,
+    {
+      withCredentials: true,
+    }
+  );
 };
 
 export const softDeleteCategoryAPI = async (categoryId: string) => {
-  const response = await axios.put(`${SERVER_URL_COMPANY}/category/softDelete/${categoryId}`, null, { withCredentials: true });
+  const response = await axios.put(
+    `${SERVER_URL_COMPANY}/category/softDelete/${categoryId}`,
+    null,
+    { withCredentials: true }
+  );
   return response.data;
 };
 
-
-export const getCompanyBookingsAPI = async () => {
-  const response = await axios.get(`${SERVER_URL_COMPANY}/bookings`, {withCredentials: true});
-  return response;
+export const getCompanyBookingsAPI = async (
+  page: number,
+  bookingPerPage: number
+) => {
+  const response = await axios.get(`${SERVER_URL_COMPANY}/bookings`, {
+    params: { page, limit: bookingPerPage },
+    withCredentials: true,
+  });
+  return response.data;
 };

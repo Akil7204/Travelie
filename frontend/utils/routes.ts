@@ -40,6 +40,7 @@ const changeToCompanyDashboardRoutes = new Set([
   "/company/categorys",
   "/company/addCategory",
   "/company/chat",
+  "/company/bookingList",
 ]);
 
 const EditTripRoutePattern = /^\/company\/editTrip\/[^/]+\/?.*$/;

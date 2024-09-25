@@ -9,12 +9,10 @@ import {
   toBeRedirectedCompanyRoutes,
   toBeRedirectedRoutes,
 } from "./utils/routes";
-import { isBlockedApi } from "./app/services/allAPI";
 
 export async function middleware(req: NextRequest) {
   const pathname = req.nextUrl.pathname;
 
-  // Improved matcher for static assets
   if (pathname.startsWith("/_next/") || pathname.startsWith("/favicon.ico")) {
     return NextResponse.next();
   }
