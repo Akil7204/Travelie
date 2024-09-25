@@ -5,7 +5,9 @@ import {
   CreatingCategory,
   CreatingTrip,
   findCompanyByEmail,
+  getAllBookingFromDB,
   getAllCategoryFromDB,
+  getAllCountBookingFromDb,
   getAllCountCategoryFromDb,
   getAllCountFromDb,
   getAllTripsFromDB,
@@ -188,3 +190,11 @@ export const updateCategory = async (
     throw new Error(error.message);
   }
 };
+
+export const getAllBookings = async (comapanyId: string,skip: number, limit: number, ) => {
+  return await getAllBookingFromDB(comapanyId, skip, limit);
+};
+
+export const getTotalCountBooking = async(companyId: string) => {
+  return await getAllCountBookingFromDb(companyId);
+}

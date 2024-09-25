@@ -2,6 +2,7 @@ import  { Document } from "mongoose";
 import { Company, CompanyModel } from "../domain/company";
 import { Trip, Trips } from "../domain/trips";
 import { Category } from "../domain/category";
+import { bookedModal } from "../domain/bookedTrip";
 
 // Extending the Company interface with mongoose Document
 interface CompanyModel extends Company, Document {
@@ -121,7 +122,7 @@ export const getAllCategoryFromDB = async (comapanyId: string, skip: number, lim
 
 export const getAllCountCategoryFromDb = async (): Promise<number> => {
   try {
-    return await Category.countDocuments(); // Count all documents in the Trip collection
+    return await Category.countDocuments(); 
   } catch (error) {
     console.error("Error fetching count from database:", error);
     throw error;
@@ -195,6 +196,43 @@ export const updateingCategory = async (companyId: string, body: any, categoryId
 export const findCompanyById = async (companyId: string) => {
   return CompanyModel.findById(companyId);
 };
+
+export const getAllBookingFromDB = async (companyId: string, skip: number, limit: number) => {
+  try {
+    const bookings = await bookedModal
+      .find()
+      .populate({
+        path: "tripId", 
+        match: { companyId }, 
+      })
+      .populate("userId") 
+      .skip(skip)
+      .limit(limit);
+
+    const filteredBookings = bookings.filter(booking => booking.tripId !== null);
+
+    return filteredBookings;
+  } catch (error) {
+    throw new Error("Error fetching bookings");
+  }
+};
+
+export const getAllCountBookingFromDb = async (companyId: string) => {
+  try {
+    const totalCount = await bookedModal
+      .find()
+      .populate({
+        path: "tripId",
+        match: { companyId },
+      })
+      .countDocuments();
+
+    return totalCount;
+  } catch (error) {
+    throw new Error("Error fetching total booking count");
+  }
+};
+
 
 
 

@@ -3,9 +3,11 @@ import { otpGenerator } from "../../uilts/otpGenerator";
 import {
   fetchCategoryById,
   fetchTripById,
+  getAllBookings,
   getAllCategory,
   getAllTrips,
   getTotalCount,
+  getTotalCountBooking,
   getTotalCountCategory,
   loginCompany,
   registerCompany,
@@ -274,6 +276,28 @@ export const softDeleteCategory = async (req: any, res: Response) => {
   } catch (error: any) {
     console.error("Error soft deleting category:", error);
     throw new Error(error.message);
+  }
+};
+
+export const getBookings = async (req: any, res: Response) => {
+  try {
+    const page = parseInt(req.query.page as string) || 1; 
+    const limit = parseInt(req.query.limit as string) || 10; 
+    const skip = (page - 1) * limit; 
+    const companyId = req.companyId;
+
+    const bookings = await getAllBookings(companyId, skip, limit);
+
+    const totalCount = await getTotalCountBooking(companyId);
+
+
+    res.status(200).json({
+      data: bookings,
+      totalCount,
+      currentPage: page,
+    });
+  } catch (error) {
+    res.status(500).json({ message: "Error fetching bookings", error });
   }
 };
 
