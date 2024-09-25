@@ -7,6 +7,7 @@ import {
   fetchBookedData,
   fetchWalletDetails,
   getAllTrips,
+  getUnreadMessagesCount,
   getUserBookings,
   googleLoginHandler,
   handleReportSubmit,
@@ -52,6 +53,7 @@ router.post('/cancel-trip/:bookingId', verifyUser, cancelTrip);
 router.get("/wallet/:userId", verifyUser, fetchWalletDetails);
 
 router.post("/report", verifyUser, handleReportSubmit);
+router.get('/messages/unread-count/:userId',verifyUser, getUnreadMessagesCount);
 
 // Payment Routes;
 router.post('/payment', verifyUser, payment);

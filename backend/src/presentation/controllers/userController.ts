@@ -25,6 +25,7 @@ import {
 import { sendEmail } from "../../uilts/sendEmail";
 import { profileAddBucket } from "../../uilts/profileAddBucket";
 import { chatModel } from "../../domain/chatModel";
+import { messageModel } from "../../domain/messageModel";
 var jsSHA = require("jssha");
 
 // register the user
@@ -292,7 +293,6 @@ export const saveData = async (req: Request, res: Response) => {
       const companyId = trip?.companyId;
       let chat = await chatModel.findOne({ userId, companyId });
       if (!chat) {
-        // If no chat exists, create a new chat
         chat = new chatModel({
           userId,
           companyId,
@@ -377,5 +377,31 @@ export const handleReportSubmit = async (req: any, res: Response) => {
     return res.status(201).json({ success: true, data: report });
   } catch (error: any) {
     return res.status(500).json({ error: error.message });
+  }
+};
+
+// Get unread messages count for a specific room or user
+export const getUnreadMessagesCount = async (
+  req: Request,
+  res: any
+): Promise<void> => {
+  const { userId } = req.params;
+
+  // console.log({userId});
+
+  try {
+    if (!userId) {
+      return res.status(400).json({ error: "User ID is required" });
+    }
+
+    const unreadCount = await messageModel.countDocuments({
+      to: userId,
+      isRead: false,
+    });
+
+    res.status(200).json({ unreadCount });
+  } catch (error) {
+    console.error("Error fetching unread messages count:", error);
+    res.status(500).json({ error: "Error fetching unread messages count" });
   }
 };
