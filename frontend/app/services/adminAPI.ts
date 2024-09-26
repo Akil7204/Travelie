@@ -150,3 +150,11 @@ export const updateReportStatusAPI = async (reportId: string, status: "Pending" 
     throw new Error(error.response?.data?.message || "Failed to update report status");
   }
 };
+
+
+export const fetchingAllData = async (token: string) => {
+  const response = await axios.get(`${server_URL_admin}/dashboard`, {headers: {
+    Authorization: `Bearer ${token}`,
+  }, });
+  return response.data;
+};

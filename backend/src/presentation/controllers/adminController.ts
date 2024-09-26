@@ -8,6 +8,7 @@ import {
   getAllCompanies,
   getAllUnapprovalCompany,
   getAllUsers,
+  getDashboardData,
   loginUser,
   unblockCompany,
   unblockUser,
@@ -77,24 +78,36 @@ export const getUsersList = async (
 };
 
 // Block a user
-export const blockUserController = async (req: Request, res: Response, next: NextFunction) => {
+export const blockUserController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const userId = req.params.id;
     console.log("backend", userId);
-    
+
     const blockedUser = await blockUser(userId);
-    res.status(200).json({ message: "User blocked successfully", user: blockedUser });
+    res
+      .status(200)
+      .json({ message: "User blocked successfully", user: blockedUser });
   } catch (error) {
     next(error);
   }
 };
 
 // Unblock a user
-export const unblockUserController = async (req: Request, res: Response, next: NextFunction) => {
+export const unblockUserController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const userId = req.params.id;
     const unblockedUser = await unblockUser(userId);
-    res.status(200).json({ message: "User unblocked successfully", user: unblockedUser });
+    res
+      .status(200)
+      .json({ message: "User unblocked successfully", user: unblockedUser });
   } catch (error) {
     next(error);
   }
@@ -105,33 +118,46 @@ export const getAllcompanyController = async (req: Request, res: Response) => {
     const allWorkers = await getAllCompanies();
     res.status(200).json(allWorkers);
   } catch (err) {
-    res.status(500).json({ error: 'Failed to retrieve workers' });
+    res.status(500).json({ error: "Failed to retrieve workers" });
   }
 };
 
-export const blockCompanyController = async (req: Request, res: Response, next: NextFunction) => {
+export const blockCompanyController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const companyId = req.params.id;
     console.log("backend", companyId);
-    
+
     const blockedCompany = await blockCompany(companyId);
 
-    res.status(200).json({ message: "Company blocked successfully", company: blockedCompany });
+    res.status(200).json({
+      message: "Company blocked successfully",
+      company: blockedCompany,
+    });
   } catch (error) {
     next(error);
   }
 };
 
-export const unblockCompanyController = async (req: Request, res: Response, next: NextFunction) => {
+export const unblockCompanyController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const CompanyId = req.params.id;
     const unblockedCompany = await unblockCompany(CompanyId);
-    res.status(200).json({ message: "Company unblocked successfully", company: unblockedCompany });
+    res.status(200).json({
+      message: "Company unblocked successfully",
+      company: unblockedCompany,
+    });
   } catch (error) {
     next(error);
   }
 };
-
 
 export const createReportController = async (req: Request, res: Response) => {
   const { companyId, userId, message } = req.body;
@@ -140,29 +166,47 @@ export const createReportController = async (req: Request, res: Response) => {
     const report = await createNewReport(companyId, userId, message);
     res.status(201).json({ success: true, data: report });
   } catch (error) {
-    res.status(500).json({ success: false, message: "Failed to create report", error });
+    res
+      .status(500)
+      .json({ success: false, message: "Failed to create report", error });
   }
 };
-
 
 export const getReport = async (req: Request, res: Response) => {
   try {
     const reports = await fetchAllReports();
     res.status(200).json({ success: true, data: reports });
   } catch (error) {
-    res.status(500).json({ success: false, message: "Failed to fetch reports", error });
+    res
+      .status(500)
+      .json({ success: false, message: "Failed to fetch reports", error });
   }
 };
 
-
-export const updateReportStatusController = async (req: Request, res: Response) => {
+export const updateReportStatusController = async (
+  req: Request,
+  res: Response
+) => {
   const { reportId } = req.params;
   const { status } = req.body;
   try {
     const updatedReport = await changeReportStatus(reportId, status);
     res.status(200).json({ success: true, data: updatedReport });
   } catch (error) {
-    res.status(500).json({ success: false, message: "Failed to update report status", error });
+    res.status(500).json({
+      success: false,
+      message: "Failed to update report status",
+      error,
+    });
   }
 };
 
+export const DashboardController = async (req: any, res: any) => {
+  try {
+    
+    const dashboardData = await getDashboardData();
+    return res.status(200).json(dashboardData);
+  } catch (error) {
+    return res.status(500).json({ error: "Something went wrong" });
+  }
+};

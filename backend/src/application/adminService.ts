@@ -8,6 +8,12 @@ import {
   getAllCompaniesFromDB,
   getAllReports,
   getAllUnapprovalFromDB,
+  getReportStats,
+  getRevenueLastTwoWeeks,
+  getTotalCompanies,
+  getTotalRevenue,
+  getTotalTrips,
+  getTotalUsers,
   unblockCompanyById,
   unblockUserById,
   updateCompanyFromDB,
@@ -25,7 +31,6 @@ export const loginUser = async (
   email: string,
   password: string
 ): Promise<{ adminToken: string; admin: string } | null> => {
-
   if (process.env.Admin_email !== email) {
     throw errorHandler(404, "User not found");
   }
@@ -51,7 +56,7 @@ export const getAllUnapprovalCompany = async () => {
 
 export const updateApproval = async (id: string) => {
   return await updateCompanyFromDB(id);
-}
+};
 
 // Fetch all users
 export const getAllUsers = async (): Promise<User[]> => {
@@ -72,7 +77,6 @@ export const blockUser = async (userId: string): Promise<User | null> => {
   return blockUserById(userId);
 };
 
-
 // Function to unblock a user
 export const unblockUser = async (userId: string): Promise<User | null> => {
   const user = await findUserById(userId);
@@ -92,7 +96,9 @@ export const getAllCompanies = async () => {
   return await getAllCompaniesFromDB();
 };
 
-export const blockCompany = async (companyId: string): Promise<Company | null> => {
+export const blockCompany = async (
+  companyId: string
+): Promise<Company | null> => {
   const company = await findCompanyById(companyId);
   if (!company) {
     throw errorHandler(404, "company not found");
@@ -105,7 +111,9 @@ export const blockCompany = async (companyId: string): Promise<Company | null> =
   return blockCompanyById(companyId);
 };
 
-export const unblockCompany = async (companyId: string): Promise<Company | null> => {
+export const unblockCompany = async (
+  companyId: string
+): Promise<Company | null> => {
   const company = await findCompanyById(companyId);
   if (!company) {
     throw errorHandler(404, "company not found");
@@ -124,17 +132,49 @@ export const createNewReport = async (
   userId: string,
   userMessage: string
 ) => {
-
   return await createReport(companyId, userId, userMessage);
 };
-
 
 export const fetchAllReports = async () => {
   return await getAllReports();
 };
 
-
-export const changeReportStatus = async (reportId: string, status: "Pending" | "Resolved" | "Dismissed") => {
+export const changeReportStatus = async (
+  reportId: string,
+  status: "Pending" | "Resolved" | "Dismissed"
+) => {
   const reportObjectId = new mongoose.Types.ObjectId(reportId);
   return await updateReportStatus(reportObjectId, status);
+};
+
+export const getDashboardData = async () => {
+  try {
+
+    const totalTrips = await getTotalTrips();
+    
+    const totalRevenueResult = await getTotalRevenue();
+    
+    const totalRevenue = totalRevenueResult || 0;
+    
+    const totalCompanies = await getTotalCompanies();
+    
+    const totalUsers = await getTotalUsers();
+    
+
+    const [reportStats, revenueLastTwoWeeks] = await Promise.all([
+      getReportStats(),
+      getRevenueLastTwoWeeks(),
+    ]);
+
+    return {
+      reportStats,
+      revenueLastTwoWeeks,
+      totalTrips,
+      totalRevenue,
+      totalCompanies,
+      totalUsers,
+    };
+  } catch (error: any) {
+    console.log("error in admin service: ", error);
+  }
 };

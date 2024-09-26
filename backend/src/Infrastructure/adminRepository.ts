@@ -3,6 +3,7 @@ import { Admin } from "../domain/admin";
 import { Company, CompanyModel } from "../domain/company";
 import { User, UserModel } from "../domain/user";
 import { IReport, ReportModel } from "../domain/ReportModel";
+import { bookedModal } from "../domain/bookedTrip";
 
 // Define the Mongoose schema for the User
 const AdminSchema: Schema<Admin> = new Schema({
@@ -90,4 +91,96 @@ export const updateReportStatus = async (
     { status },
     { new: true }
   );
+};
+
+
+export const getTotalTrips = async () => {
+  try {
+    return await bookedModal.countDocuments({paymentStatus: "success"});
+  } catch (error: any) {
+    console.error("Error getting total trips", error);
+    throw error;
+  }
+};
+
+export const getTotalRevenue = async () => {
+  try {
+    const result = await bookedModal.aggregate([
+      { $group: { _id: null, totalRevenue: { $sum: "$totalAmount" } } },
+    ]);
+    return result[0]?.totalRevenue || 0;
+  } catch (error: any) {
+    console.error("Error getting total revenue", error);
+    throw error;
+  }
+};
+
+export const getTotalCompanies = async () => {
+  try {
+    return await CompanyModel.countDocuments({});
+  } catch (error: any) {
+    console.error("Error getting total companies", error);
+    throw error;
+  }
+};
+
+export const getTotalUsers = async () => {
+  try {
+    return await UserModel.countDocuments({});
+  } catch (error: any) {
+    console.error("Error getting total users", error);
+    throw error;
+  }
+};
+
+export const getReportStats = async () => {
+  try {
+    const pendingCount = await ReportModel.countDocuments({ status: "Pending" });
+    const resolvedCount = await ReportModel.countDocuments({ status: "Resolved" });
+    const dismissedCount = await ReportModel.countDocuments({ status: "Dismissed" });
+
+    return {
+      pending: pendingCount,
+      resolved: resolvedCount,
+      dismissed: dismissedCount,
+    };
+  } catch (error) {
+    console.error("Error fetching report stats", error);
+    throw error;
+  }
+};
+
+export const getRevenueLastTwoWeeks = async () => {
+  try {
+    const today = new Date();
+    const twoWeeksAgo = new Date(today);
+    twoWeeksAgo.setDate(today.getDate() - 14);
+
+    const revenueData = await bookedModal.aggregate([
+      {
+        $match: {
+          paymentStatus: "success", 
+          createdAt: { $gte: twoWeeksAgo, $lte: today },
+        },
+      },
+      {
+        $group: {
+          _id: {
+            $dateToString: { format: "%Y-%m-%d", date: "$createdAt" },
+          },
+          totalRevenue: { $sum: "$totalAmount" },
+        },
+      },
+      {
+        $sort: { _id: 1 },
+      },
+    ]);
+    console.log(revenueData);
+    
+
+    return revenueData; 
+  } catch (error) {
+    console.error("Error fetching revenue data", error);
+    throw error;
+  }
 };

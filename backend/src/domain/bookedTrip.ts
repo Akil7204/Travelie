@@ -42,6 +42,6 @@ const bookingSchema = new Schema<Booking>({
         type: String,
         default: null
     },
-});
+},{ timestamps: true });
 
 export const bookedModal = mongoose.model<Booking>("bookedTrip", bookingSchema);
