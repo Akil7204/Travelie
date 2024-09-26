@@ -1,13 +1,13 @@
 import React from 'react';
 
 interface Message {
-  _id: string; // Add this field to uniquely identify each message
+  _id: string; 
   name: string;
   message: string;
   companyId: {
     companyname: string;
     email: string;
-    profileImage?: string; // Optional field in case the profile image is added later
+    profileImage?: string; 
   };
   userId: string;
   time: string;
@@ -16,10 +16,10 @@ interface Message {
 
 interface MessageListProps {
   messages: Message[];
-  onChatSelect: any ; // Callback to handle chat selection
+  onChatSelect: any ;
 }
 
-const defaultProfileImage = '/img/DefaultProfilePicMale.png'; // Default profile image URL
+const defaultProfileImage = '/img/DefaultProfilePicMale.png'; 
 
 const MessageList: React.FC<MessageListProps> = ({ messages, onChatSelect }) => {
   return (
@@ -33,11 +33,11 @@ const MessageList: React.FC<MessageListProps> = ({ messages, onChatSelect }) => 
       <ul>
         {messages.map((msg) => (
           <li
-            key={msg._id} // Use unique ID for the key
+            key={msg._id} 
             className={`flex items-center p-3 mb-2 rounded-lg ${
               msg.active ? 'bg-blue-400' : 'bg-white'
             }`}
-            onClick={() => onChatSelect(msg)} // Call the selection function on click
+            onClick={() => onChatSelect(msg)} 
           >
             {/* Display profile image */}
             <img
@@ -48,7 +48,7 @@ const MessageList: React.FC<MessageListProps> = ({ messages, onChatSelect }) => 
             <div className="flex-grow">
               <p
                 className="font-semibold text-blue-600 hover:text-blue-800 cursor-pointer"
-                onClick={() => onChatSelect(msg)} // Ensure the click still selects the chat
+                onClick={() => onChatSelect(msg)}
               >
                 {msg.companyId.companyname}
               </p>

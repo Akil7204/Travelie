@@ -24,15 +24,15 @@ const Navbar: React.FC = () => {
       setUser(users);
 
       setIsAuthorized(true);
-      fetchUnreadMessages(users._id);
+      fetchUnreadMessages();
     } else {
       setIsAuthorized(false);
     }
   }, []);
 
-  const fetchUnreadMessages = async (userId: string) => {
+  const fetchUnreadMessages = async () => {
     try {
-      const response = await getUnreadMessagesCountAPI(userId);
+      const response = await getUnreadMessagesCountAPI();
       console.log(response);
       
       setUnreadMessages(response.unreadCount);

@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { getUnreadMessagesCountAPI } from "@/app/services/allAPI";
+import { Badge } from "@mui/material";
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -8,12 +10,12 @@ interface LayoutProps {
 
 const Profile: React.FC<LayoutProps> = ({ children }) => {
   const [activePath, setActivePath] = useState<string>("profile");
-  const [userProfile, setUserProfile] = useState<any>(null); // Initialize userProfile state
+  const [userProfile, setUserProfile] = useState<any>(null);
+  const [unreadMessagesCount, setUnreadMessagesCount] = useState<number>(0);
 
   useEffect(() => {
-    // Get user profile from local storage on component mount
     const storedUserProfile = localStorage.getItem("user");
-    
+
     if (storedUserProfile) {
       try {
         const user = JSON.parse(storedUserProfile);
@@ -22,7 +24,17 @@ const Profile: React.FC<LayoutProps> = ({ children }) => {
         console.error("Error parsing user data from localStorage:", error);
       }
     }
-  }, []); // Empty dependency array to run once on mount
+  }, []);
+
+  useEffect(() => {
+    const fetchUnreadMessages = async () => {
+      const response = await getUnreadMessagesCountAPI();
+      console.log(response);
+      setUnreadMessagesCount(response.unreadCount);
+    };
+
+    fetchUnreadMessages();
+  }, []);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -30,7 +42,6 @@ const Profile: React.FC<LayoutProps> = ({ children }) => {
     }
   }, []);
 
-  // Function to determine if a link is active
   const isActive = (path: string) => activePath === path;
 
   return (
@@ -42,7 +53,7 @@ const Profile: React.FC<LayoutProps> = ({ children }) => {
             <div className="w-16 h-16 rounded-full overflow-hidden">
               {userProfile && (
                 <Image
-                  src={userProfile.profileImage } // Use a default image if none found
+                  src={userProfile.profileImage} // Use a default image if none found
                   alt="Profile"
                   width={64}
                   height={64}
@@ -84,7 +95,13 @@ const Profile: React.FC<LayoutProps> = ({ children }) => {
                     : "hover:bg-gray-200"
                 }`}
               >
-                Message
+                <Badge
+                  badgeContent={unreadMessagesCount}
+                  color="secondary"
+                  overlap="circular"
+                >
+                  Message
+                </Badge>
               </Link>
               <Link
                 href="/wallet"
@@ -99,9 +116,7 @@ const Profile: React.FC<LayoutProps> = ({ children }) => {
               <Link
                 href="#"
                 className={`rounded-lg block text-xl p-3 font-semibold ${
-                  isActive("#")
-                    ? "text-white bg-blue-700"
-                    : "hover:bg-gray-200"
+                  isActive("#") ? "text-white bg-blue-700" : "hover:bg-gray-200"
                 }`}
               >
                 Sign out
