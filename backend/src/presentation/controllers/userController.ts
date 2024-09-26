@@ -380,12 +380,11 @@ export const handleReportSubmit = async (req: any, res: Response) => {
   }
 };
 
-// Get unread messages count for a specific room or user
 export const getUnreadMessagesCount = async (
-  req: Request,
+  req: any,
   res: any
 ): Promise<void> => {
-  const { userId } = req.params;
+  const userId  = req.userId;
 
   // console.log({userId});
 
@@ -395,10 +394,11 @@ export const getUnreadMessagesCount = async (
     }
 
     const unreadCount = await messageModel.countDocuments({
-      to: userId,
+      senderModel: "Company",
       isRead: false,
     });
-
+    console.log(unreadCount);
+    
     res.status(200).json({ unreadCount });
   } catch (error) {
     console.error("Error fetching unread messages count:", error);

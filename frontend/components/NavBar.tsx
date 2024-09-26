@@ -1,9 +1,6 @@
 "use client";
 
 import { deleteCookie } from "@/utils/deleteCookie";
-import getUserData from "@/utils/getUserData";
-import { unstable_noStore } from "next/cache";
-// components/Navbar.tsx
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -35,7 +32,7 @@ const Navbar: React.FC = () => {
     localStorage.removeItem("token");
     deleteCookie("token");
     setIsAuthorized(false);
-    router.push("/"); // Redirect to the home page or login page
+    router.push("/"); 
   };
 
   return (

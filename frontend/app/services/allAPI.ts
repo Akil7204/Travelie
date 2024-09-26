@@ -149,3 +149,8 @@ export const submitReportAPI = async (reportData: any) => {
     throw error;
   }
 };
+
+export const getUnreadMessagesCountAPI = async () => {
+  const response = await axios.get(`${SERVER_URL}/unread-count`, {withCredentials: true });
+  return response.data;
+};
