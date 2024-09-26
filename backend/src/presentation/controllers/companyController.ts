@@ -18,7 +18,7 @@ import {
   uploadTrip,
   verifyAndSaveCompany,
 } from "../../application/companyService";
-import { findCompanyByEmail } from "../../Infrastructure/companyRepository";
+import { findCompanyByEmail, getCompanyDashboardData } from "../../Infrastructure/companyRepository";
 import { sendEmail } from "../../uilts/sendEmail";
 import { IMulterFile } from "../../types/types";
 import { Category } from "../../domain/category";
@@ -300,4 +300,23 @@ export const getBookings = async (req: any, res: Response) => {
     res.status(500).json({ message: "Error fetching bookings", error });
   }
 };
+
+
+
+
+export const fetchCompanyDashboardData = async (req: any, res: Response) => {
+  try {
+    const companyId = req.companyId; 
+    console.log(companyId);
+    
+    const data = await getCompanyDashboardData(companyId);
+    console.log({data});
+    
+    return res.status(200).json(data);
+  } catch (error) {
+    console.error("Error fetching company dashboard data", error);
+    return res.status(500).json({ error: "Internal server error" });
+  }
+};
+
 

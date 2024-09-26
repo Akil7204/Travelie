@@ -146,3 +146,16 @@ export const getCompanyBookingsAPI = async (
   });
   return response.data;
 };
+
+
+export const fetchDashboardData = async () => {
+  try {
+    const response = await axios.get(`${SERVER_URL_COMPANY}/dashboard`, {
+      withCredentials: true,
+    });
+    return response.data; 
+  } catch (error) {
+    console.error("Error fetching dashboard data:", error);
+    throw error; 
+  }
+};

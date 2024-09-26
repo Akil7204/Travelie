@@ -53,6 +53,7 @@ router.post('/cancel-trip/:bookingId', verifyUser, cancelTrip);
 router.get("/wallet/:userId", verifyUser, fetchWalletDetails);
 
 router.post("/report", verifyUser, handleReportSubmit);
+
 router.get('/unread-count',verifyUser, getUnreadMessagesCount);
 
 // Payment Routes;

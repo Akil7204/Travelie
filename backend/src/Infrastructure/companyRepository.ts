@@ -1,4 +1,4 @@
-import  { Document } from "mongoose";
+import { Document } from "mongoose";
 import { Company, CompanyModel } from "../domain/company";
 import { Trip, Trips } from "../domain/trips";
 import { Category } from "../domain/category";
@@ -65,18 +65,23 @@ export const CreatingTrip = async (TripData: any) => {
     console.log("Saved Trip: ", savedTrip);
 
     return savedTrip;
-    
   } catch (error) {
     console.error("Error saving trip: ", error);
     throw error;
   }
 };
 
-export const getAllTripsFromDB = async (comapanyId: string, skip: number, limit: number) => {
-
-  return await Trips.find({companyId: comapanyId}).skip(skip).limit(limit).sort({
-    createdAt: -1,
-  });
+export const getAllTripsFromDB = async (
+  comapanyId: string,
+  skip: number,
+  limit: number
+) => {
+  return await Trips.find({ companyId: comapanyId })
+    .skip(skip)
+    .limit(limit)
+    .sort({
+      createdAt: -1,
+    });
 };
 
 export const getAllCountFromDb = async (): Promise<number> => {
@@ -92,8 +97,6 @@ export const getTripById = async (id: string): Promise<Trip | null> => {
   return await Trips.findById(id);
 };
 
-
-
 export const CreatingCategory = async (categoryData: any) => {
   try {
     // Create a new category instance
@@ -106,23 +109,28 @@ export const CreatingCategory = async (categoryData: any) => {
     const savedCategory = await category.save();
 
     return savedCategory;
-    
   } catch (error) {
     console.error("Error saving category: ", error);
     throw error;
   }
 };
 
-export const getAllCategoryFromDB = async (comapanyId: string, skip: number, limit: number) => {
-
-  return await Category.find({companyId: comapanyId, isDeleted: false}).skip(skip).limit(limit).sort({
-    createdAt: -1,
-  });
+export const getAllCategoryFromDB = async (
+  comapanyId: string,
+  skip: number,
+  limit: number
+) => {
+  return await Category.find({ companyId: comapanyId, isDeleted: false })
+    .skip(skip)
+    .limit(limit)
+    .sort({
+      createdAt: -1,
+    });
 };
 
 export const getAllCountCategoryFromDb = async (): Promise<number> => {
   try {
-    return await Category.countDocuments(); 
+    return await Category.countDocuments();
   } catch (error) {
     console.error("Error fetching count from database:", error);
     throw error;
@@ -133,13 +141,20 @@ export const getCategoryById = async (id: string): Promise<Trip | null> => {
   return await Category.findById(id);
 };
 
-export const updateingTrip = async (companyId: string, body: any, imageUrl: string[], tripId: string) => {
+export const updateingTrip = async (
+  companyId: string,
+  body: any,
+  imageUrl: string[],
+  tripId: string
+) => {
   try {
     // Find the existing trip
     const trip = await Trips.findOne({ _id: tripId, companyId });
-    
+
     if (!trip) {
-      throw new Error('Trip not found or you are not authorized to edit this trip');
+      throw new Error(
+        "Trip not found or you are not authorized to edit this trip"
+      );
     }
 
     // Update fields
@@ -148,8 +163,12 @@ export const updateingTrip = async (companyId: string, body: any, imageUrl: stri
     trip.days = body.days || trip.days;
     trip.startingFrom = body.startingFrom || trip.startingFrom;
     trip.endingAt = body.endingAt || trip.endingAt;
-    trip.startingDate = body.startingDate ? new Date(body.startingDate) : trip.startingDate;
-    trip.endingDate = body.endingDate ? new Date(body.endingDate) : trip.endingDate;
+    trip.startingDate = body.startingDate
+      ? new Date(body.startingDate)
+      : trip.startingDate;
+    trip.endingDate = body.endingDate
+      ? new Date(body.endingDate)
+      : trip.endingDate;
     trip.price = body.price || trip.price;
     trip.locations = body.locations || trip.locations;
     trip.category = body.category || trip.category;
@@ -171,13 +190,19 @@ export const updateingTrip = async (companyId: string, body: any, imageUrl: stri
   }
 };
 
-export const updateingCategory = async (companyId: string, body: any, categoryId: string) => {
+export const updateingCategory = async (
+  companyId: string,
+  body: any,
+  categoryId: string
+) => {
   try {
     // Find the existing category
     const category = await Category.findOne({ _id: categoryId, companyId });
-    
+
     if (!category) {
-      throw new Error('Category not found or you are not authorized to edit this category');
+      throw new Error(
+        "Category not found or you are not authorized to edit this category"
+      );
     }
 
     // Update fields
@@ -197,19 +222,25 @@ export const findCompanyById = async (companyId: string) => {
   return CompanyModel.findById(companyId);
 };
 
-export const getAllBookingFromDB = async (companyId: string, skip: number, limit: number) => {
+export const getAllBookingFromDB = async (
+  companyId: string,
+  skip: number,
+  limit: number
+) => {
   try {
     const bookings = await bookedModal
-      .find({paymentStatus: "success"})
+      .find({ paymentStatus: "success" })
       .populate({
-        path: "tripId", 
-        match: { companyId }, 
+        path: "tripId",
+        match: { companyId },
       })
-      .populate("userId") 
+      .populate("userId")
       .skip(skip)
       .limit(limit);
 
-    const filteredBookings = bookings.filter(booking => booking.tripId !== null);
+    const filteredBookings = bookings.filter(
+      (booking) => booking.tripId !== null
+    );
 
     return filteredBookings;
   } catch (error) {
@@ -220,7 +251,7 @@ export const getAllBookingFromDB = async (companyId: string, skip: number, limit
 export const getAllCountBookingFromDb = async (companyId: string) => {
   try {
     const totalCount = await bookedModal
-      .find({paymentStatus: "success"})
+      .find({ paymentStatus: "success" })
       .populate({
         path: "tripId",
         match: { companyId },
@@ -233,7 +264,61 @@ export const getAllCountBookingFromDb = async (companyId: string) => {
   }
 };
 
+export const getCompanyDashboardData = async (companyId: string) => {
+  try {
+    const tripIds = (await Trips.find({ companyId }).select("_id")).map(
+      (trip) => trip._id
+    );
 
+    if (tripIds.length === 0) {
+      return {
+        totalTrips: 0,
+        totalBookings: 0,
+        totalRevenue: 0,
+      };
+    }
+ 
+    const totalTrips = tripIds.length;
 
+    const totalBookings = await bookedModal.countDocuments({
+      tripId: { $in: tripIds },
+    });
+
+    const bookings = await bookedModal.find({
+      tripId: { $in: tripIds },
+    });
+    console.log("Bookings for Company Trips:", bookings);
+
+    const totalRevenueResult = await bookedModal.aggregate([
+      {
+        $match: {
+          tripId: { $in: tripIds }, 
+        },
+      },
+      {
+        $group: {
+          _id: null,
+          totalRevenue: { $sum: "$totalAmount" }, 
+        },
+      },
+    ]);
+
+    
+    console.log("Aggregated Total Revenue Result:", totalRevenueResult);
+
+    
+    const totalRevenue = totalRevenueResult[0]?.totalRevenue || 0;
+
+  
+    return {
+      totalTrips,
+      totalBookings,
+      totalRevenue,
+    };
+  } catch (error) {
+    console.log("Error in getCompanyDashboardData:", error);
+    throw new Error("Error fetching company dashboard data");
+  }
+};
 
 
