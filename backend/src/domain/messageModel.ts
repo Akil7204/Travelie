@@ -1,9 +1,9 @@
 import mongoose, { Document, Schema } from "mongoose";
 
 interface IMessage extends Document {
-  chatId: mongoose.Schema.Types.ObjectId; // Reference to chat
-  senderId: mongoose.Schema.Types.ObjectId; // Reference to the sender (User or Company)
-  senderModel: "User" | "Company"; // To differentiate between User and Company
+  chatId: mongoose.Schema.Types.ObjectId; 
+  senderId: mongoose.Schema.Types.ObjectId; 
+  senderModel: "User" | "Company"; 
   text: string;
   isRead: boolean;
   createdAt?: Date;

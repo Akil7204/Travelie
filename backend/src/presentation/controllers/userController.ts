@@ -384,21 +384,23 @@ export const getUnreadMessagesCount = async (
   req: any,
   res: any
 ): Promise<void> => {
-  const userId  = req.userId;
-
-  // console.log({userId});
+  const userId = req.userId;  // Assuming req.userId contains the logged-in user’s ID
 
   try {
     if (!userId) {
       return res.status(400).json({ error: "User ID is required" });
     }
 
+    const chats = await chatModel.find({ userId: userId }).select('_id');
+
+    const chatIds = chats.map(chat => chat._id);
+
     const unreadCount = await messageModel.countDocuments({
-      senderModel: "Company",
-      isRead: false,
+      chatId: { $in: chatIds }, 
+      senderModel: "Company", 
+      isRead: false, 
     });
-    console.log(unreadCount);
-    
+
     res.status(200).json({ unreadCount });
   } catch (error) {
     console.error("Error fetching unread messages count:", error);

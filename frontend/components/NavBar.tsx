@@ -1,16 +1,19 @@
 "use client";
 
+import { getUnreadMessagesCountAPI } from "@/app/services/allAPI";
 import { deleteCookie } from "@/utils/deleteCookie";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import {Badge, Avatar} from '@mui/material'
 
 const Navbar: React.FC = () => {
   const router = useRouter();
   const [isAuthorized, setIsAuthorized] = useState<boolean>(false);
-  const [user, setUser] =  useState<any>(null);
+  const [user, setUser] = useState<any>(null);
+  const [unreadMessages, setUnreadMessages] = useState<number>(0);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -18,13 +21,25 @@ const Navbar: React.FC = () => {
 
     if (token && userData) {
       const users = JSON.parse(userData);
-      setUser(users)
-      
+      setUser(users);
+
       setIsAuthorized(true);
+      fetchUnreadMessages(users._id);
     } else {
       setIsAuthorized(false);
     }
   }, []);
+
+  const fetchUnreadMessages = async (userId: string) => {
+    try {
+      const response = await getUnreadMessagesCountAPI(userId);
+      console.log(response);
+      
+      setUnreadMessages(response.unreadCount);
+    } catch (error) {
+      console.error("Failed to fetch unread messages", error);
+    }
+  };
 
   const handleLogoutClick = () => {
     toast.success("Logout Successfully");
@@ -32,7 +47,7 @@ const Navbar: React.FC = () => {
     localStorage.removeItem("token");
     deleteCookie("token");
     setIsAuthorized(false);
-    router.push("/"); 
+    router.push("/");
   };
 
   return (
@@ -72,11 +87,9 @@ const Navbar: React.FC = () => {
       {isAuthorized ? (
         <div className="flex space-x-8">
           <Link href="/profile">
-            <img
-              src={user.profileImage}
-              alt="Profile"
-              className="w-9 h-9 rounded-full"
-            />
+            <Badge badgeContent={unreadMessages} color="secondary">
+              <Avatar alt="Profile" src={user.profileImage} />
+            </Badge>
           </Link>
           <Link href="#">
             <span
