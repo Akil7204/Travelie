@@ -79,13 +79,7 @@ const Dashboard: React.FC = () => {
     responsive: true,
     plugins: {
       legend: {
-        position: "top" as
-          | "top"
-          | "center"
-          | "right"
-          | "bottom"
-          | "left"
-          | "chartArea",
+        position: "top" as const,
       },
       title: {
         display: true,
@@ -96,27 +90,14 @@ const Dashboard: React.FC = () => {
 
   const revenueData = {
     labels: [
-      "Day 1",
-      "Day 2",
-      "Day 3",
-      "Day 4",
-      "Day 5",
-      "Day 6",
-      "Day 7",
-      "Day 8",
-      "Day 9",
-      "Day 10",
-      "Day 11",
-      "Day 12",
-      "Day 13",
-      "Day 14",
+      "Day 1", "Day 2", "Day 3", "Day 4", "Day 5",
+      "Day 6", "Day 7", "Day 8", "Day 9", "Day 10",
+      "Day 11", "Day 12", "Day 13", "Day 14",
     ],
     datasets: [
       {
         label: "Revenue",
-        data: dashboardData.revenueLastTwoWeeks.length
-          ? dashboardData.revenueLastTwoWeeks
-          : new Array(14).fill(0),
+        data: dashboardData.revenueLastTwoWeeks,
         backgroundColor: "rgba(75, 192, 192, 0.2)",
         borderColor: "rgba(75, 192, 192, 1)",
         borderWidth: 2,
@@ -129,13 +110,7 @@ const Dashboard: React.FC = () => {
     responsive: true,
     plugins: {
       legend: {
-        position: "top" as
-          | "top"
-          | "center"
-          | "right"
-          | "bottom"
-          | "left"
-          | "chartArea",
+        position: "top" as const,
       },
       title: {
         display: true,
@@ -165,13 +140,7 @@ const Dashboard: React.FC = () => {
     responsive: true,
     plugins: {
       legend: {
-        position: "top" as
-          | "top"
-          | "center"
-          | "right"
-          | "bottom"
-          | "left"
-          | "chartArea",
+        position: "top" as const,
       },
       title: {
         display: true,
@@ -203,16 +172,16 @@ const Dashboard: React.FC = () => {
           <p className="text-2xl font-bold">{dashboardData.totalUsers}</p>
         </div>
       </div>
-      <div className="mb-8 flex">
+      <div className="mb-8 flex flex-row justify-between">
         <div className="w-1/2 pr-2">
-          <Line data={revenueData} options={revenueOptions} />
+          <Line data={revenueData} options={revenueOptions}  />
         </div>
         <div className="w-1/2 pl-2">
           <Bar data={data} options={options} />
         </div>
       </div>
       <div className="mb-4">
-        <Bar data={reportData} options={reportOptions} />
+        <Bar data={reportData} options={reportOptions}  />
       </div>
     </Layout>
   );
