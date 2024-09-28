@@ -31,9 +31,8 @@ const MessagePage = () => {
     const getChats = async () => {
       try {
         if (users) {
-          const { data } = await userChats(users._id); 
+          const { data } = await userChats(users._id);
           console.log({data});
-          
           setChats(data); 
         }
       } catch (error: any) {
@@ -82,7 +81,7 @@ const MessagePage = () => {
             onChatSelect={setSelectedChatId} 
           />
           
-          {/* Right side with ChatArea or default message */}
+          {/* Right side with ChatArea */}
           <div className="flex-grow p-4">
             {selectedChatId && users?._id ? (
               <ChatArea chatId={selectedChatId}  senderId={users?._id} senderModel="User" chat={chats} />

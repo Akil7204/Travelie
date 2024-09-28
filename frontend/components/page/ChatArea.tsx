@@ -11,12 +11,12 @@ interface Message {
     username: string;
     profileImage?: string;
   };
-  senderModel: string; // 'User' or 'Company'
+  senderModel: string; 
 }
 
 interface ChatAreaProps {
   chatId: any;
-  senderId: string; // Current user (admin/user) ID
+  senderId: string;
   senderModel: string;
   chat: any;
 }
@@ -25,9 +25,8 @@ const ChatArea: React.FC<ChatAreaProps> = ({
   chatId,
   senderId,
   senderModel,
-  chat,
 }) => {
-  const [messages, setMessages] = useState<Message[]>([]); // State to hold fetched messages
+  const [messages, setMessages] = useState<Message[]>([]); 
   const [companyName, setCompanyName] = useState<string | undefined>();
   const [companyProfileImage, setCompanyProfileImage] = useState<
     string | undefined
