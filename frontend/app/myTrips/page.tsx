@@ -6,6 +6,7 @@ import Navbar from "@/components/NavBar";
 import Profile from "@/components/profile/Profile";
 import Footer from "@/components/Footer";
 import { useRouter } from "next/navigation";
+import jsPDF from "jspdf";
 
 interface Trip {
   _id: string;
@@ -38,7 +39,6 @@ const MyTrips: React.FC = () => {
 
   const router = useRouter();
 
- 
   const [isOpen, setIsOpen] = useState(false);
   const [selectedBooking, setSelectedBooking] = useState<Booking | null>(null);
 
@@ -60,7 +60,7 @@ const MyTrips: React.FC = () => {
       const response: any = await getUserBookingsAPI(page, bookingPerPage);
       setBookings(response.bookings);
       console.log(response.bookings);
-      
+
       setTotalPages(Math.ceil(response.totalCount / bookingPerPage));
     } catch (error) {
       console.error("Error fetching bookings:", error);
@@ -74,7 +74,7 @@ const MyTrips: React.FC = () => {
   const cancelTripAPI = async (bookingId: string) => {
     try {
       console.log(bookingId);
-      
+
       const response = await cancelBooking(bookingId);
 
       if (!response) {
@@ -82,15 +82,68 @@ const MyTrips: React.FC = () => {
       }
 
       // const result = await response.json();
-      if(response.statusText == "OK"){
-        router.push("/myTrips")
+      if (response.statusText == "OK") {
+        router.push("/myTrips");
         console.log("Trip cancelled:", response);
-        closeModal()
-        fetchBookings(currentPage)
+        closeModal();
+        fetchBookings(currentPage);
       }
-
     } catch (error) {
       console.error("Error cancelling trip:", error);
+    }
+  };
+
+  const downloadTicket = async () => {
+    if (selectedBooking) {
+      const doc = new jsPDF();
+  
+      doc.setFontSize(30);
+      doc.setTextColor(33, 150, 243); 
+      doc.text("Travelie", 105, 20, { align: "center" });
+  
+     
+      doc.setFontSize(22);
+      doc.setTextColor(44, 62, 80); 
+      doc.text("Trip Ticket", 105, 35, { align: "center" });
+  
+      doc.setDrawColor(44, 62, 80);
+      doc.line(20, 40, 190, 40);
+  
+      doc.setFontSize(18);
+      doc.setTextColor(34, 153, 84); 
+      doc.text("Trip Details", 20, 50);
+  
+      doc.setFontSize(12);
+      doc.setTextColor(0, 0, 0);
+      doc.text(`Trip Name: ${selectedBooking.tripId.tripName}`, 20, 60);
+      doc.text(`Starting Date: ${new Date(selectedBooking.tripId.startingDate).toDateString()}`, 20, 70);
+      doc.text(`Seats: ${selectedBooking.seats}`, 20, 80);
+      doc.text(`Duration: ${selectedBooking.tripId.days} Days`, 20, 90);
+  
+      doc.setFontSize(18);
+      doc.setTextColor(34, 153, 84);
+      doc.text("Transaction Details", 20, 110);
+  
+      doc.setFontSize(12);
+      doc.setTextColor(0, 0, 0);
+      doc.text(`Transaction ID: ${selectedBooking.txnId}`, 20, 120);
+      doc.text(`Total Price: INR ${selectedBooking.totalAmount}`, 20, 130);
+      doc.text(`Payment Status: ${selectedBooking.paymentStatus}`, 20, 140);
+  
+      doc.setFontSize(18);
+      doc.setTextColor(34, 153, 84);
+      doc.text("Description", 20, 160);
+  
+      doc.setFontSize(12);
+      doc.setTextColor(0, 0, 0);
+      doc.text(selectedBooking.tripId.description, 20, 170, { maxWidth: 170 });
+  
+      doc.setFontSize(10);
+      doc.setTextColor(100, 100, 100);
+      doc.text("For any queries, contact us at: support@travelie.com", 20, 280);
+      doc.text("Thank you for choosing Travelie!", 20, 290);
+  
+      doc.save(`Travelie_Ticket_${selectedBooking.tripId.tripName}_${new Date().toLocaleDateString()}.pdf`);
     }
   };
 
@@ -109,7 +162,7 @@ const MyTrips: React.FC = () => {
                 <div className="flex items-center">
                   {/* Trip Image */}
                   <img
-                    src={booking.tripId.images[0]} 
+                    src={booking.tripId.images[0]}
                     alt={booking.tripId.tripName}
                     className="w-32 h-32 rounded-lg object-cover"
                   />
@@ -243,7 +296,10 @@ const MyTrips: React.FC = () => {
                     </div>
                   ) : (
                     <>
-                      <button className="w-full py-2 mt-4 bg-blue-500 text-white font-semibold rounded-md shadow-md hover:bg-blue-600 transition">
+                      <button
+                        className="w-full py-2 mt-4 bg-blue-500 text-white font-semibold rounded-md shadow-md hover:bg-blue-600 transition"
+                        onClick={downloadTicket}
+                      >
                         Download Ticket
                       </button>
                       <button

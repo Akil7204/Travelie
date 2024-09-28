@@ -216,7 +216,7 @@ const ManageAccount: React.FC = () => {
         <br />
         <hr className="border-b-2 border-blue-300" />
         {/* Change Password Section */}
-        <div className="mt-10">
+        {/* <div className="mt-10">
           <h3 className="text-xl font-semibold mb-4">Change Password</h3>
           <form className="space-y-4">
             <div>
@@ -252,7 +252,7 @@ const ManageAccount: React.FC = () => {
               Change Password
             </button>
           </form>
-        </div>
+        </div> */}
       </Prfile>
       <Footer />
     </>
