@@ -384,7 +384,7 @@ export const getUnreadMessagesCount = async (
   req: any,
   res: any
 ): Promise<void> => {
-  const userId = req.userId;  // Assuming req.userId contains the logged-in user’s ID
+  const userId = req.userId;  
 
   try {
     if (!userId) {

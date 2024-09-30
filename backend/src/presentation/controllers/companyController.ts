@@ -22,6 +22,8 @@ import { findCompanyByEmail, getCompanyDashboardData } from "../../Infrastructur
 import { sendEmail } from "../../uilts/sendEmail";
 import { IMulterFile } from "../../types/types";
 import { Category } from "../../domain/category";
+import { chatModel } from "../../domain/chatModel";
+import { messageModel } from "../../domain/messageModel";
 
 interface CustomRequest extends Request {
   companyId?: string;
@@ -302,8 +304,6 @@ export const getBookings = async (req: any, res: Response) => {
 };
 
 
-
-
 export const fetchCompanyDashboardData = async (req: any, res: Response) => {
   try {
     const companyId = req.companyId; 
@@ -319,4 +319,32 @@ export const fetchCompanyDashboardData = async (req: any, res: Response) => {
   }
 };
 
+
+export const companyUnreadMessagesCount = async (
+  req: any,
+  res: any
+): Promise<void> => {
+  const companyId = req.userId;  
+
+  try {
+    if (!companyId) {
+      return res.status(400).json({ error: "Company ID is required" });
+    }
+
+    const chats = await chatModel.find({ companyId: companyId }).select('_id');
+
+    const chatIds = chats.map(chat => chat._id);
+
+    const unreadCount = await messageModel.countDocuments({
+      chatId: { $in: chatIds }, 
+      senderModel: "User", 
+      isRead: false, 
+    });
+
+    res.status(200).json({ unreadCount });
+  } catch (error) {
+    console.error("Error fetching unread messages count:", error);
+    res.status(500).json({ error: "Error fetching unread messages count" });
+  }
+};
 

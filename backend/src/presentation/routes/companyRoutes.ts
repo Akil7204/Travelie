@@ -1,5 +1,5 @@
 import express  from "express";
-import { addCategory, addTrip, editCategoryById, editTripById, fetchCompanyDashboardData, getBookings, getCategoryById, getCategorysById, getTripById, getTripsById, login, register, softDeleteCategory, verifyOtp } from "../controllers/companyController";
+import { addCategory, addTrip, companyUnreadMessagesCount, editCategoryById, editTripById, fetchCompanyDashboardData, getBookings, getCategoryById, getCategorysById, getTripById, getTripsById, login, register, softDeleteCategory, verifyOtp } from "../controllers/companyController";
 import upload from "../../uilts/multer";
 import { verifycompany } from "../MiddleWare/companyJWT";
 
@@ -26,6 +26,8 @@ router.put("/category/softDelete/:id", verifycompany, softDeleteCategory)
 
 router.get("/bookings", verifycompany, getBookings);
 router.get("/dashboard", verifycompany, fetchCompanyDashboardData);
+
+router.get('/unread-count', verifycompany, companyUnreadMessagesCount);
 
 
 export default router;

@@ -18,7 +18,7 @@ const ChatSchema = new Schema<Ichat>(
     },
     companyId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Company", // it is reference of company
+      ref: "Company", 
       required: true,
     },
   },
