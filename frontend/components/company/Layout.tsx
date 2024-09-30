@@ -21,6 +21,8 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     }
   }, []);
 
+
+
   const isActive = (path: string) => activePath === path;
 
   const handleLogoutClick = () => {
@@ -28,7 +30,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     localStorage.removeItem("company");
     localStorage.removeItem("companyToken");
     deleteCookie("companyToken");
-    router.push("/company/signin"); // Redirect to the home page or login page
+    router.push("/company/signin"); 
   };
 
   return (

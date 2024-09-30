@@ -1,5 +1,6 @@
 import axios from "axios";
 import { SERVER_URL_CHAT, SERVER_URL_MESSAGE } from "./serverURL";
+import { linkWithCredential } from "firebase/auth";
 
 export const userChats = (id: string) => {
   return axios.get(`${SERVER_URL_CHAT}/${id}`);
@@ -36,9 +37,9 @@ export const sendMessage = async (
   }
 };
 
-export const getMessages = (id: string) => {
+export const getMessages = (id: string, senderId: string) => {
   try {
-    return axios.get(`${SERVER_URL_MESSAGE}/message/${id}`);
+    return axios.get(`${SERVER_URL_MESSAGE}/message/${id}`, {params: { senderId }});
   } catch (error: any) {
     console.log(error);
   }

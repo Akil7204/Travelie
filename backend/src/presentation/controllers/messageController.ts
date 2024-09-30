@@ -6,11 +6,15 @@ import { io } from "../../main";
 export const addMessage = (io: any) => async (req: any, res: Response) => {
   const { chatId, senderId, text, senderModel } = req.body;
 
-  console.log({chatId,senderId,text,senderModel});
-  
+  console.log({ chatId, senderId, text, senderModel });
 
   // Log to see if the request data is received correctly
-  console.log("Received message data:", { chatId, senderId, text, senderModel });
+  console.log("Received message data:", {
+    chatId,
+    senderId,
+    text,
+    senderModel,
+  });
 
   if (!chatId || !senderId || !text || !senderModel) {
     return res.status(400).json({ message: "All fields are required" });
@@ -43,14 +47,15 @@ export const addMessage = (io: any) => async (req: any, res: Response) => {
     res.status(200).json(populatedMessage);
   } catch (error: any) {
     console.error("Error saving message:", error.message);
-    res.status(500).json({ message: "Failed to add message", error: error.message });
+    res
+      .status(500)
+      .json({ message: "Failed to add message", error: error.message });
   }
 };
 
-
-
-export const getMessage = async (req: Request, res: Response) => {
+export const getMessage = async (req: any, res: Response) => {
   const { chatId } = req.params;
+  const { senderId } = req.query;
 
   try {
     const messages = await messageModel.find({ chatId }).populate("senderId");
@@ -61,6 +66,11 @@ export const getMessage = async (req: Request, res: Response) => {
         .json({ message: "No messages found for this chat" });
     }
 
+    await messageModel.updateMany(
+      { chatId, isRead: false, senderId: { $ne: senderId } },
+      { $set: { isRead: true } }
+    );
+
     res.status(200).json(messages);
   } catch (error: any) {
     res
@@ -70,7 +80,7 @@ export const getMessage = async (req: Request, res: Response) => {
 };
 
 export const companyAddMessage = async (req: any, res: any) => {
-  const { chatId, senderId, text, senderModel } = req.body.messageData; 
+  const { chatId, senderId, text, senderModel } = req.body.messageData;
 
   console.log(chatId, senderId, text, senderModel);
 
@@ -87,14 +97,14 @@ export const companyAddMessage = async (req: any, res: any) => {
       chatId,
       senderId,
       text,
-      senderModel, 
+      senderModel,
     });
 
     const result = await message.save();
-    console.log({result});
+    console.log({ result });
 
     io.to(chatId).emit("message", result);
-    
+
     res.status(200).json(result);
   } catch (error: any) {
     res

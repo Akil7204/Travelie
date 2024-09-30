@@ -57,8 +57,9 @@ const ChatBox: React.FC<ChatBoxProps> = ({
 
   useEffect(() => {
     const fetchChatDetails = async () => {
+      
       try {
-        const response = await getMessages(chat[0]?._id);
+        const response = await getMessages(chat[0]?._id, senderId);
         const messagesData = response?.data || [];
         setMessages(messagesData);
       } catch (error) {

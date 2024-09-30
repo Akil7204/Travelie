@@ -72,7 +72,9 @@ const ChatArea: React.FC<ChatAreaProps> = ({
   useEffect(() => {
     const fetchChatDetails = async () => {
       try {
-        const response = await getMessages(chatId._id);
+        console.log({senderId});
+        
+        const response = await getMessages(chatId._id, senderId);
         const messagesData = response?.data || [];
         // console.log(messagesData);
 
