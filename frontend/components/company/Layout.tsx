@@ -6,6 +6,8 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { deleteCookie } from "@/utils/deleteCookie";
 import { useRouter } from "next/navigation";
+import { companyUnreadMessagesCountAPI } from "@/app/services/companyAPI";
+import { Badge } from "@mui/material";
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -13,15 +15,26 @@ interface LayoutProps {
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {
   const [activePath, setActivePath] = useState<string | null>(null);
+  const [unreadMessages, setUnreadMessages] = useState<number>(0);
   const router = useRouter();
 
   useEffect(() => {
     if (typeof window !== "undefined") {
       setActivePath(window.location.pathname);
     }
+    fetchUnreadMessages();
   }, []);
 
-
+  const fetchUnreadMessages = async () => {
+    try {
+      const response = await companyUnreadMessagesCountAPI();
+      console.log(response);
+      
+      setUnreadMessages(response.unreadCount);
+    } catch (error) {
+      console.error("Failed to fetch unread messages", error);
+    }
+  };
 
   const isActive = (path: string) => activePath === path;
 
@@ -114,7 +127,9 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                       : "hover:bg-gray-200"
                   }`}
                 >
+                  <Badge badgeContent={unreadMessages} color="secondary">
                   Chat
+                  </Badge>
                 </Link>
               </li>
               <li className="px-6 py-3 mt-12">

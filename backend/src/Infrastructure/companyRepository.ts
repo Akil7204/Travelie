@@ -287,7 +287,6 @@ export const getCompanyDashboardData = async (companyId: string) => {
     const bookings = await bookedModal.find({
       tripId: { $in: tripIds },
     });
-    console.log("Bookings for Company Trips:", bookings);
 
     const totalRevenueResult = await bookedModal.aggregate([
       {
@@ -304,7 +303,6 @@ export const getCompanyDashboardData = async (companyId: string) => {
     ]);
 
     
-    console.log("Aggregated Total Revenue Result:", totalRevenueResult);
 
     
     const totalRevenue = totalRevenueResult[0]?.totalRevenue || 0;

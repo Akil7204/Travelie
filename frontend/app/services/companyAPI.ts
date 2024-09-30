@@ -159,3 +159,8 @@ export const fetchDashboardData = async () => {
     throw error; 
   }
 };
+
+export const companyUnreadMessagesCountAPI = async () => {
+  const response = await axios.get(`${SERVER_URL_COMPANY}/unread-count`, {withCredentials: true, });
+  return response.data;
+};

@@ -307,10 +307,8 @@ export const getBookings = async (req: any, res: Response) => {
 export const fetchCompanyDashboardData = async (req: any, res: Response) => {
   try {
     const companyId = req.companyId; 
-    console.log(companyId);
     
     const data = await getCompanyDashboardData(companyId);
-    console.log({data});
     
     return res.status(200).json(data);
   } catch (error) {
@@ -322,10 +320,10 @@ export const fetchCompanyDashboardData = async (req: any, res: Response) => {
 
 export const companyUnreadMessagesCount = async (
   req: any,
-  res: any
-): Promise<void> => {
-  const companyId = req.userId;  
-
+  res: Response
+) => {
+  const companyId = req.companyId; 
+  
   try {
     if (!companyId) {
       return res.status(400).json({ error: "Company ID is required" });
