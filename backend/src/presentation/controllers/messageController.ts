@@ -48,15 +48,13 @@ export const addMessage = (io: any) => async (req: any, res: Response) => {
 };
 
 
-// Get messages for a specific chat
+
 export const getMessage = async (req: Request, res: Response) => {
   const { chatId } = req.params;
 
   try {
-    // Find messages by chatId and populate senderId to get details of the sender
     const messages = await messageModel.find({ chatId }).populate("senderId");
 
-    // Check if any messages were found
     if (!messages.length) {
       return res
         .status(404)
