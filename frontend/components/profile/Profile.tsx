@@ -3,10 +3,13 @@ import Image from "next/image";
 import Link from "next/link";
 import { getUnreadMessagesCountAPI } from "@/app/services/allAPI";
 import { Badge } from "@mui/material";
+import { io } from "socket.io-client";
 
 interface LayoutProps {
   children: React.ReactNode;
 }
+
+const socket = io("http://localhost:4000");
 
 const Profile: React.FC<LayoutProps> = ({ children }) => {
   const [activePath, setActivePath] = useState<string>("profile");
@@ -29,8 +32,10 @@ const Profile: React.FC<LayoutProps> = ({ children }) => {
   useEffect(() => {
     const fetchUnreadMessages = async () => {
       const response = await getUnreadMessagesCountAPI();
-      console.log(response);
-      setUnreadMessagesCount(response.unreadCount);
+      socket.on("unreadCount", (response: any) => {
+        console.log("Unread count received:", response);
+        setUnreadMessagesCount(response.unreadCount);
+      });  
     };
 
     fetchUnreadMessages();

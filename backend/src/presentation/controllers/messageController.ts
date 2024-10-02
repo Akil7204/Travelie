@@ -70,6 +70,14 @@ export const getMessage = async (req: any, res: Response) => {
       { chatId, isRead: false, senderId: { $ne: senderId } },
       { $set: { isRead: true } }
     );
+    
+    const unreadCount = await messageModel.countDocuments({
+      chatId,
+      senderId: { $ne: senderId },
+      isRead: false,
+    });
+
+    io.emit("unreadCount", { unreadCount });
 
     res.status(200).json(messages);
   } catch (error: any) {

@@ -26,6 +26,7 @@ import { sendEmail } from "../../uilts/sendEmail";
 import { profileAddBucket } from "../../uilts/profileAddBucket";
 import { chatModel } from "../../domain/chatModel";
 import { messageModel } from "../../domain/messageModel";
+import { io } from "../../main";
 var jsSHA = require("jssha");
 
 // register the user
@@ -400,6 +401,8 @@ export const getUnreadMessagesCount = async (
       senderModel: "Company", 
       isRead: false, 
     });
+
+    io.emit('unreadCount', { unreadCount });
 
     res.status(200).json({ unreadCount });
   } catch (error) {

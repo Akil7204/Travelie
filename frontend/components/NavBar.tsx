@@ -8,6 +8,11 @@ import { useEffect, useState } from "react";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import {Badge, Avatar} from '@mui/material'
+import { io } from "socket.io-client";
+
+
+const socket = io("http://localhost:4000"); // Your server URL
+// const socket = io("https://travelie.solutions"); // for production
 
 const Navbar: React.FC = () => {
   const router = useRouter();
@@ -24,7 +29,6 @@ const Navbar: React.FC = () => {
       setUser(users);
 
       setIsAuthorized(true);
-      fetchUnreadMessages();
     } else {
       setIsAuthorized(false);
     }
@@ -33,13 +37,27 @@ const Navbar: React.FC = () => {
   const fetchUnreadMessages = async () => {
     try {
       const response = await getUnreadMessagesCountAPI();
-      console.log(response);
-      
-      setUnreadMessages(response.unreadCount);
+      console.log({response});
+      socket.on("unreadCount", (response: any) => {
+        console.log("Unread count received:", response);
+        setUnreadMessages(response.unreadCount);
+      });
     } catch (error) {
       console.error("Failed to fetch unread messages", error);
     }
   };
+
+  useEffect(() => {
+    socket.on("connect", () => {
+      console.log("Socket connected:", socket.id);
+    });
+
+    fetchUnreadMessages();
+
+    return () => {
+      socket.off("unreadCount");
+    };
+  }, [user]);
 
   const handleLogoutClick = () => {
     toast.success("Logout Successfully");
