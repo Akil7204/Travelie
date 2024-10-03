@@ -1,4 +1,5 @@
 "use client";
+import Swal from "sweetalert2";
 import { blockCompanyAPI, getAllCompanyAPI, unblockCompanyAPI } from "@/app/services/adminAPI";
 import Layout from "@/components/admin/Layout";
 import Table from "@/components/page/Table";
@@ -14,68 +15,84 @@ interface Company {
 const AdminCompanyPage: React.FC = () => {
   const [companies, setCompanies] = useState<Company[]>([]);
 
-
   useEffect(() => {
-    const fetchUsers = async () => {
+    const fetchCompanies = async () => {
       try {
         const token = localStorage.getItem("adminToken");
         if (!token) throw new Error("No token found");
 
         const response = await getAllCompanyAPI(token);
         console.log(response);
-        
         setCompanies(response);
       } catch (err) {
-        console.error("Error fetching users:", err);
-        // setError("Failed to fetch users");
-      } finally {
-        // setLoading(false);
+        console.error("Error fetching companies:", err);
       }
     };
 
-    fetchUsers();
+    fetchCompanies();
   }, []);
 
-  const handleToggleBlock = (id: string) => {
-    setCompanies((prevCompanies) =>
-      prevCompanies.map((company) =>
-        company._id === id
-          ? { ...company, isBlocked: !company.isBlocked }
-          : company
-      )
-    );
-  };
+  const handleConfirmAction = async (company: Company) => {
+    const swalWithBootstrapButtons = Swal.mixin({
+      customClass: {
+        confirmButton: "bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 mr-3",
+        cancelButton: "bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600",
+      },
+      buttonsStyling: true,
+    });
 
-  const handleConfirmAction = async (user: any) => {
-    if (user) {
-      try {
-        const token = localStorage.getItem("adminToken");
-        if (!token) throw new Error("No token found");
+    swalWithBootstrapButtons
+      .fire({
+        title: `Are you sure you want to ${company.isBlocked ? "unblock" : "block"} this company?`,
+        text: `You are about to ${company.isBlocked ? "unblock" : "block"} ${company.companyname}.`,
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: `Yes, ${company.isBlocked ? "unblock" : "block"} it!`,
+        cancelButtonText: "No, cancel!",
+        reverseButtons: true,
+      })
+      .then(async (result) => {
+        if (result.isConfirmed) {
+          try {
+            const token = localStorage.getItem("adminToken");
+            if (!token) throw new Error("No token found");
 
-        setCompanies((prevUsers) =>
-          prevUsers.map((company) =>
-            company._id === user._id
-              ? { ...company, isBlocked: !company.isBlocked }
-              : company
-          )
-        );
+            // Toggle company block/unblock
+            setCompanies((prevCompanies) =>
+              prevCompanies.map((c) =>
+                c._id === company._id
+                  ? { ...c, isBlocked: !c.isBlocked }
+                  : c
+              )
+            );
 
-        if (user.isBlocked) {
-          await unblockCompanyAPI(user._id, token);
-          console.log("unblock success");
-          
-        //   toast.success("User unblocked successfully");
-        } else {
-          await blockCompanyAPI(user?._id, token);
-          console.log("block success");
-
-        //   toast.success("User blocked successfully");
+            if (company.isBlocked) {
+              await unblockCompanyAPI(company._id, token);
+              swalWithBootstrapButtons.fire(
+                "Unblocked!",
+                `${company.companyname} has been unblocked.`,
+                "success"
+              );
+            } else {
+              await blockCompanyAPI(company._id, token);
+              swalWithBootstrapButtons.fire(
+                "Blocked!",
+                `${company.companyname} has been blocked.`,
+                "success"
+              );
+            }
+          } catch (err) {
+            console.error("Failed to update company status", err);
+            Swal.fire("Error", "Failed to update company status", "error");
+          }
+        } else if (result.dismiss === Swal.DismissReason.cancel) {
+          swalWithBootstrapButtons.fire(
+            "Cancelled",
+            `${company.companyname} is safe.`,
+            "error"
+          );
         }
-      } catch (err) {
-        console.error("Failed to update user status", err);
-        // setError("Failed to update user status");
-      }
-    }
+      });
   };
 
   const headers = ["ID", "Name", "Industry", "Status", "Action"];
@@ -99,9 +116,7 @@ const AdminCompanyPage: React.FC = () => {
       <td className="px-6 py-4 border-b text-center">
         <button
           className={`px-4 py-2 text-sm font-medium ${
-            company.isBlocked
-              ? "bg-green-500 text-white"
-              : "bg-red-500 text-white"
+            company.isBlocked ? "bg-green-500 text-white" : "bg-red-500 text-white"
           } rounded-lg focus:outline-none hover:opacity-90 transition`}
           onClick={() => handleConfirmAction(company)}
         >
