@@ -36,8 +36,9 @@ const Navbar: React.FC = () => {
 
   const fetchUnreadMessages = async () => {
     try {
+      
       const response = await getUnreadMessagesCountAPI();
-      console.log({response});
+      // console.log({response});
       socket.on("unreadCount", (response: any) => {
         console.log("Unread count received:", response);
         setUnreadMessages(response.unreadCount);

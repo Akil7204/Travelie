@@ -111,12 +111,7 @@ const ChatBox: React.FC<ChatBoxProps> = ({
 
     try {
       const result = await messageSend(messageData);
-      // console.log({ messages });
-
-      // socket?.emit("message", result);
-
-      // setMessages((prevState: any) => [...prevState, messageData]);
-      setNewMessage(""); // Clear input after sending the message
+      setNewMessage(""); 
     } catch (error) {
       console.error("Error sending message:", error);
     }

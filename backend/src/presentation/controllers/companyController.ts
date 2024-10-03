@@ -24,6 +24,7 @@ import { IMulterFile } from "../../types/types";
 import { Category } from "../../domain/category";
 import { chatModel } from "../../domain/chatModel";
 import { messageModel } from "../../domain/messageModel";
+import { io } from "../../main";
 
 interface CustomRequest extends Request {
   companyId?: string;
@@ -338,6 +339,8 @@ export const companyUnreadMessagesCount = async (
       senderModel: "User", 
       isRead: false, 
     });
+
+    io.emit('unread', { unreadCount });
 
     res.status(200).json({ unreadCount });
   } catch (error) {

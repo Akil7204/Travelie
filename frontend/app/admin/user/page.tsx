@@ -1,9 +1,11 @@
 "use client";
 
+import Swal from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
 import { blockUserAPI, getAllUsersAPI, unblockUserAPI } from "@/app/services/adminAPI";
 import Layout from "@/components/admin/Layout";
 import Table from "@/components/page/Table";
-import React, { use, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 
 interface User {
   _id: string;
@@ -12,9 +14,18 @@ interface User {
   isBlocked: boolean;
 }
 
+const swalWithBootstrapButtons = Swal.mixin({
+  customClass: {
+    confirmButton: "bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 mr-3", 
+    cancelButton: "bg-red-500 text-white  px-4 py-2 rounded-md hover:bg-red-600",
+  },
+  buttonsStyling: true, 
+});
+
 const AdminUserPage: React.FC = () => {
   const [users, setUsers] = useState<User[]>([]);
   const [currentUser, setCurrentUser] = useState<User>();
+
   useEffect(() => {
     const fetchUsers = async () => {
       try {
@@ -25,47 +36,63 @@ const AdminUserPage: React.FC = () => {
         setUsers(response);
       } catch (err) {
         console.error("Error fetching users:", err);
-        // setError("Failed to fetch users");
-      } finally {
-        // setLoading(false);
       }
     };
 
     fetchUsers();
   }, []);
 
+  const handleConfirmAction = async (user: User) => {
+    swalWithBootstrapButtons
+      .fire({
+        title: "Are you sure?",
+        text: `You are about to ${user.isBlocked ? "unblock" : "block"} this user!`,
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: `Yes, ${user.isBlocked ? "unblock" : "block"} it!`,
+        cancelButtonText: "No, cancel!",
+        reverseButtons: true,
+      })
+      .then(async (result) => {
+        if (result.isConfirmed) {
+          try {
+            const token = localStorage.getItem("adminToken");
+            if (!token) throw new Error("No token found");
 
-  const handleConfirmAction = async (user: any) => {
-    if (user) {
-      try {
-        const token = localStorage.getItem("adminToken");
-        if (!token) throw new Error("No token found");
+            setUsers((prevUsers) =>
+              prevUsers.map((u) =>
+                u._id === user._id ? { ...u, isBlocked: !u.isBlocked } : u
+              )
+            );
 
-        setUsers((prevUsers) =>
-          prevUsers.map((users) =>
-            users._id === user._id
-              ? { ...users, isBlocked: !users.isBlocked }
-              : users
-          )
-        );
-        setCurrentUser(user)
+            setCurrentUser(user);
 
-        if (user?.isBlocked) {
-          await unblockUserAPI(user._id, token);
-          console.log("unblock success");
-          
-        //   toast.success("User unblocked successfully");
-        } else {
-          await blockUserAPI(user?._id, token);
-          console.log("block success");
-
-        //   toast.success("User blocked successfully");
+            if (user.isBlocked) {
+              await unblockUserAPI(user._id, token);
+              swalWithBootstrapButtons.fire(
+                "Unblocked!",
+                "The user has been unblocked.",
+                "success"
+              );
+            } else {
+              await blockUserAPI(user._id, token);
+              swalWithBootstrapButtons.fire(
+                "Blocked!",
+                "The user has been blocked.",
+                "success"
+              );
+            }
+          } catch (err) {
+            console.error("Failed to update user status", err);
+          }
+        } else if (result.dismiss === Swal.DismissReason.cancel) {
+          swalWithBootstrapButtons.fire(
+            "Cancelled",
+            "No changes were made to the user status.",
+            "error"
+          );
         }
-      } catch (err) {
-        console.error("Failed to update user status", err);
-        // setError("Failed to update user status");
-      }
-    }
+      });
   };
 
   const headers = ["ID", "Name", "Email", "Status", "Action"];
@@ -91,8 +118,7 @@ const AdminUserPage: React.FC = () => {
           className={`px-4 py-2 text-sm font-medium ${
             user.isBlocked ? "bg-green-500 text-white" : "bg-red-500 text-white"
           } rounded-lg focus:outline-none hover:opacity-90 transition`}
-        //   onClick={() => handleToggleBlock(user._id)}
-        onClick={() => handleConfirmAction(user)}
+          onClick={() => handleConfirmAction(user)}
         >
           {user.isBlocked ? "Unblock" : "Block"}
         </button>

@@ -8,21 +8,35 @@ import { deleteCookie } from "@/utils/deleteCookie";
 import { useRouter } from "next/navigation";
 import { companyUnreadMessagesCountAPI } from "@/app/services/companyAPI";
 import { Badge } from "@mui/material";
+import { io } from "socket.io-client";
 
 interface LayoutProps {
   children: React.ReactNode;
 }
 
+const socket = io("http://localhost:4000");
+
 const Layout: React.FC<LayoutProps> = ({ children }) => {
   const [activePath, setActivePath] = useState<string | null>(null);
   const [unreadMessages, setUnreadMessages] = useState<number>(0);
+  const [company, setCompany] = useState<any>(null);
   const router = useRouter();
+
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    const userData = localStorage.getItem("user");
+
+    if (token && userData) {
+      const users = JSON.parse(userData);
+      setCompany(users);
+    }
+  }, []);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
       setActivePath(window.location.pathname);
     }
-    fetchUnreadMessages();
   }, []);
 
   const fetchUnreadMessages = async () => {
@@ -30,11 +44,28 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       const response = await companyUnreadMessagesCountAPI();
       console.log(response);
       
-      setUnreadMessages(response.unreadCount);
+      socket.on("unread", (response: any) => {
+        console.log("Unread count:", response);
+        setUnreadMessages(response?.unreadCount);
+      });
+      
+      // setUnreadMessages(response.unreadCount);
     } catch (error) {
       console.error("Failed to fetch unread messages", error);
     }
   };
+
+  useEffect(() => {
+    socket.on("connect", () => {
+      console.log("Socket connected:", socket.id);
+    });
+
+    fetchUnreadMessages();
+
+    return () => {
+      socket.off("unread");
+    };
+  }, [company]);
 
   const isActive = (path: string) => activePath === path;
 
