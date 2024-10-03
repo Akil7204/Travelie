@@ -62,8 +62,12 @@ const MyTrips: React.FC = () => {
       console.log(response.bookings);
 
       setTotalPages(Math.ceil(response.totalCount / bookingPerPage));
-    } catch (error) {
-      console.error("Error fetching bookings:", error);
+    } catch (error: any) {
+      if (error.response.status === 403) {
+        localStorage.removeItem("user");
+        localStorage.removeItem("token");
+        router.push("/login");
+      }
     }
   };
 
@@ -96,54 +100,63 @@ const MyTrips: React.FC = () => {
   const downloadTicket = async () => {
     if (selectedBooking) {
       const doc = new jsPDF();
-  
+
       doc.setFontSize(30);
-      doc.setTextColor(33, 150, 243); 
+      doc.setTextColor(33, 150, 243);
       doc.text("Travelie", 105, 20, { align: "center" });
-  
-     
+
       doc.setFontSize(22);
-      doc.setTextColor(44, 62, 80); 
+      doc.setTextColor(44, 62, 80);
       doc.text("Trip Ticket", 105, 35, { align: "center" });
-  
+
       doc.setDrawColor(44, 62, 80);
       doc.line(20, 40, 190, 40);
-  
+
       doc.setFontSize(18);
-      doc.setTextColor(34, 153, 84); 
+      doc.setTextColor(34, 153, 84);
       doc.text("Trip Details", 20, 50);
-  
+
       doc.setFontSize(12);
       doc.setTextColor(0, 0, 0);
       doc.text(`Trip Name: ${selectedBooking.tripId.tripName}`, 20, 60);
-      doc.text(`Starting Date: ${new Date(selectedBooking.tripId.startingDate).toDateString()}`, 20, 70);
+      doc.text(
+        `Starting Date: ${new Date(
+          selectedBooking.tripId.startingDate
+        ).toDateString()}`,
+        20,
+        70
+      );
       doc.text(`Seats: ${selectedBooking.seats}`, 20, 80);
       doc.text(`Duration: ${selectedBooking.tripId.days} Days`, 20, 90);
-  
+
       doc.setFontSize(18);
       doc.setTextColor(34, 153, 84);
       doc.text("Transaction Details", 20, 110);
-  
+
       doc.setFontSize(12);
       doc.setTextColor(0, 0, 0);
       doc.text(`Transaction ID: ${selectedBooking.txnId}`, 20, 120);
       doc.text(`Total Price: INR ${selectedBooking.totalAmount}`, 20, 130);
       doc.text(`Payment Status: ${selectedBooking.paymentStatus}`, 20, 140);
-  
+
       doc.setFontSize(18);
       doc.setTextColor(34, 153, 84);
       doc.text("Description", 20, 160);
-  
+
       doc.setFontSize(12);
       doc.setTextColor(0, 0, 0);
       doc.text(selectedBooking.tripId.description, 20, 170, { maxWidth: 170 });
-  
+
       doc.setFontSize(10);
       doc.setTextColor(100, 100, 100);
       doc.text("For any queries, contact us at: support@travelie.com", 20, 280);
       doc.text("Thank you for choosing Travelie!", 20, 290);
-  
-      doc.save(`Travelie_Ticket_${selectedBooking.tripId.tripName}_${new Date().toLocaleDateString()}.pdf`);
+
+      doc.save(
+        `Travelie_Ticket_${
+          selectedBooking.tripId.tripName
+        }_${new Date().toLocaleDateString()}.pdf`
+      );
     }
   };
 

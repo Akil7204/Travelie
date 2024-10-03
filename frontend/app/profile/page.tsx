@@ -21,25 +21,25 @@ const ManageAccount: React.FC = () => {
   const [profileImagePreview, setProfileImagePreview] = useState<string | null>(null);
   const [imageProfile, setImageProfile] = useState<File | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
-  const [initialValues, setInitialValues] = useState<UserProfile | null>(null); // Store initial values
+  const [initialValues, setInitialValues] = useState<UserProfile | null>(null); 
 
   const router = useRouter();
   const { register, handleSubmit, formState: { errors }, setValue, watch } = useForm<UserProfile>();
 
-  // Watch form fields to detect changes
+  
   const watchedFields = watch();
 
   useEffect(() => {
-    // Get user data from localStorage
+    
     const userData = JSON.parse(localStorage.getItem("user") || "{}");
     const initialData: UserProfile = {
       username: userData.username || "",
       email: userData.email || "",
       phone: userData.phone || "",
-      profileImage: null, // Assuming profile image is a separate file
+      profileImage: null, 
     };
 
-    // Set initial form values
+   
     setInitialValues(initialData);
     setValue("username", initialData.username);
     setValue("email", initialData.email);
@@ -47,14 +47,14 @@ const ManageAccount: React.FC = () => {
     setProfileImagePreview(userData.profileImage || "");
   }, [setValue]);
 
-  // Compare current values with initial values to detect changes
+  
   const hasChanges = () => {
     if (!initialValues) return false;
 
     return (
       initialValues.username !== watchedFields.username ||
       initialValues.phone !== watchedFields.phone ||
-      imageProfile !== null // Check if the profile image is changed
+      imageProfile !== null
     );
   };
 

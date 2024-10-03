@@ -1,3 +1,4 @@
+import { useRouter } from "next/navigation";
 import { commonAPI } from "./commonAPI";
 import { SERVER_URL, SERVER_URL_ISBLOCKED } from "./serverURL";
 
@@ -68,24 +69,22 @@ export const detailTripsAPI = async (id: string) => {
 
 export const bookingApi = async (reqBody: FormData, reqHeader: any) => {
   try {
-    const response = await axios.post(
-      `${SERVER_URL}/bookingSeat`, 
-      reqBody,
-      {
-        headers: reqHeader,
-        withCredentials: true,
-      }
-    );
-    return response.data; 
+    const response = await axios.post(`${SERVER_URL}/bookingSeat`, reqBody, {
+      headers: reqHeader,
+      withCredentials: true,
+    });
+    return response.data;
   } catch (error: any) {
     console.error("Error in booking API:", error);
-    return error.response
+    return error.response;
   }
 };
 
 export const fetchBookedData = async (bookingId: string) => {
   try {
-    const response = await axios.get(`${SERVER_URL}/bookedTrip/${bookingId}`, { withCredentials: true}); // Adjust the API endpoint
+    const response = await axios.get(`${SERVER_URL}/bookedTrip/${bookingId}`, {
+      withCredentials: true,
+    }); // Adjust the API endpoint
     return response.data; // Return the data from the response
   } catch (error) {
     console.error("Error fetching booking data:", error);
@@ -95,7 +94,9 @@ export const fetchBookedData = async (bookingId: string) => {
 
 export const fetchingBookingDetails = async (bookingId: any) => {
   try {
-    const response = await axios.get(`${SERVER_URL}/bookedTrip/${bookingId}`, { withCredentials: true}); // Adjust the API endpoint
+    const response = await axios.get(`${SERVER_URL}/bookedTrip/${bookingId}`, {
+      withCredentials: true,
+    }); // Adjust the API endpoint
     return response.data; // Return the data from the response
   } catch (error) {
     console.error("Error fetching booking data:", error);
@@ -103,11 +104,17 @@ export const fetchingBookingDetails = async (bookingId: any) => {
   }
 };
 
-export const getUserBookingsAPI = async (page: number, bookingPerPage: number) => {
+export const getUserBookingsAPI = async (
+  page: number,
+  bookingPerPage: number
+) => {
   try {
-    const response = await axios.get(`${SERVER_URL}/bookings`,  { params: { page, limit: bookingPerPage },withCredentials: true });
+    const response = await axios.get(`${SERVER_URL}/bookings`, {
+      params: { page, limit: bookingPerPage },
+      withCredentials: true,
+    });
     // console.log(response.data);
-    
+
     return response.data;
   } catch (error) {
     console.error("Failed to fetch bookings:", error);
@@ -115,25 +122,37 @@ export const getUserBookingsAPI = async (page: number, bookingPerPage: number) =
   }
 };
 
-
 export const isBlockedApi = async (data: any) => {
-  return axios.get(`${SERVER_URL_ISBLOCKED}/isBlockedApi/${data}`,  {withCredentials: true});
+  return axios.get(`${SERVER_URL_ISBLOCKED}/isBlockedApi/${data}`, {
+    withCredentials: true,
+  });
 };
 
 export const cancelBooking = async (bookingId: any) => {
   try {
-    const response = await axios.post(`${SERVER_URL}/cancel-trip/${bookingId}`,null, { withCredentials: true}); 
-    return response
+    const response = await axios.post(
+      `${SERVER_URL}/cancel-trip/${bookingId}`,
+      null,
+      { withCredentials: true }
+    );
+    return response;
   } catch (error) {
     console.error("Error fetching booking data:", error);
     throw error;
   }
 };
 
-export const fetchingWallet = async (userId: string, page: number, tranctionPerPage: number) => {
+export const fetchingWallet = async (
+  userId: string,
+  page: number,
+  tranctionPerPage: number
+) => {
   try {
-    const response = await axios.get(`${SERVER_URL}/wallet/${userId}`, { params: {  page, limit: tranctionPerPage }, withCredentials: true}); 
-    return response
+    const response = await axios.get(`${SERVER_URL}/wallet/${userId}`, {
+      params: { page, limit: tranctionPerPage },
+      withCredentials: true,
+    });
+    return response;
   } catch (error) {
     console.error("Error fetching wallet data:", error);
     throw error;
@@ -142,8 +161,10 @@ export const fetchingWallet = async (userId: string, page: number, tranctionPerP
 
 export const submitReportAPI = async (reportData: any) => {
   try {
-    const response = await axios.post(`${SERVER_URL}/report`, reportData, { withCredentials: true}); 
-    return response
+    const response = await axios.post(`${SERVER_URL}/report`, reportData, {
+      withCredentials: true,
+    });
+    return response;
   } catch (error) {
     console.error("Error fetching report data:", error);
     throw error;
@@ -151,6 +172,19 @@ export const submitReportAPI = async (reportData: any) => {
 };
 
 export const getUnreadMessagesCountAPI = async () => {
-  const response = await axios.get(`${SERVER_URL}/unread-count`, {withCredentials: true });
-  return response.data;
+  try {
+    const response = await axios.get(`${SERVER_URL}/unread-count`, {
+      withCredentials: true,
+    });
+    return response.data;
+  } catch (error: any) {
+    // if (error.response && error.response.status === 403) {
+    //   const router = useRouter();
+    //   localStorage.removeItem("user");
+    //   localStorage.removeItem("token");
+    //   router.push("/login");
+    // } else {
+    //   console.error("Error fetching unread messages count", error);
+    // }
+  }
 };

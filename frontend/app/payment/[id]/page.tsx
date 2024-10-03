@@ -3,25 +3,30 @@
 import { fetchBookedData } from "@/app/services/allAPI";
 import Navbar from "@/components/NavBar";
 import PayUComponent from "@/components/payment/payUComponent";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
 const BookingConfirmation = () => {
   const [bookingDetails, setBookingDetails] = useState<any>(null);
+  const router = useRouter();
   const params = useParams();
 
   const bookingId: any = params.id;
   console.log(bookingId);
 
-  
   useEffect(() => {
     const fetchBookingDetails = async () => {
       try {
-        const response = await fetchBookedData(bookingId); 
+        const response = await fetchBookedData(bookingId);
         console.log(response);
 
         setBookingDetails(response);
-      } catch (error) {
+      } catch (error: any) {
+        if (error.response.status === 403) {
+          localStorage.removeItem("user");
+          localStorage.removeItem("token");
+          router.push("/login");
+        }
         console.error("Error fetching booking details:", error);
       }
     };

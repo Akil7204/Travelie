@@ -36,7 +36,7 @@ const Login: React.FC = () => {
 
         if (result.user.isBlocked === true) {
           deleteCookie("token");
-          toast.success("You are blocked");
+          toast.error("You are blocked");
         } else {
           localStorage.setItem("token", result.token);
           localStorage.setItem("user", JSON.stringify(result.user));

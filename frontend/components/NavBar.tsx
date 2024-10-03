@@ -7,9 +7,8 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import {Badge, Avatar} from '@mui/material'
+import { Badge, Avatar } from "@mui/material";
 import { io } from "socket.io-client";
-
 
 const socket = io("http://localhost:4000"); // Your server URL
 // const socket = io("https://travelie.solutions"); // for production
@@ -36,14 +35,20 @@ const Navbar: React.FC = () => {
 
   const fetchUnreadMessages = async () => {
     try {
-      
       const response = await getUnreadMessagesCountAPI();
       // console.log({response});
       socket.on("unreadCount", (response: any) => {
         console.log("Unread count received:", response);
         setUnreadMessages(response.unreadCount);
       });
-    } catch (error) {
+    } catch (error: any) {
+      console.log(error);
+      
+      // if (error.response.status === 403) {
+      //   localStorage.removeItem("user");
+      //   localStorage.removeItem("token");
+      //   router.push("/login");
+      // }
       console.error("Failed to fetch unread messages", error);
     }
   };

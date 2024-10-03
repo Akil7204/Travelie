@@ -1,10 +1,10 @@
 import { Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
+import { UserModel } from "../../domain/user";
 
-export function verifyUser(req: any, res: Response, next: NextFunction) {
-    
+export async function verifyUser(req: any, res: Response, next: NextFunction) {
   const Token = req.cookies?.token;
-    
+
   if (!Token) {
     return res.status(401).json("JWT not found in the cookies");
   }
@@ -17,11 +17,22 @@ export function verifyUser(req: any, res: Response, next: NextFunction) {
   try {
     const decoded: any = jwt.verify(Token, secret);
     req.userId = decoded?.userId;
-    
+
+   
+    const user = await UserModel.findById(req.userId);
+
+    if (!user) {
+      return res.status(404).json("User not found");
+    }
+
+   
+    if (user.isBlocked) {
+      return res.status(403).json("User is blocked");
+    }
+
     next();
   } catch (err: any) {
-    console.log(err);
-    
+    console.error(err);
     return res.status(401).send("Invalid JWT");
   }
 }
