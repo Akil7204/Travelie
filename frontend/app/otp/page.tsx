@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Suspense } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import Head from "next/head";
 import { toast, ToastContainer } from "react-toastify";
@@ -23,27 +23,21 @@ const OTPPage: React.FC = () => {
 
   const router = useRouter();
   const searchParams = useSearchParams();
-
   const email = searchParams.get("email");
 
   // Handle OTP submission
   const handleOtpSubmit: SubmitHandler<OTPFormInputs> = async (data) => {
-    console.log(data, email);
-
     try {
       await verifyOtp({ otp: data.otp, email });
-
-      toast.success("please login");
+      toast.success("Please login");
       router.push("/login");
     } catch (error) {
-      // console.error(error);
-      toast.error("Invalid otp.");
+      toast.error("Invalid OTP.");
     }
   };
 
   // Handle Resend OTP click
   const handleResendOtp = () => {
-    console.log("Resend OTP");
     setTimeLeft(60);
     setIsResendDisabled(true);
     // Logic to resend OTP (e.g., call an API)
@@ -64,17 +58,7 @@ const OTPPage: React.FC = () => {
 
   return (
     <>
-      <ToastContainer
-        position="top-center"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-      />
+      <ToastContainer />
       <Head>
         <title>OTP Verification - Travelie</title>
       </Head>
@@ -88,42 +72,42 @@ const OTPPage: React.FC = () => {
             Check your Email for an OTP.
           </p>
 
-          <form onSubmit={handleSubmit(handleOtpSubmit)} className="space-y-6">
-            <div className="flex justify-center">
-              <input
-                id="otp"
-                type="text"
-                placeholder="Enter Your OTP"
-                maxLength={6}
-                className={`w-40 text-center px-4 py-2 border ${
-                  errors.otp ? "border-red-500" : "border-gray-300"
-                } rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 text-gray-900`}
-                {...register("otp", {
-                  required: "OTP is required",
-                  pattern: /^[0-9]{6}$/,
-                })}
-              />
-            </div>
-            {errors.otp && (
-              <p className="mt-2 text-sm text-red-600 text-center">
-                {errors.otp.message || "Enter a valid 6-digit OTP"}
-              </p>
-            )}
-            <button
-              type="submit"
-              className="w-full py-3 px-4 text-white bg-blue-600 hover:bg-blue-700 rounded-md text-sm font-medium shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-            >
-              Create account
-            </button>
-          </form>
+          <Suspense fallback={<div>Loading...</div>}>
+            <form onSubmit={handleSubmit(handleOtpSubmit)} className="space-y-6">
+              <div className="flex justify-center">
+                <input
+                  id="otp"
+                  type="text"
+                  placeholder="Enter Your OTP"
+                  maxLength={6}
+                  className={`w-40 text-center px-4 py-2 border ${
+                    errors.otp ? "border-red-500" : "border-gray-300"
+                  } rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 text-gray-900`}
+                  {...register("otp", {
+                    required: "OTP is required",
+                    pattern: /^[0-9]{6}$/,
+                  })}
+                />
+              </div>
+              {errors.otp && (
+                <p className="mt-2 text-sm text-red-600 text-center">
+                  {errors.otp.message || "Enter a valid 6-digit OTP"}
+                </p>
+              )}
+              <button
+                type="submit"
+                className="w-full py-3 px-4 text-white bg-blue-600 hover:bg-blue-700 rounded-md text-sm font-medium shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+              >
+                Verify OTP
+              </button>
+            </form>
+          </Suspense>
 
           <div className="text-center mt-4">
             {isResendDisabled ? (
               <p className="text-sm text-gray-600">
                 Resend OTP in{" "}
-                <span className="font-medium text-gray-900">
-                  {timeLeft} seconds
-                </span>
+                <span className="font-medium text-gray-900">{timeLeft} seconds</span>
               </p>
             ) : (
               <button

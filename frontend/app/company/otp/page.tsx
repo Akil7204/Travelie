@@ -20,24 +20,33 @@ const OTPPage: React.FC = () => {
   } = useForm<OTPFormInputs>();
   const [timeLeft, setTimeLeft] = useState(60); // 1 minute countdown
   const [isResendDisabled, setIsResendDisabled] = useState(true);
+  const [email, setEmail] = useState<string | null>(null); // Store email in state
 
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  const email = searchParams.get("email");
+  // Ensure searchParams only run on client-side
+  useEffect(() => {
+    const emailFromParams = searchParams.get("email");
+    if (emailFromParams) {
+      setEmail(emailFromParams);
+    }
+  }, [searchParams]);
 
   // Handle OTP submission
   const handleOtpSubmit: SubmitHandler<OTPFormInputs> = async (data) => {
     console.log(data, email);
 
     try {
-      await verifyOtp({ otp: data.otp, email });
-
-      toast.success("please login");
-      router.push("/company/signin");
+      if (email) {
+        await verifyOtp({ otp: data.otp, email });
+        toast.success("Please login");
+        router.push("/company/signin");
+      } else {
+        toast.error("Email not found.");
+      }
     } catch (error) {
-      // console.error(error);
-      toast.error("Invalid otp.");
+      toast.error("Invalid OTP.");
     }
   };
 
@@ -113,7 +122,7 @@ const OTPPage: React.FC = () => {
               type="submit"
               className="w-full py-3 px-4 text-white bg-blue-600 hover:bg-blue-700 rounded-md text-sm font-medium shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
             >
-              Create account
+              Submit OTP
             </button>
           </form>
 
