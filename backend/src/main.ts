@@ -25,7 +25,7 @@ connectToDatabase();
 
 app.use(
   cors({
-    origin: "http://localhost:3000",  
+    origin: "https://travelie.life",  
     credentials: true,
   })
 );
@@ -35,11 +35,11 @@ app.use(cookieParser());
 app.use(express.urlencoded({extended: true}))
 
 
-app.use('/api/users', userRoutes);
-app.use('/api/company', companyRoutes);
-app.use('/api/admin', adminRoutes);
-app.use('/api/chat', chatRoutes);
-app.use('/api/message', messageRoutes);
+app.use('/users', userRoutes);
+app.use('/company', companyRoutes);
+app.use('/admin', adminRoutes);
+app.use('/chat', chatRoutes);
+app.use('/message', messageRoutes);
 app.use('/api', checkUserStatusRouter);
 
 
@@ -47,7 +47,7 @@ const httpServer = createServer(app);
 
 export const io = new serverSocket(httpServer, {
   cors: {
-    origin: "http://localhost:3000" || '*', 
+    origin: "https://travelie.life" || '*', 
     methods: ['GET', 'POST'], 
   },
 });

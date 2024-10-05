@@ -37,7 +37,7 @@ const ChatBox: React.FC<ChatBoxProps> = ({
   const [socket, setSocket] = useState<Socket | null>(null);
 
   useEffect(() => {
-    const socketInstance = io("http://localhost:4000");
+    const socketInstance = io("https://travelie.life");
     setSocket(socketInstance);
 
     socketInstance.on("connect", () => {

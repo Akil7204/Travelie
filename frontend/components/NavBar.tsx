@@ -10,7 +10,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { Badge, Avatar } from "@mui/material";
 import { io } from "socket.io-client";
 
-const socket = io("http://localhost:4000"); // Your server URL
+const socket = io("https://travelie.life"); // Your server URL
 // const socket = io("https://travelie.solutions"); // for production
 
 const Navbar: React.FC = () => {

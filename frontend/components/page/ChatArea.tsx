@@ -35,7 +35,7 @@ const ChatArea: React.FC<ChatAreaProps> = ({
   const [socket, setSocket] = useState<Socket | null>(null);
 
   useEffect(() => {
-    const socketConnection = io("http://localhost:4000", {
+    const socketConnection = io("https://travelie.life", {
       transports: ["websocket"],
       autoConnect: false,
     });

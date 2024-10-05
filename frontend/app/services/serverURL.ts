@@ -1,6 +1,6 @@
-export const SERVER_URL = "http://localhost:4000/api/users";
-export const SERVER_URL_COMPANY = "http://localhost:4000/api/company";
-export const server_URL_admin = "http://localhost:4000/api/admin";
-export const SERVER_URL_CHAT = "http://localhost:4000/api/chat"
-export const SERVER_URL_MESSAGE = "http://localhost:4000/api/message";
-export const SERVER_URL_ISBLOCKED = "http://localhost:4000/api";
+export const SERVER_URL = "https://travelie.life/api/users";
+export const SERVER_URL_COMPANY = "https://travelie.life/api/company";
+export const server_URL_admin = "https://travelie.life/api/admin";
+export const SERVER_URL_CHAT = "https://travelie.life/api/chat"
+export const SERVER_URL_MESSAGE = "https://travelie.life/api/message";
+export const SERVER_URL_ISBLOCKED = "https://travelie.life/api";
