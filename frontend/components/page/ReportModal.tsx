@@ -77,8 +77,8 @@ const ReportModal: React.FC<ReportModalProps> = ({
                   </Dialog.Title>
                   <div className="mt-2">
                     <p className="text-sm text-gray-500">
-                      Please provide a reason for reporting the company "
-                      <strong>{companyName}</strong>".
+                      Please provide a reason for reporting the company 
+                      <strong>{companyName}</strong>.
                     </p>
                   </div>
                 </div>

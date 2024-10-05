@@ -27,7 +27,7 @@ interface Trip {
   bookedSeats?: number;
 }
 
-const discover: React.FC = () => {
+const Discover: React.FC = () => {
   const [trips, setTrips] = useState<Trip[]>([]);
   const [filteredTrips, setFilteredTrips] = useState<Trip[]>([]);
   const [searchTerm, setSearchTerm] = useState<string>("");
@@ -88,4 +88,4 @@ const discover: React.FC = () => {
   );
 };
 
-export default discover;
+export default Discover;

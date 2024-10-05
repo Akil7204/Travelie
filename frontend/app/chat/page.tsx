@@ -62,7 +62,7 @@ const MessagePage = () => {
         <Profile>
           <div className="flex flex-grow items-center justify-center h-full">
             <p className="text-lg font-semibold">
-              You haven't booked any trips yet. Book a trip to start chatting with a company!
+              {"You haven't booked any trips yet. Book a trip to start chatting with a company!"}
             </p>
           </div>
         </Profile>
