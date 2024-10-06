@@ -19,7 +19,7 @@ export async function POST(req: any, res: NextApiResponse) {
      PayUOrderId = await PayUApiCalls.saveData(data);
     // await paymentService.addTransaction(PayUOrderId, data.email, "success");
   } catch (error: any) {
-    console.log(error.message);
+    console.log(error);
   }
   redirect(
     `/bookingSucessful/${PayUOrderId}`
