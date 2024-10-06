@@ -60,7 +60,7 @@ const httpServer = createServer(app);
 
 export const io = new serverSocket(httpServer, {
   cors: {
-    origin: allowedOrigins,
+    origin: allowedOrigins || '*',
     methods: ['GET', 'POST'],
   },
 });
