@@ -35,7 +35,7 @@ app.use(cookieParser());
 app.use(express.urlencoded({extended: true}))
 
 
-app.use('/users', userRoutes);
+app.use('/api/users', userRoutes);
 app.use('/company', companyRoutes);
 app.use('/admin', adminRoutes);
 app.use('/chat', chatRoutes);
