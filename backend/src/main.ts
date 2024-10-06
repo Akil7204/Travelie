@@ -44,11 +44,11 @@ app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 
 // Routes
-app.use('/api/users', userRoutes);
-app.use('/api/company', companyRoutes);
-app.use('/api/admin', adminRoutes);
-app.use('/api/chat', chatRoutes);
-app.use('/api/message', messageRoutes);
+app.use('/users', userRoutes);
+app.use('/company', companyRoutes);
+app.use('/admin', adminRoutes);
+app.use('/chat', chatRoutes);
+app.use('/message', messageRoutes);
 app.use('/api', checkUserStatusRouter);
 
 
