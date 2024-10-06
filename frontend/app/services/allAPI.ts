@@ -96,8 +96,8 @@ export const fetchingBookingDetails = async (bookingId: any) => {
   try {
     const response = await axios.get(`${SERVER_URL}/bookedTrip/${bookingId}`, {
       withCredentials: true,
-    }); // Adjust the API endpoint
-    return response.data; // Return the data from the response
+    }); 
+    return response.data; 
   } catch (error) {
     console.error("Error fetching booking data:", error);
     throw error;
