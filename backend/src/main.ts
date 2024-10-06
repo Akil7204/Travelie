@@ -26,27 +26,28 @@ connectToDatabase();
 
 const allowedOrigins = [
   "https://travelie.life",  
-  "http://localhost:3000",  
+  "http://localhost:3000",
+  "https://test.payu.in", 
 ];
 
 
-// app.use(
-//   cors({
-//     origin: function (origin, callback) {
-//       if (!origin || allowedOrigins.indexOf(origin) !== -1) {
-//         callback(null, true);
-//       } else {
-//         callback(new Error("Not allowed by CORS"));
-//       }
-//     },
-//     credentials: true,
-//   })
-// );
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    credentials: true,
+  })
+);
 
-app.use(cors({
-  origin: allowedOrigins || '*', 
-  credentials: true,
-}));
+// app.use(cors({
+//   origin: allowedOrigins || '*', 
+//   credentials: true,
+// }));
 
 
 app.use(express.json());
