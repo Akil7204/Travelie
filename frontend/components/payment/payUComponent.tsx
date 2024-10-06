@@ -20,8 +20,8 @@ const PayUComponent = ({ BookedData }: props) => {
   const amount = BookedData.totalAmount; 
   const productinfo = BookedData._id;
   const key = PayU.merchantKey;
-  const surl = `${FRONTEND_DOMAIN}/app/api/paymentSuccess`;
-  const furl = `${FRONTEND_DOMAIN}/app/api/paymentFailure`;
+  const surl = `${FRONTEND_DOMAIN}/api/paymentSuccess`;
+  const furl = `${FRONTEND_DOMAIN}/api/paymentFailure`;
   // const service_provider = "payu_paisa";
 
   useEffect(() => {
