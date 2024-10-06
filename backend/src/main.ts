@@ -12,10 +12,14 @@ import cookieParser from "cookie-parser";
 import { socketHandler } from "./presentation/socket/chat";
 import { Server as serverSocket } from 'socket.io';
 import { checkUserStatusRouter } from "./presentation/MiddleWare/verfiy";
+import morgan from 'morgan'
+
 
 dotenv.config();
 
 const app = express();
+
+app.use(morgan('dev'))
 
 connectToDatabase();
 
@@ -49,7 +53,7 @@ app.use('/company', companyRoutes);
 app.use('/admin', adminRoutes);
 app.use('/chat', chatRoutes);
 app.use('/message', messageRoutes);
-app.use('/api', checkUserStatusRouter);
+// app.use('/api', checkUserStatusRouter);
 
 
 const httpServer = createServer(app);
