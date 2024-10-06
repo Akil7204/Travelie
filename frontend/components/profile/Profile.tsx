@@ -9,7 +9,7 @@ interface LayoutProps {
   children: React.ReactNode;
 }
 
-const socket = io("http://localhost:4000");
+const socket = io("https://travelie.life");
 
 const Profile: React.FC<LayoutProps> = ({ children }) => {
   const [activePath, setActivePath] = useState<string>("profile");
