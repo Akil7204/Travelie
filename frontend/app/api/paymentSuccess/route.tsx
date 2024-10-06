@@ -5,7 +5,7 @@ import { promises as fs } from "fs";
 
 export const config = {
   api: {
-    bodyParser: false,  // Disable body parsing to handle form-data
+    bodyParser: false,  
   },
 };
 
