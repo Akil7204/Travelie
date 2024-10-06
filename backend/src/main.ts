@@ -7,35 +7,44 @@ import companyRoutes from "./presentation/routes/companyRoutes";
 import adminRoutes from "./presentation/routes/adminRoutes";
 import chatRoutes from "./presentation/routes/chatRoutes";
 import messageRoutes from "./presentation/routes/messageRoutes";
-import http, { createServer, Server } from "http";
-import cookieParser from "cookie-parser"; 
+import http, { createServer } from "http";
+import cookieParser from "cookie-parser";
 import { socketHandler } from "./presentation/socket/chat";
-import { Server as serverSocket} from 'socket.io';
-import {checkUserStatusRouter} from "./presentation/MiddleWare/verfiy";
-
+import { Server as serverSocket } from 'socket.io';
+import { checkUserStatusRouter } from "./presentation/MiddleWare/verfiy";
 
 dotenv.config();
 
-
 const app = express();
-
 
 connectToDatabase();
 
 
+const allowedOrigins = [
+  "https://travelie.life",  
+  "http://localhost:3000",  
+];
+
+
 app.use(
   cors({
-    origin: "https://travelie.life",  
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
     credentials: true,
   })
 );
 
 app.use(express.json());
 app.use(cookieParser());
-app.use(express.urlencoded({extended: true}))
+app.use(express.urlencoded({ extended: true }));
 
-
-app.use('/api/users', userRoutes);
+// Routes
+app.use('/users', userRoutes);
 app.use('/company', companyRoutes);
 app.use('/admin', adminRoutes);
 app.use('/chat', chatRoutes);
@@ -47,14 +56,12 @@ const httpServer = createServer(app);
 
 export const io = new serverSocket(httpServer, {
   cors: {
-    origin: "https://travelie.life" || '*', 
-    methods: ['GET', 'POST'], 
+    origin: allowedOrigins,
+    methods: ['GET', 'POST'],
   },
 });
 
-
 socketHandler(io);
-
 
 const PORT = process.env.PORT || 4000;
 
