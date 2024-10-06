@@ -1,36 +1,27 @@
-import { NextApiResponse } from "next";
-import { IncomingForm } from "formidable";
+import paymentService from "@/utils/apiCalls/paymentService";
 import PayUApiCalls from "@/utils/apiCalls/PayUApiCalls";
-import { promises as fs } from "fs";
-
-export const config = {
-  api: {
-    bodyParser: false,  
-  },
-};
+import { NextApiResponse } from "next";
+import { redirect } from "next/navigation";
 
 export async function POST(req: any, res: NextApiResponse) {
-  const form = new IncomingForm();
+  const contentType = req.headers.get("content-type") || "";
+  console.log({ contentType });
 
-  form.parse(req, async (err: any, fields: any, files: any) => {
-    if (err) {
-      console.log("Error parsing form data:", err);
-      return res.status(500).json({ message: "Error parsing form data" });
-    }
+  const formData = await req.formData();
 
-    const data = fields;
-    console.log("Parsed form data:", data);
-
-    let PayUOrderId;
-    try {
-      PayUOrderId = await PayUApiCalls.saveData(data);
-      // await paymentService.addTransaction(PayUOrderId, data.email, "success");
-    } catch (error: any) {
-      console.error("Error saving data:", error);
-      return res.status(500).json({ message: "Error saving data" });
-    }
-
-    return res.redirect(303, `/bookingSucessful/${PayUOrderId}`);
+  const data: { [key: string]: any } = {};
+  formData.forEach((value: any, key: string) => {
+    data[key] = value;
   });
+  console.log(data)
+  let PayUOrderId
+  try {
+     PayUOrderId = await PayUApiCalls.saveData(data);
+    // await paymentService.addTransaction(PayUOrderId, data.email, "success");
+  } catch (error: any) {
+    console.log(error);
+  }
+  redirect(
+    `/bookingSucessful/${PayUOrderId}`
+  );
 }
-
