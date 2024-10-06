@@ -33,3 +33,4 @@ export async function POST(req: any, res: NextApiResponse) {
     return res.redirect(303, `/bookingSucessful/${PayUOrderId}`);
   });
 }
+
