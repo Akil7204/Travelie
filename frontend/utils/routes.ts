@@ -10,7 +10,7 @@ export function isProtectedRoute(pathname: string): boolean {
 }
 
 export function toBeRedirectedRoutes(pathname: string): boolean {
-  return changeToHomeRoutes.has(pathname) && paymentRoute.test(pathname);
+  return changeToHomeRoutes.has(pathname) 
 }
 
 // Admin side;

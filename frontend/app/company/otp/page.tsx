@@ -29,7 +29,7 @@ const OtpForm: React.FC = () => {
     try {
       await verifyOtp({ otp: data.otp, email });
       toast.success("Please login");
-      router.push("/company/login");
+      router.push("/company/signin");
     } catch (error) {
       toast.error("Invalid OTP.");
     }
