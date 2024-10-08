@@ -76,7 +76,7 @@ const FilterSection: React.FC<FilterSectionProps> = ({
         </div>
       </div> */}
 
-      <div className="mb-6">
+      {/* <div className="mb-6">
         <h4 className="font-medium text-gray-700">Popular Filters</h4>
         <div className="mt-2 space-y-2">
           <label className="flex items-center">
@@ -98,9 +98,9 @@ const FilterSection: React.FC<FilterSectionProps> = ({
             <input type="checkbox" className="mr-2" /> Kerala
           </label>
         </div>
-      </div>
+      </div> */}
 
-      <div>
+      {/* <div>
         <h4 className="font-medium text-gray-700">Activities</h4>
         <div className="mt-2 space-y-2">
           <label className="flex items-center">
@@ -122,7 +122,7 @@ const FilterSection: React.FC<FilterSectionProps> = ({
             <input type="checkbox" className="mr-2" /> Night lights
           </label>
         </div>
-      </div>
+      </div> */}
     </aside>
   );
 };

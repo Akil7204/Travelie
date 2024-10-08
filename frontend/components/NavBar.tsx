@@ -97,7 +97,7 @@ const Navbar: React.FC = () => {
         <li>
           <Link href="/discover">Discover</Link>
         </li>
-        <li>
+        {/* <li>
           <Link href="/activities">Activities</Link>
         </li>
         <li>
@@ -105,7 +105,7 @@ const Navbar: React.FC = () => {
         </li>
         <li>
           <Link href="/contact">Contact</Link>
-        </li>
+        </li> */}
       </ul>
 
       {isAuthorized ? (
