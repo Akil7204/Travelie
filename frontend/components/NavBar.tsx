@@ -10,14 +10,16 @@ import "react-toastify/dist/ReactToastify.css";
 import { Badge, Avatar } from "@mui/material";
 import { io } from "socket.io-client";
 
-const socket = io("https://travelie.life"); // Your server URL
-// const socket = io("https://travelie.solutions"); // for production
+const socket = io("https://travelie.life"); 
+// const socket = io("http://localhost:3000"); 
+
 
 const Navbar: React.FC = () => {
   const router = useRouter();
   const [isAuthorized, setIsAuthorized] = useState<boolean>(false);
   const [user, setUser] = useState<any>(null);
   const [unreadMessages, setUnreadMessages] = useState<number>(0);
+  const [currentPath, setCurrentPath] = useState<string>("");
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -31,24 +33,20 @@ const Navbar: React.FC = () => {
     } else {
       setIsAuthorized(false);
     }
+
+    // Set current path
+    setCurrentPath(window.location.pathname);
   }, []);
 
   const fetchUnreadMessages = async () => {
     try {
       const response = await getUnreadMessagesCountAPI();
-      // console.log({response});
       socket.on("unreadCount", (response: any) => {
         console.log("Unread count received:", response);
         setUnreadMessages(response.unreadCount);
       });
     } catch (error: any) {
       console.log(error);
-      
-      // if (error.response.status === 403) {
-      //   localStorage.removeItem("user");
-      //   localStorage.removeItem("token");
-      //   router.push("/login");
-      // }
       console.error("Failed to fetch unread messages", error);
     }
   };
@@ -74,8 +72,11 @@ const Navbar: React.FC = () => {
     router.push("/");
   };
 
+  // Function to determine if the current route is active
+  const isActive = (path: string) => currentPath === path;
+
   return (
-    <nav className="fixed w-screen z-50 flex justify-between items-center py-4  px-6  bg-white border-b border-gray-200 ">
+    <nav className="fixed w-screen z-50 flex justify-between items-center py-4 px-6 bg-white border-b border-gray-200">
       <ToastContainer
         position="top-center"
         autoClose={5000}
@@ -92,20 +93,27 @@ const Navbar: React.FC = () => {
       </div>
       <ul className="flex space-x-10 text-lg">
         <li>
-          <Link href="/">Home</Link>
+          <Link href="/">
+            <span
+              className={`pb-2 ${
+                isActive("/") ? "border-b-2 border-blue-500" : ""
+              }`}
+            >
+              Home
+            </span>
+          </Link>
         </li>
         <li>
-          <Link href="/discover">Discover</Link>
+          <Link href="/discover">
+            <span
+              className={`pb-2 ${
+                isActive("/discover") ? "border-b-2 border-blue-500" : ""
+              }`}
+            >
+              Discover
+            </span>
+          </Link>
         </li>
-        {/* <li>
-          <Link href="/activities">Activities</Link>
-        </li>
-        <li>
-          <Link href="/about">About</Link>
-        </li>
-        <li>
-          <Link href="/contact">Contact</Link>
-        </li> */}
       </ul>
 
       {isAuthorized ? (
