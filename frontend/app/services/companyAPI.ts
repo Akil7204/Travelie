@@ -137,11 +137,10 @@ export const softDeleteCategoryAPI = async (categoryId: string) => {
 };
 
 export const getCompanyBookingsAPI = async (
-  page: number,
-  bookingPerPage: number
+  id: string
 ) => {
   const response = await axios.get(`${SERVER_URL_COMPANY}/bookings`, {
-    params: { page, limit: bookingPerPage },
+    params: { id },
     withCredentials: true,
   });
   return response.data;

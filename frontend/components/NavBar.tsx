@@ -10,9 +10,8 @@ import "react-toastify/dist/ReactToastify.css";
 import { Badge, Avatar } from "@mui/material";
 import { io } from "socket.io-client";
 
-const socket = io("https://travelie.life"); 
-// const socket = io("http://localhost:3000"); 
-
+// const socket = io("https://travelie.life"); // Your server URL
+const socket = io("http://localhost:3000");
 
 const Navbar: React.FC = () => {
   const router = useRouter();
@@ -34,7 +33,6 @@ const Navbar: React.FC = () => {
       setIsAuthorized(false);
     }
 
-    // Set current path
     setCurrentPath(window.location.pathname);
   }, []);
 
@@ -72,7 +70,6 @@ const Navbar: React.FC = () => {
     router.push("/");
   };
 
-  // Function to determine if the current route is active
   const isActive = (path: string) => currentPath === path;
 
   return (
@@ -88,34 +85,37 @@ const Navbar: React.FC = () => {
         draggable
         pauseOnHover
       />
-      <div className="text-2xl font-bold font-serif">
+      <div className="text-2xl font-bold font-serif ">
         <Link href="/">TRAVELIE</Link>
       </div>
-      <ul className="flex space-x-10 text-lg">
-        <li>
-          <Link href="/">
-            <span
-              className={`pb-2 ${
-                isActive("/") ? "border-b-2 border-blue-500" : ""
-              }`}
-            >
-              Home
-            </span>
-          </Link>
-        </li>
-        <li>
-          <Link href="/discover">
-            <span
-              className={`pb-2 ${
-                isActive("/discover") ? "border-b-2 border-blue-500" : ""
-              }`}
-            >
-              Discover
-            </span>
-          </Link>
-        </li>
-      </ul>
+      <div className="flex-grow flex justify-center items-center space-x-16">
+        <ul className="flex space-x-10 text-lg">
+          <li>
+            <Link href="/">
+              <span
+                className={`pb-2 ${
+                  isActive("/") ? "border-b-2 border-blue-700" : ""
+                }`}
+              >
+                Home
+              </span>
+            </Link>
+          </li>
+          <li>
+            <Link href="/discover">
+              <span
+                className={`pb-2 ${
+                  isActive("/discover") ? "border-b-2 border-blue-700" : ""
+                }`}
+              >
+                Discover
+              </span>
+            </Link>
+          </li>
+        </ul>
+      </div>
 
+      {/* Right Side with Profile/Logout Buttons */}
       {isAuthorized ? (
         <div className="flex space-x-8">
           <Link href="/profile">

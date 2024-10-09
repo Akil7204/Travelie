@@ -1,92 +1,88 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import Layout from "@/components/company/Layout";
-import Table from "@/components/page/Table";
-import { getCompanyBookingsAPI } from "@/app/services/companyAPI";
+import { useRouter } from "next/navigation";
 import Pagination from "@/components/page/Pagination";
+import { getAllTripsAPI } from "@/app/services/companyAPI";
+import Layout from "@/components/company/Layout";
 
-interface Booking {
+interface Trip {
   _id: string;
-  tripId: {
-    tripName: string;
-    date: string;
-  };
-  userId: {
-    username: string;
-  };
+  tripName: string;
+  description: string;
+  images: string[];
+  startingFrom: string;
+  startingDate: string;
+  endingAt: string;
   seats: number;
-  totalAmount: number;
-  paymentType: string;
-  paymentStatus: string;
-  txnId?: string;
-  createdAt: Date;
 }
 
-const BookingListPage: React.FC = () => {
-  const [bookings, setBookings] = useState<Booking[]>([]);
-  const [error, setError] = useState<string | null>(null);
+const TripsListPage: React.FC = () => {
+  const [trips, setTrips] = useState<Trip[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const bookingPerPage = 10;
+  const tripsPerPage = 10;
+  const router = useRouter();
+
+  const fetchTrips = async (page: number) => {
+    try {
+      const response: any = await getAllTripsAPI(page, tripsPerPage);
+      console.log(response.allTrips);
+
+      setTrips(response.allTrips);
+      setTotalPages(Math.ceil(response.totalCount / tripsPerPage));
+    } catch (err) {
+      console.error("Error fetching trips:", err);
+    }
+  };
+
+  useEffect(() => {
+    fetchTrips(currentPage);
+  }, [currentPage]);
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
   };
 
-  useEffect(() => {
-    const fetchBookings = async (page: number) => {
-      try {
-        const response: any = await getCompanyBookingsAPI(page, bookingPerPage);
-        setBookings(response.data);
-        setTotalPages(Math.ceil(response.totalCount / bookingPerPage));
-        console.log(response);
-      } catch (err) {
-        console.error("Error fetching bookings:", err);
-        setError("Error fetching bookings");
-      }
-    };
-
-    fetchBookings(currentPage);
-  }, [currentPage]);
-
-  const headers = [
-    "ID",
-    "Trip Name",
-    "User Name",
-    "Seats",
-    "Total Amount",
-    "Payment Status",
-    "Payment Type",
-    "Txn ID",
-  ];
-
-  const renderBookingRow = (booking: Booking) => (
-    <>
-      <td className="px-6 py-4 border-b">{booking._id}</td>
-      <td className="px-6 py-4 border-b">{booking.tripId.tripName}</td>
-      <td className="px-6 py-4 border-b">{booking.userId.username}</td>
-      <td className="px-6 py-4 border-b">{booking.seats}</td>
-      <td className="px-6 py-4 border-b">{booking.totalAmount}</td>
-      <td className="px-6 py-4 border-b">{booking.paymentStatus}</td>
-      <td className="px-6 py-4 border-b">{booking.paymentType}</td>
-      <td className="px-6 py-4 border-b">{booking.txnId || "N/A"}</td>
-    </>
-  );
+  const handleTripClick = (tripId: string) => {
+    console.log({tripId});
+    
+    router.push(`/company/bookingList/${tripId}`);
+  };
 
   return (
     <Layout>
       <div className="container mx-auto p-6">
-        <h1 className="text-2xl font-bold mb-6">Booking List</h1>
-        {error ? (
-          <p className="text-red-500">{error}</p>
-        ) : (
-          <Table<Booking>
-            headers={headers}
-            data={bookings}
-            renderRow={renderBookingRow}
-          />
-        )}
+        <h1 className="text-2xl font-bold mb-6">Trips List</h1>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {trips.map((trip) => (
+            <div
+              key={trip._id}
+              className="bg-white shadow-lg rounded-lg p-4 cursor-pointer"
+              onClick={() => handleTripClick(trip._id)}
+            >
+              <img
+                src={trip.images[0]}
+                alt={trip.tripName}
+                className="w-full h-40 object-cover rounded-t-lg"
+              />
+              <div className="p-4">
+                <h3 className="text-lg font-semibold">{trip.tripName}</h3>
+                <p>{trip.description}</p>
+                <p>
+                  <strong>From:</strong> {trip.startingFrom} -{" "}
+                  {new Date(trip.startingDate).toLocaleDateString()}
+                </p>
+                <p>
+                  <strong>To:</strong> {trip.endingAt}
+                </p>
+                <p>
+                  <strong>Seats:</strong> {trip.seats}
+                </p>
+              </div>
+            </div>
+          ))}
+        </div>
         <div className="mt-4 flex justify-between items-center">
           <Pagination
             currentPage={currentPage}
@@ -99,4 +95,4 @@ const BookingListPage: React.FC = () => {
   );
 };
 
-export default BookingListPage;
+export default TripsListPage;

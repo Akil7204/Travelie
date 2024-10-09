@@ -43,11 +43,11 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 
-app.use('/users', userRoutes);
-app.use('/company', companyRoutes);
-app.use('/admin', adminRoutes);
-app.use('/chat', chatRoutes);
-app.use('/message', messageRoutes);
+app.use('/v1/api/users', userRoutes);
+app.use('/v1/api/company', companyRoutes);
+app.use('/v1/api/admin', adminRoutes);
+app.use('/v1/api/chat', chatRoutes);
+app.use('/v1/api/message', messageRoutes);
 
 const httpServer = createServer(app);
 

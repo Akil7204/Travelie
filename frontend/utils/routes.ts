@@ -45,12 +45,15 @@ const changeToCompanyDashboardRoutes = new Set([
 
 const EditTripRoutePattern = /^\/company\/editTrip\/[^/]+\/?.*$/;
 const EditCategoryRoutePattern = /^\/company\/editCategory\/[^/]+\/?.*$/;
+const bookingRoutePattern = /^\/company\/bookingList\/[^/]+\/?.*$/;
+
 
 export function isProtectedCompanyRoute(pathname: string): boolean {
   return (
     changeToCompanyDashboardRoutes.has(pathname) ||
     EditTripRoutePattern.test(pathname) ||
-    EditCategoryRoutePattern.test(pathname)
+    EditCategoryRoutePattern.test(pathname) ||
+    bookingRoutePattern.test(pathname)
   );
 }
 
@@ -58,6 +61,7 @@ export function toBeRedirectedCompanyRoutes(pathname: string): boolean {
   return (
     !changeToCompanyDashboardRoutes.has(pathname) &&
     !EditTripRoutePattern.test(pathname) &&
-    !EditCategoryRoutePattern.test(pathname)
+    !EditCategoryRoutePattern.test(pathname) &&
+    !bookingRoutePattern.test(pathname)
   );
 }
