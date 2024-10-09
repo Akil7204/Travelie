@@ -284,12 +284,15 @@ export const softDeleteCategory = async (req: any, res: Response) => {
 
 export const getBookings = async (req: any, res: Response) => {
   try {
-    const page = parseInt(req.query.page as string) || 1; 
-    const limit = parseInt(req.query.limit as string) || 10; 
-    const skip = (page - 1) * limit; 
+    // const page = parseInt(req.query.page as string) || 1; 
+    // const limit = parseInt(req.query.limit as string) || 10; 
+    // const skip = (page - 1) * limit; 
+    const tripId = req.query.id
+    console.log({tripId});
+    
     const companyId = req.companyId;
 
-    const bookings = await getAllBookings(companyId, skip, limit);
+    const bookings = await getAllBookings(companyId, tripId);
 
     const totalCount = await getTotalCountBooking(companyId);
 
@@ -297,7 +300,6 @@ export const getBookings = async (req: any, res: Response) => {
     res.status(200).json({
       data: bookings,
       totalCount,
-      currentPage: page,
     });
   } catch (error) {
     res.status(500).json({ message: "Error fetching bookings", error });

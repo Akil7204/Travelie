@@ -1,8 +1,8 @@
-import { Document } from "mongoose";
 import { Company, CompanyModel } from "../domain/company";
 import { Trip, Trips } from "../domain/trips";
 import { Category } from "../domain/category";
 import { bookedModal } from "../domain/bookedTrip";
+import { Mongoose } from "mongoose";
 
 // Extending the Company interface with mongoose Document
 interface CompanyModel extends Company, Document {
@@ -222,31 +222,25 @@ export const findCompanyById = async (companyId: string) => {
   return CompanyModel.findById(companyId);
 };
 
-export const getAllBookingFromDB = async (
-  companyId: string,
-  skip: number,
-  limit: number
-) => {
+
+export const getBookingsByTripId = async (companyId: string, tripId: string) => {
   try {
-    const bookings = await bookedModal
-      .find({ paymentStatus: "success" })
-      .populate({
-        path: "tripId",
-        match: { companyId },
-      })
-      .populate("userId")
-      .skip(skip)
-      .limit(limit);
+    const trip = await Trips.findOne({ _id: tripId, companyId });
 
-    const filteredBookings = bookings.filter(
-      (booking) => booking.tripId !== null
-    );
+    if (!trip) {
+      throw new Error('Trip not found for the given company');
+    }
 
-    return filteredBookings;
-  } catch (error) {
-    throw new Error("Error fetching bookings");
+    const bookings = await bookedModal.find({ tripId }).populate('userId'); 
+    
+    return bookings;
+  } catch (error: any) {
+    console.error('Error fetching bookings:', error.message);
+    throw error;
   }
 };
+
+
 
 export const getAllCountBookingFromDb = async (companyId: string) => {
   try {
@@ -277,7 +271,7 @@ export const getCompanyDashboardData = async (companyId: string) => {
         totalRevenue: 0,
       };
     }
- 
+
     const totalTrips = tripIds.length;
 
     const totalBookings = await bookedModal.countDocuments({
@@ -291,23 +285,19 @@ export const getCompanyDashboardData = async (companyId: string) => {
     const totalRevenueResult = await bookedModal.aggregate([
       {
         $match: {
-          tripId: { $in: tripIds }, 
+          tripId: { $in: tripIds },
         },
       },
       {
         $group: {
           _id: null,
-          totalRevenue: { $sum: "$totalAmount" }, 
+          totalRevenue: { $sum: "$totalAmount" },
         },
       },
     ]);
 
-    
-
-    
     const totalRevenue = totalRevenueResult[0]?.totalRevenue || 0;
 
-  
     return {
       totalTrips,
       totalBookings,
@@ -318,5 +308,3 @@ export const getCompanyDashboardData = async (companyId: string) => {
     throw new Error("Error fetching company dashboard data");
   }
 };
-
-
