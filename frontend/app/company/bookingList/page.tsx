@@ -15,6 +15,7 @@ interface Trip {
   startingDate: string;
   endingAt: string;
   seats: number;
+  bookedSeats: number;
 }
 
 const TripsListPage: React.FC = () => {
@@ -27,7 +28,6 @@ const TripsListPage: React.FC = () => {
   const fetchTrips = async (page: number) => {
     try {
       const response: any = await getAllTripsAPI(page, tripsPerPage);
-      console.log(response.allTrips);
 
       setTrips(response.allTrips);
       setTotalPages(Math.ceil(response.totalCount / tripsPerPage));
@@ -78,6 +78,9 @@ const TripsListPage: React.FC = () => {
                 </p>
                 <p>
                   <strong>Seats:</strong> {trip.seats}
+                </p>
+                <p>
+                  <strong>Booked Seats:</strong> {trip.bookedSeats}
                 </p>
               </div>
             </div>
