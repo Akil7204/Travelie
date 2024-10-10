@@ -1,16 +1,13 @@
 import mongoose, { Document, Schema } from "mongoose";
 
-interface Ichat extends Document {
-  // members: String[];
+interface IChat extends Document {
   userId: mongoose.Schema.Types.ObjectId;
   companyId: mongoose.Schema.Types.ObjectId;
+  lastMessage: string;
 }
 
-const ChatSchema = new Schema<Ichat>(
+const ChatSchema = new Schema<IChat>(
   {
-    // members: {
-    //   type: [String],
-    // },
     userId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
@@ -18,11 +15,15 @@ const ChatSchema = new Schema<Ichat>(
     },
     companyId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Company", 
+      ref: "Company",
       required: true,
+    },
+    lastMessage: {
+      type: String,
+      required: false, 
     },
   },
   { timestamps: true }
 );
 
-export const chatModel = mongoose.model<Ichat>("Chat", ChatSchema);
+export const chatModel = mongoose.model<IChat>("Chat", ChatSchema);
