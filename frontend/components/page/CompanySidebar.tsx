@@ -25,7 +25,7 @@ const ChatSidebar: React.FC<ChatSidebarProps> = ({ users, selectedUser, setSelec
           ))}
         </ul>
       ) : (
-        <p>No users available</p> // Handle the case when users array is empty
+        <p>No users available</p> 
       )}
     </div>
   );
