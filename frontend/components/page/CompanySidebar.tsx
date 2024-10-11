@@ -7,7 +7,7 @@ interface ChatSidebarProps {
 }
 
 const ChatSidebar: React.FC<ChatSidebarProps> = ({ users, selectedUser, setSelectedUser }) => {
-  console.log(users);
+  console.log({users});
   
   return (
     <div className="w-1/4 h-full bg-gray-200 p-4">

@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import axios from "axios";
+import moment from "moment"; // Importing moment
 import { getMessages, messageSend } from "@/app/services/chatAPI";
 import { io, Socket } from "socket.io-client";
 
@@ -35,6 +36,7 @@ const ChatBox: React.FC<ChatBoxProps> = ({
   const [newMessage, setNewMessage] = useState("");
   const [messages, setMessages] = useState<any>([]);
   const [socket, setSocket] = useState<Socket | null>(null);
+  const messagesEndRef = useRef<HTMLDivElement | null>(null); // Ref for scrolling
 
   useEffect(() => {
     const socketInstance = io("https://travelie.life");
@@ -57,7 +59,6 @@ const ChatBox: React.FC<ChatBoxProps> = ({
 
   useEffect(() => {
     const fetchChatDetails = async () => {
-      
       try {
         const response = await getMessages(chat[0]?._id, senderId);
         const messagesData = response?.data || [];
@@ -66,29 +67,18 @@ const ChatBox: React.FC<ChatBoxProps> = ({
         setMessages([]);
         console.error("Failed to fetch chat details:", error);
       }
-
-      // socket?.on("message", (newMessage: Message) => {
-      //   console.log('came here');
-      //   setMessages((prevMessages: any) => [...prevMessages, newMessage]);
-      // });
     };
 
-    // if (socket && chat[0]) {
-      fetchChatDetails();
-    // }
-
-    // return () => {
-    //   socket?.off("message");
-    // };
+    fetchChatDetails();
   }, [chat[0]]);
 
+  // Listen for new messages via socket
   useEffect(() => {
     if (socket) {
       socket.on("message", (newMessage: Message) => {
         console.log("got it");
         setMessages((prevMessages: any) => [...prevMessages, newMessage]);
         console.log(newMessage);
-        
       });
 
       return () => {
@@ -96,6 +86,12 @@ const ChatBox: React.FC<ChatBoxProps> = ({
       };
     }
   }, [socket]);
+
+  useEffect(() => {
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({ behavior: "auto" });
+    }
+  }, [messages]);
 
   const handleSendMessage = async () => {
     if (!newMessage.trim()) return;
@@ -110,12 +106,15 @@ const ChatBox: React.FC<ChatBoxProps> = ({
     };
 
     try {
-      const result = await messageSend(messageData);
-      setNewMessage(""); 
+      await messageSend(messageData);
+      setNewMessage("");
     } catch (error) {
       console.error("Error sending message:", error);
     }
-    
+  };
+
+  const formatTime = (timestamp: string) => {
+    return moment(timestamp).format('h:mm A'); 
   };
 
   return (
@@ -130,9 +129,7 @@ const ChatBox: React.FC<ChatBoxProps> = ({
           <div
             key={index}
             className={`flex ${
-              message.senderModel !== "User"
-                ? "justify-end"
-                : "justify-start"
+              message.senderModel !== "User" ? "justify-end" : "justify-start"
             }`}
           >
             <div
@@ -144,11 +141,14 @@ const ChatBox: React.FC<ChatBoxProps> = ({
             >
               <p>{message.text}</p>
               <span className="text-xs mt-2 block text-right">
-                {message.time}
+                {formatTime(message.createdAt)} {/* Display formatted time */}
               </span>
             </div>
           </div>
         ))}
+
+        {/* Ref for the last message to scroll into view */}
+        <div ref={messagesEndRef}></div>
       </div>
 
       <div className="border-t p-4 flex items-center">

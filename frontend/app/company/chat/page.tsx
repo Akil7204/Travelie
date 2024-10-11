@@ -14,7 +14,7 @@ interface Message {
   text: string;
   companyId: string;
   userId: {
-    _id: string; 
+    _id: string;
     username: string;
   };
   time: string;
@@ -46,6 +46,8 @@ const ChatApp = () => {
       if (users) {
         try {
           const { data } = await companyChats(users._id);
+          console.log({ data });
+
           setChats(data);
         } catch (error: any) {
           console.error(error);
@@ -69,26 +71,6 @@ const ChatApp = () => {
     (user) => user.username === selectedUser
   )?._id;
 
-  const filteredMessages: ChatMessage[] = chats
-    .filter((chat) => chat.userId.username === selectedUser)
-    .map((chat) => ({
-      text: chat.text,
-      sender: chat.userId.username,
-      time: chat.time,
-    }));
-
-    // const handleNewMessage = (message: ChatMessage) => {
-    //   const newMessage: Message = { // Create a function to generate a unique ID
-    //     companyId: users!._id, // Use the current company ID
-    //     text: message.text,
-    //     userId: { _id: selectedUserId!, username: message.sender },
-    //     time: message.time,
-    //   };
-    
-    //   setChats((prevChats) => [...prevChats, newMessage]);
-    // };
-
-
   return (
     <Layout>
       <div className="h-screen flex">
@@ -105,8 +87,9 @@ const ChatApp = () => {
           <ChatBox
             // messages={filteredMessages}
             selectedUser={selectedUser}
-            chat={chats.filter((chat) => chat.userId.username === selectedUser)} 
-            senderId={users?._id} senderModel="Company"
+            chat={chats.filter((chat) => chat.userId.username === selectedUser)}
+            senderId={users?._id}
+            senderModel="Company"
           />
         ) : (
           <div className="w-3/4 h-full p-4">Select a user to view chats.</div>
