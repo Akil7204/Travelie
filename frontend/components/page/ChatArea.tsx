@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import io, { Socket } from "socket.io-client";
+import moment from "moment"; // import moment for time formatting
 import { getMessages, messageSend } from "@/app/services/chatAPI";
 
 interface Message {
@@ -11,6 +12,7 @@ interface Message {
     profileImage?: string;
   };
   senderModel: string;
+  createdAt: string; // Add the createdAt field for timestamp
 }
 
 interface ChatAreaProps {
@@ -33,7 +35,7 @@ const ChatArea: React.FC<ChatAreaProps> = ({
   const [newMessage, setNewMessage] = useState<string>("");
   const [socket, setSocket] = useState<Socket | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
-  const chatContainerRef = useRef<HTMLDivElement>(null); 
+  const chatContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const socketConnection = io("https://travelie.life", {
@@ -93,7 +95,7 @@ const ChatArea: React.FC<ChatAreaProps> = ({
   };
 
   useEffect(() => {
-    scrollToBottom(); 
+    scrollToBottom();
   }, [messages]);
 
   const handleSendMessage = async () => {
@@ -108,7 +110,7 @@ const ChatArea: React.FC<ChatAreaProps> = ({
 
     try {
       const result = await messageSend(messageData);
-      setNewMessage(""); 
+      setNewMessage("");
     } catch (error) {
       console.error("Failed to send message:", error);
     }
@@ -131,7 +133,7 @@ const ChatArea: React.FC<ChatAreaProps> = ({
 
       {/* Messages */}
       <div
-        ref={chatContainerRef} 
+        ref={chatContainerRef}
         className="bg-white p-4 rounded-lg shadow-lg flex-grow mb-4 overflow-y-auto h-1/2"
       >
         {messages.length > 0 ? (
@@ -150,6 +152,10 @@ const ChatArea: React.FC<ChatAreaProps> = ({
                 }`}
               >
                 <p>{msg.text}</p>
+                {/* Display the time when the message was sent */}
+                <span className="text-xs text-gray-700 block mt-1">
+                  {moment(msg.createdAt).format('LT')} 
+                </span>
               </div>
             </div>
           ))
@@ -158,7 +164,7 @@ const ChatArea: React.FC<ChatAreaProps> = ({
             <p className="text-gray-500">No messages yet</p>
           </div>
         )}
-        <div  ref={messagesEndRef}></div>
+        <div ref={messagesEndRef}></div>
       </div>
 
       {/* Input box */}
