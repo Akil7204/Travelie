@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { messageModel } from "../../domain/messageModel";
 import { io } from "../../main";
+import { chatModel } from "../../domain/chatModel";
 
 // Add a new message to the chat
 export const addMessage = (io: any) => async (req: any, res: Response) => {
@@ -112,6 +113,12 @@ export const companyAddMessage = async (req: any, res: any) => {
     console.log({ result });
 
     io.to(chatId).emit("message", result);
+
+    await chatModel.findByIdAndUpdate(
+      chatId,
+      { lastMessage: text }, 
+      { new: true } 
+    );
 
     res.status(200).json(result);
   } catch (error: any) {
