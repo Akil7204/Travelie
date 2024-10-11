@@ -1,4 +1,5 @@
 import React from 'react';
+import moment from 'moment';
 
 interface Message {
   _id: string; 
@@ -9,8 +10,9 @@ interface Message {
     email: string;
     profileImage?: string; 
   };
-  userId: string;
-  time: string;
+  userId: string;  
+  lastMessage: string; 
+  updatedAt: string;
   active: boolean;
 }
 
@@ -52,9 +54,11 @@ const MessageList: React.FC<MessageListProps> = ({ messages, onChatSelect }) => 
               >
                 {msg.companyId.companyname}
               </p>
-              <p className="text-sm text-gray-600">{msg.message}</p>
+              <p className="text-sm text-gray-600">{msg.lastMessage}</p>
             </div>
-            <span className="text-xs text-gray-400">{msg.time}</span>
+            <span className="text-xs text-gray-400">
+              {moment(msg.updatedAt).fromNow()} 
+            </span>
           </li>
         ))}
       </ul>
