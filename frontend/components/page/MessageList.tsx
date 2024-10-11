@@ -24,6 +24,20 @@ interface MessageListProps {
 const defaultProfileImage = '/img/DefaultProfilePicMale.png'; 
 
 const MessageList: React.FC<MessageListProps> = ({ messages, onChatSelect }) => {
+
+  const formatTime = (updatedAt: string) => {
+    const duration = moment.duration(moment().diff(updatedAt));
+    const hours = duration.asHours();
+
+    if (hours < 1) {
+      return moment(updatedAt).fromNow(); 
+    } else if (Math.floor(hours) === 1) {
+      return '1 hour ago'; 
+    } else {
+      return moment(updatedAt).fromNow(); 
+    }
+  };
+
   return (
     <div className="w-1/3 bg-gray-100 p-4 h-screen">
       <h2 className="text-lg font-semibold mb-4">Messages</h2>
@@ -57,7 +71,7 @@ const MessageList: React.FC<MessageListProps> = ({ messages, onChatSelect }) => 
               <p className="text-sm text-gray-600">{msg.lastMessage}</p>
             </div>
             <span className="text-xs text-gray-400">
-              {moment(msg.updatedAt).fromNow()} 
+              {formatTime(msg.updatedAt)}
             </span>
           </li>
         ))}

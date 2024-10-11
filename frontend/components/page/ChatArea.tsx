@@ -1,7 +1,6 @@
-"use client"
-import { getMessages, messageSend, sendMessage } from "@/app/services/chatAPI";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import io, { Socket } from "socket.io-client";
+import { getMessages, messageSend } from "@/app/services/chatAPI";
 
 interface Message {
   _id: string;
@@ -11,7 +10,7 @@ interface Message {
     username: string;
     profileImage?: string;
   };
-  senderModel: string; 
+  senderModel: string;
 }
 
 interface ChatAreaProps {
@@ -26,13 +25,15 @@ const ChatArea: React.FC<ChatAreaProps> = ({
   senderId,
   senderModel,
 }) => {
-  const [messages, setMessages] = useState<Message[]>([]); 
+  const [messages, setMessages] = useState<Message[]>([]);
   const [companyName, setCompanyName] = useState<string | undefined>();
   const [companyProfileImage, setCompanyProfileImage] = useState<
     string | undefined
   >();
   const [newMessage, setNewMessage] = useState<string>("");
   const [socket, setSocket] = useState<Socket | null>(null);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+  const chatContainerRef = useRef<HTMLDivElement>(null); 
 
   useEffect(() => {
     const socketConnection = io("https://travelie.life", {
@@ -56,7 +57,6 @@ const ChatArea: React.FC<ChatAreaProps> = ({
     }
   }, [chatId, socket]);
 
-
   useEffect(() => {
     if (socket) {
       socket.on("message", (newMessage: Message) => {
@@ -72,14 +72,9 @@ const ChatArea: React.FC<ChatAreaProps> = ({
   useEffect(() => {
     const fetchChatDetails = async () => {
       try {
-        console.log({senderId});
-        
         const response = await getMessages(chatId._id, senderId);
         const messagesData = response?.data || [];
-        // console.log(messagesData);
-
-        setMessages(messagesData); 
-        // console.log(chat);
+        setMessages(messagesData);
         setCompanyName(chatId.companyId.companyname);
       } catch (error) {
         setMessages([]);
@@ -89,8 +84,17 @@ const ChatArea: React.FC<ChatAreaProps> = ({
     };
 
     fetchChatDetails();
-    
   }, [chatId]);
+
+  const scrollToBottom = () => {
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({ behavior: "auto" });
+    }
+  };
+
+  useEffect(() => {
+    scrollToBottom(); 
+  }, [messages]);
 
   const handleSendMessage = async () => {
     if (!newMessage.trim()) return;
@@ -104,10 +108,7 @@ const ChatArea: React.FC<ChatAreaProps> = ({
 
     try {
       const result = await messageSend(messageData);
-      console.log(result);
-      
       setNewMessage(""); 
-      
     } catch (error) {
       console.error("Failed to send message:", error);
     }
@@ -129,7 +130,10 @@ const ChatArea: React.FC<ChatAreaProps> = ({
       </div>
 
       {/* Messages */}
-      <div className="bg-white p-4 rounded-lg shadow-lg flex-grow mb-4 overflow-y-auto h-1/2">
+      <div
+        ref={chatContainerRef} 
+        className="bg-white p-4 rounded-lg shadow-lg flex-grow mb-4 overflow-y-auto h-1/2"
+      >
         {messages.length > 0 ? (
           messages.map((msg) => (
             <div
@@ -154,6 +158,7 @@ const ChatArea: React.FC<ChatAreaProps> = ({
             <p className="text-gray-500">No messages yet</p>
           </div>
         )}
+        <div  ref={messagesEndRef}></div>
       </div>
 
       {/* Input box */}
