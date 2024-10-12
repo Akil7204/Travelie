@@ -188,3 +188,16 @@ export const getUnreadMessagesCountAPI = async () => {
     // }
   }
 };
+
+
+export const walletPayment = async (Data: any) => {
+  try {
+    const response = await axios.post(`${SERVER_URL}/walletPayment`, Data, {
+      withCredentials: true,
+    });
+    return response;
+  } catch (error) {
+    console.error("Error fetching wallet data:", error);
+    throw error;
+  }
+};

@@ -17,6 +17,7 @@ import {
   saveData,
   updateProfile,
   verifyOtp,
+  walletSaveData,
 } from "../controllers/userController";
 import upload from "../../uilts/multer";
 import { verifyUser } from "../MiddleWare/userJWT";
@@ -59,7 +60,8 @@ router.get('/unread-count',verifyUser, getUnreadMessagesCount);
 // Payment Routes;
 router.post('/payment', verifyUser, payment);
 router.post('/addTransaction',  addTransaction );
-router.post('/response/saveData', saveData)
+router.post('/response/saveData', saveData);
+router.post('/walletPayment', walletSaveData)
 
 
 

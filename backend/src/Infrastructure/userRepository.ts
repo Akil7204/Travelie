@@ -115,17 +115,14 @@ export const updateBookedTrip = async (
 ) => {
   try {
     const bookedData = await bookedModal.findByIdAndUpdate(
-      productinfo, // The ID of the document to update
-      { txnId: txnid, paymentStatus: status }, // The fields to update
-      { new: true } // Return the updated document
+      productinfo, 
+      { txnId: txnid, paymentStatus: status }, 
+      { new: true } 
     );
-    // const tripId = bookedData?.tripId
-    // console.log({tripId})
-    // // Find the trip by tripId and increment the bookedSeat field by seatCount
     const updatedTrip = await Trips.findByIdAndUpdate(
       bookedData?.tripId,
-      { $inc: { bookedSeats: bookedData?.seats } }, // Increment the bookedSeat field by seatCount
-      { new: true } // Return the updated document
+      { $inc: { bookedSeats: bookedData?.seats } }, 
+      { new: true } 
     );
     console.log({ bookedData });
 

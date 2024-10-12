@@ -410,3 +410,34 @@ export const getUnreadMessagesCount = async (
     res.status(500).json({ error: "Error fetching unread messages count" });
   }
 };
+
+
+export const walletSaveData = async (req: Request, res: Response) => {
+  try {
+    const { txnid, email, productinfo, status } = req.body;
+    console.log({ txnid, email, productinfo, status });
+    // if (status == "success") {
+      const bookedTripId = await fetchbookingData(txnid, productinfo, status);
+      console.log({bookedTripId});
+      
+      const { tripId, userId }: any = bookedTripId;
+      const trip = await fetchDetailTrip(tripId);
+
+      const companyId = trip?.companyId;
+      let chat = await chatModel.findOne({ userId, companyId });
+      if (!chat) {
+        chat = new chatModel({
+          userId,
+          companyId,
+        });
+        await chat.save();
+      }
+      res.status(200).json(bookedTripId?._id);
+    // } else if (status == "failure") {
+    //   res.json("booking failed");
+    //   console.log(status);
+    // }
+  } catch (error) {
+    console.log(error);
+  }
+};

@@ -1,10 +1,11 @@
 "use client";
 
-import { fetchBookedData } from "@/app/services/allAPI";
+import { fetchBookedData, walletPayment } from "@/app/services/allAPI";
 import Navbar from "@/components/NavBar";
 import PayUComponent from "@/components/payment/payUComponent";
+import { generateTxnId } from "@/utils/generateTxnId";
 import { useParams, useRouter } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 const BookingConfirmation = () => {
   const [bookingDetails, setBookingDetails] = useState<any>(null);
@@ -33,6 +34,25 @@ const BookingConfirmation = () => {
 
     fetchBookingDetails();
   }, []);
+
+  const txnidRef = useRef(generateTxnId(8));
+  const handleWalletPayment = async () => {
+    try {
+      const txnid = txnidRef.current;
+      const amount = bookingDetails.totalAmount; 
+      const productinfo = bookingDetails._id;
+      const { username, phone, email } = bookingDetails.userId;
+      const data = { txnid, amount, productinfo, username, email, phone };
+      console.log({data});
+
+      const response = await walletPayment(data)
+      console.log("Payment successful", response.data);
+      
+    } catch (error) {
+      console.log(error);
+      
+    }
+  }
 
   if (!bookingDetails) {
     return <p>Loading booking details...</p>;
@@ -89,29 +109,15 @@ const BookingConfirmation = () => {
             </div>
           </div>
 
-          {/* Coupon Code */}
-          {/* <div className="border p-4 rounded-lg mt-4">
-                    <p className="text-blue-500 text-sm mb-2">
-                        <a href="#">Use a coupon, credit, or promotional code</a>
-                    </p>
-                    <div className="flex">
-                        <input
-                            type="text"
-                            placeholder="Coupon code"
-                            className="w-full px-3 py-2 border border-gray-300 rounded-l-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        />
-                        <button className="bg-gray-800 text-white px-4 py-2 rounded-r-md">
-                            Apply Coupon
-                        </button>
-                    </div>
-                </div> */}
-
           {/* Complete Booking Button */}
           <div className="mt-6">
-            {/* <button className="w-full bg-blue-500 text-white px-4 py-3 rounded-lg font-medium hover:bg-blue-600 transition">
-              proceed to payment
-            </button> */}
             <PayUComponent BookedData={bookingDetails} />
+            <button
+              onClick={handleWalletPayment}
+              className="w-full mt-4 bg-blue-500 text-white px-4 py-3 rounded-lg font-medium hover:bg-blue-600 transition"
+            >
+              Pay with Wallet
+            </button>
           </div>
         </div>
       </div>
