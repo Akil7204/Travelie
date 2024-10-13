@@ -251,3 +251,27 @@ export const createReport = async (
     console.log(error);
   }
 };
+
+
+export const updateWalletBookedTrip = async (
+  productinfo: string,
+  txnid: string
+) => {
+  try {
+    const bookedData = await bookedModal.findByIdAndUpdate(
+      productinfo, 
+      { txnId: txnid, paymentStatus: "success", paymentType: "wallet" }, 
+      { new: true } 
+    );
+    const updatedTrip = await Trips.findByIdAndUpdate(
+      bookedData?.tripId,
+      { $inc: { bookedSeats: bookedData?.seats } }, 
+      { new: true } 
+    );
+    console.log({ bookedData });
+
+    return bookedData;
+  } catch (error) {
+    console.log(error);
+  }
+};

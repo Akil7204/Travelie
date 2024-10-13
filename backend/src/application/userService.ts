@@ -19,6 +19,7 @@ import {
   updateUser,
   updateUserProfile,
   updateWallet,
+  updateWalletBookedTrip,
 } from "../Infrastructure/userRepository";
 
 import { User } from "../domain/user";
@@ -356,4 +357,13 @@ export const submitReport = async (
   } catch (error) {
     console.log("error in userService: ", error);
   }
+};
+
+
+export const walletBookingData = async (
+  txnid: string,
+  productinfo: string
+) => {
+  const bookedTrip = await updateWalletBookedTrip(productinfo, txnid);
+  return bookedTrip;
 };

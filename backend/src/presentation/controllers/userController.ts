@@ -17,6 +17,7 @@ import {
   submitReport,
   updateUserProfileSER,
   verifyAndSaveUser,
+  walletBookingData,
 } from "../../application/userService";
 import {
   findUserByEmail,
@@ -27,6 +28,7 @@ import { profileAddBucket } from "../../uilts/profileAddBucket";
 import { chatModel } from "../../domain/chatModel";
 import { messageModel } from "../../domain/messageModel";
 import { io } from "../../main";
+import { WalletModel } from "../../domain/walletModel";
 var jsSHA = require("jssha");
 
 // register the user
@@ -34,7 +36,6 @@ export const register = async (req: Request, res: Response) => {
   try {
     const { username, email, phone, password } = req.body;
 
-    // Define the proceedWithRegistration function
     const proceedWithRegistration = async () => {
       try {
         const otp = otpGenerator();
@@ -286,8 +287,8 @@ export const saveData = async (req: Request, res: Response) => {
     console.log({ txnid, email, productinfo, status });
     if (status == "success") {
       const bookedTripId = await fetchbookingData(txnid, productinfo, status);
-      console.log({bookedTripId});
-      
+      console.log({ bookedTripId });
+
       const { tripId, userId }: any = bookedTripId;
       const trip = await fetchDetailTrip(tripId);
 
@@ -322,7 +323,7 @@ export const getUserBookings = async (req: any, res: Response) => {
     const totalCount = await getTotalCountBooking(userId);
     // console.log(bookings);
 
-    res.status(200).json({bookings, totalCount});
+    res.status(200).json({ bookings, totalCount });
   } catch (error: any) {
     res.status(500).json({ message: error.message });
   }
@@ -332,20 +333,18 @@ export const cancelTrip = async (req: any, res: Response) => {
   try {
     const { bookingId } = req.params;
     const userId = req.userId;
-    
 
     const result = await cancelTripUseCase(bookingId, userId);
-    
+
     res.status(200).json({
       message: result?.message,
       refundAmount: result?.refundAmount,
       walletBalance: result?.walletBalance,
     });
   } catch (error) {
-    res.status(500).json({ message: 'Error cancelling trip', error });
+    res.status(500).json({ message: "Error cancelling trip", error });
   }
 };
-
 
 export const fetchWalletDetails = async (req: any, res: any) => {
   try {
@@ -354,11 +353,10 @@ export const fetchWalletDetails = async (req: any, res: any) => {
     const limit = parseInt(req.query.limit) || 10;
     const skip = (page - 1) * limit;
     console.log(userId);
-    
-    const walletDetails = await getWalletDetails(userId, skip, limit);
-    console.log({walletDetails});
 
-    
+    const walletDetails = await getWalletDetails(userId, skip, limit);
+    console.log({ walletDetails });
+
     res.status(200).json(walletDetails);
   } catch (error: any) {
     res.status(404).json({ message: error.message });
@@ -367,8 +365,8 @@ export const fetchWalletDetails = async (req: any, res: any) => {
 
 export const handleReportSubmit = async (req: any, res: Response) => {
   const { companyId, message } = req.body;
-  const userId = req.userId; 
-  
+  const userId = req.userId;
+
   if (!companyId || !message || !userId) {
     return res.status(400).json({ error: "Invalid input" });
   }
@@ -385,24 +383,24 @@ export const getUnreadMessagesCount = async (
   req: any,
   res: any
 ): Promise<void> => {
-  const userId = req.userId;  
+  const userId = req.userId;
 
   try {
     if (!userId) {
       return res.status(400).json({ error: "User ID is required" });
     }
 
-    const chats = await chatModel.find({ userId: userId }).select('_id');
+    const chats = await chatModel.find({ userId: userId }).select("_id");
 
-    const chatIds = chats.map(chat => chat._id);
+    const chatIds = chats.map((chat) => chat._id);
 
     const unreadCount = await messageModel.countDocuments({
-      chatId: { $in: chatIds }, 
-      senderModel: "Company", 
-      isRead: false, 
+      chatId: { $in: chatIds },
+      senderModel: "Company",
+      isRead: false,
     });
 
-    io.emit('unreadCount', { unreadCount });
+    io.emit("unreadCount", { unreadCount });
 
     res.status(200).json({ unreadCount });
   } catch (error) {
@@ -411,32 +409,48 @@ export const getUnreadMessagesCount = async (
   }
 };
 
-
-export const walletSaveData = async (req: Request, res: Response) => {
+export const walletSaveData = async (req: any, res: Response) => {
   try {
-    const { txnid, email, productinfo, status } = req.body;
-    console.log({ txnid, email, productinfo, status });
-    // if (status == "success") {
-      const bookedTripId = await fetchbookingData(txnid, productinfo, status);
-      console.log({bookedTripId});
-      
-      const { tripId, userId }: any = bookedTripId;
-      const trip = await fetchDetailTrip(tripId);
+    const { txnid, email, productinfo, amount } = req.body;
+    console.log({ txnid, email, productinfo });
 
-      const companyId = trip?.companyId;
-      let chat = await chatModel.findOne({ userId, companyId });
-      if (!chat) {
-        chat = new chatModel({
-          userId,
-          companyId,
-        });
-        await chat.save();
-      }
-      res.status(200).json(bookedTripId?._id);
-    // } else if (status == "failure") {
-    //   res.json("booking failed");
-    //   console.log(status);
-    // }
+    const wallet = await WalletModel.findOne({ userId: req.userId }); 
+    if (!wallet) {
+      return res.status(400).json({ message: "Wallet not found" });
+    }
+
+    if (wallet.balance < amount) {
+      return res.status(400).json({ message: "Insufficient balance in your wallet" });
+    }
+
+    wallet.balance -= amount;
+
+    wallet.transactions.push({
+      type: "debit",
+      amount,
+      description: `Payment for booking trip ${productinfo}`,  
+      date: new Date(),
+    });
+
+    await wallet.save();
+
+    const bookedTripId = await walletBookingData(txnid, productinfo);
+    console.log({ bookedTripId });
+
+    const { tripId, userId }: any = bookedTripId;
+    const trip = await fetchDetailTrip(tripId);
+    console.log({trip});
+    
+    const companyId = trip?.companyId;
+    let chat = await chatModel.findOne({ userId, companyId });
+    if (!chat) {
+      chat = new chatModel({
+        userId,
+        companyId,
+      });
+      await chat.save();
+    }
+    res.status(200).json(bookedTripId?._id);
   } catch (error) {
     console.log(error);
   }

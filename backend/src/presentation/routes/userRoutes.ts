@@ -61,7 +61,7 @@ router.get('/unread-count',verifyUser, getUnreadMessagesCount);
 router.post('/payment', verifyUser, payment);
 router.post('/addTransaction',  addTransaction );
 router.post('/response/saveData', saveData);
-router.post('/walletPayment', walletSaveData)
+router.post('/walletPayment',verifyUser, walletSaveData)
 
 
 
