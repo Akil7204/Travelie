@@ -46,6 +46,7 @@ const TripPage: React.FC = () => {
   const [seatCount, setSeatCount] = React.useState(1);
   const [mainImgInd, setMainImgInd] = React.useState(0);
   const [isReportModalOpen, setIsReportModalOpen] = useState(false);
+  const [paymentLoading, setPaymentLoading] = useState<boolean>(false);
 
   const tripId: any = params.id;
   const router = useRouter();
@@ -77,6 +78,7 @@ const TripPage: React.FC = () => {
   };
 
   const handleProceedToPayment = async () => {
+    setPaymentLoading(true);
     const reqBody = new FormData();
     if (tripData) {
       reqBody.append("tripId", tripData._id);
@@ -102,6 +104,8 @@ const TripPage: React.FC = () => {
       if (error.status == 401) {
         router.push("/login");
       }
+    } finally {
+      setPaymentLoading(false); 
     }
   };
 
@@ -289,6 +293,11 @@ const TripPage: React.FC = () => {
         companyName={tripData?.companyId.companyname || "Unknown"}
         onSubmitReport={handleSubmitReport}
       />
+      {paymentLoading && (
+        <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50 z-50">
+          <InfinitySpin width="200" color="#4fa94d" />
+        </div>
+      )}
     </>
   );
 };
