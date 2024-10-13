@@ -96,8 +96,8 @@ export const fetchingBookingDetails = async (bookingId: any) => {
   try {
     const response = await axios.get(`${SERVER_URL}/bookedTrip/${bookingId}`, {
       withCredentials: true,
-    }); 
-    return response.data; 
+    });
+    return response.data;
   } catch (error) {
     console.error("Error fetching booking data:", error);
     throw error;
@@ -189,15 +189,9 @@ export const getUnreadMessagesCountAPI = async () => {
   }
 };
 
-
 export const walletPayment = async (Data: any) => {
-  try {
-    const response = await axios.post(`${SERVER_URL}/walletPayment`, Data, {
-      withCredentials: true,
-    });
-    return response;
-  } catch (error) {
-    console.error("Error fetching wallet data:", error);
-    throw error;
-  }
+  const response = await axios.post(`${SERVER_URL}/walletPayment`, Data, {
+    withCredentials: true,
+  });
+  return response;
 };

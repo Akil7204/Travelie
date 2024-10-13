@@ -6,6 +6,8 @@ import PayUComponent from "@/components/payment/payUComponent";
 import { generateTxnId } from "@/utils/generateTxnId";
 import { useParams, useRouter } from "next/navigation";
 import React, { useEffect, useRef, useState } from "react";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const BookingConfirmation = () => {
   const [bookingDetails, setBookingDetails] = useState<any>(null);
@@ -39,20 +41,22 @@ const BookingConfirmation = () => {
   const handleWalletPayment = async () => {
     try {
       const txnid = txnidRef.current;
-      const amount = bookingDetails.totalAmount; 
+      const amount = bookingDetails.totalAmount;
       const productinfo = bookingDetails._id;
       const { username, phone, email } = bookingDetails.userId;
       const data = { txnid, amount, productinfo, username, email, phone };
-      console.log({data});
+      console.log({ data });
 
-      const response = await walletPayment(data)
+      const response = await walletPayment(data);
+
       console.log("Payment successful", response.data);
-      
-    } catch (error) {
-      console.log(error);
-      
+      router.push(`/bookingSucessful/${response.data}`);
+    } catch (error: any) {
+      if (error.response.status == 400) {
+        toast(error.response.data.message);
+      }
     }
-  }
+  };
 
   if (!bookingDetails) {
     return <p>Loading booking details...</p>;
@@ -61,6 +65,17 @@ const BookingConfirmation = () => {
   return (
     <>
       <Navbar />
+      <ToastContainer
+        position="top-center"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
       <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50">
         <div className="w-full max-w-md p-4 bg-white shadow-lg rounded-md">
           <h2 className="text-2xl font-semibold text-gray-800 mb-4">
