@@ -43,11 +43,7 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 
-// app.use('/v1/api/users', userRoutes);
-// app.use('/v1/api/company', companyRoutes);
-// app.use('/v1/api/admin', adminRoutes);
-// app.use('/v1/api/chat', chatRoutes);
-// app.use('/v1/api/message', messageRoutes);
+
 
 app.use('/users', userRoutes);
 app.use('/company', companyRoutes);
@@ -69,7 +65,7 @@ socketHandler(io);
 
 
 const PORT = process.env.PORT || 4000;
-
+console.log(`Configured PORT: ${PORT}`);
 httpServer.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
