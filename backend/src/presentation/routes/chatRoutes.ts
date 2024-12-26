@@ -12,6 +12,4 @@ router.get("/find/:firstId/:secondId", findChat);
 router.get("/company/:companyId", companyChat);
 
 
-
-
 export default router;

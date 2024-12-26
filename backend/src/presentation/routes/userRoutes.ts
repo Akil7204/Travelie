@@ -64,34 +64,4 @@ router.post('/response/saveData', saveData);
 router.post('/walletPayment',verifyUser, walletSaveData)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 export default router;
