@@ -66,6 +66,6 @@ socketHandler(io);
 
 const PORT = process.env.PORT || 3500;
 console.log(`Configured PORT: ${PORT}`);
-app.listen(PORT, () => {
+httpServer.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
