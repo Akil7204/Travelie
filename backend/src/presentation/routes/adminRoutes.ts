@@ -1,7 +1,6 @@
 import express  from "express";
 import { adminlogin, blockCompanyController, blockUserController, DashboardController, getAllcompanyController, getCompanyUnapproval, getReport, getUsersList, unblockCompanyController, unblockUserController, updateCompanyApproval, updateReportStatusController } from "../controllers/adminController";
 import adminJwtMiddleware from "../MiddleWare/adminJWT";
-import { getAllReports } from "../../Infrastructure/adminRepository";
 
 
 const router = express.Router();
