@@ -9,7 +9,7 @@ import chatRoutes from "./presentation/routes/chatRoutes";
 import messageRoutes from "./presentation/routes/messageRoutes";
 import { createServer } from "http";
 import cookieParser from "cookie-parser";
-import  socketHandler  from "./presentation/socket/chat";
+import { socketHandler } from "./presentation/socket/chat";
 import { Server as serverSocket } from 'socket.io';
 import morgan from 'morgan';
 

@@ -1,7 +1,7 @@
 // socket
 import { Server as SocketIOServer, Socket } from "socket.io";
 
-export default function socketHandler (io: SocketIOServer) {
+export const socketHandler = (io: SocketIOServer) => {
   io.on("connection", (socket: Socket) => {
     console.log("New client connected");
 
