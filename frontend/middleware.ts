@@ -53,8 +53,8 @@ export async function middleware(req: NextRequest) {
 
  
   const isProtected = isProtectedRoute(pathname);
-  // console.log("isprotucted",isProtected);
-  // console.log("token is : ", tokenVerified);
+  console.log("isprotucted",isProtected);
+  console.log("token is : ", tokenVerified);
   
   
   if (isProtected && !tokenVerified) {
