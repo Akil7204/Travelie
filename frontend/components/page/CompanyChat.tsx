@@ -39,7 +39,8 @@ const ChatBox: React.FC<ChatBoxProps> = ({
   const messagesEndRef = useRef<HTMLDivElement | null>(null); // Ref for scrolling
 
   useEffect(() => {
-    const socketInstance = io("https://travelie.life");
+    // const socketInstance = io("https://travelie.life");
+    const socketInstance = io("https://travelie.onrender.com");
     setSocket(socketInstance);
 
     socketInstance.on("connect", () => {

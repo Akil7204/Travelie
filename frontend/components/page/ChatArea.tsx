@@ -38,7 +38,11 @@ const ChatArea: React.FC<ChatAreaProps> = ({
   const chatContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const socketConnection = io("https://travelie.life", {
+    // const socketConnection = io("https://travelie.life", {
+    //   transports: ["websocket"],
+    //   autoConnect: false,
+    // });
+    const socketConnection = io("https://travelie.onrender.com", {
       transports: ["websocket"],
       autoConnect: false,
     });
