@@ -25,33 +25,33 @@ const allowedOrigins = [
   "http://localhost:3000",
   "https://test.payu.in", 
 ];
-console.log("Allowed Origins:", allowedOrigins);
-// app.use(
-//   cors({
-//     origin: (origin, callback) => {
-//       console.log(origin);
-//       if (!origin || allowedOrigins.includes(origin)) {
-//         callback(null, true); 
-//       } else {
-//         callback(new Error("Not allowed by CORS")); 
-//       }
-//     },
-//     credentials: true, 
-//   })
-// );
 
-app.use(cors({
-  origin: (origin, callback) => {
-    console.log("Incoming Origin:", origin); // Debug log
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true); // Allow request
-    } else {
-      console.error("Blocked by CORS:", origin); // Log blocked origin
-      callback(new Error("Not allowed by CORS")); // Reject request
-    }
-  },
-  credentials: true,
-}));
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      console.log(origin);
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true); 
+      } else {
+        callback(new Error("Not allowed by CORS")); 
+      }
+    },
+    credentials: true, 
+  })
+);
+
+// app.use(cors({
+//   origin: (origin, callback) => {
+//     console.log("Incoming Origin:", origin); // Debug log
+//     if (!origin || allowedOrigins.includes(origin)) {
+//       callback(null, true); // Allow request
+//     } else {
+//       console.error("Blocked by CORS:", origin); // Log blocked origin
+//       callback(new Error("Not allowed by CORS")); // Reject request
+//     }
+//   },
+//   credentials: true,
+// }));
 
 app.use(express.json());
 app.use(cookieParser());
