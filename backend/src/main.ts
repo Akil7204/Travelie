@@ -21,11 +21,11 @@ app.use(morgan('dev'));
 connectToDatabase();
 
 const allowedOrigins = [
-  "https://travelie.life",  
+  "https://www.travelie.life",  
   "http://localhost:3000",
   "https://test.payu.in", 
 ];
-
+console.log("Allowed Origins:", allowedOrigins);
 // app.use(
 //   cors({
 //     origin: (origin, callback) => {
