@@ -4,7 +4,7 @@ import { UserModel } from "../../domain/user";
 
 export async function verifyUser(req: any, res: Response, next: NextFunction) {
   const Token = req.cookies?.token;
-  console.log();
+  console.log(Token);
   
   if (!Token) {
     return res.status(401).json("JWT not found in the cookies");
