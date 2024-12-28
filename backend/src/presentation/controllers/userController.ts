@@ -95,13 +95,13 @@ export const login = async (req: Request, res: Response) => {
     const { user, token } = await loginUser(email, password);
     // console.log({user, token});
 
-    // res.cookie("token", token);
-    res.cookie("token", token, {
-      httpOnly: true,       // Prevents JavaScript from accessing the cookie (security measure)
-      secure: true,         // Ensures the cookie is sent only over HTTPS
-      sameSite: "none",     // Allows cross-site requests
-      path: "/",            // Makes the cookie available for all paths on the domain
-    });
+    res.cookie("token", token);
+    // res.cookie("token", token, {
+    //   httpOnly: true,       // Prevents JavaScript from accessing the cookie (security measure)
+    //   secure: true,         // Ensures the cookie is sent only over HTTPS
+    //   sameSite: "none",     // Allows cross-site requests
+    //   path: "/",            // Makes the cookie available for all paths on the domain
+    // });
     // console.log('Cookie set:', req.cookies['token']);
     res.status(200).json({ user, token });
   } catch (error: any) {
