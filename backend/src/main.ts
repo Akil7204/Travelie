@@ -83,7 +83,6 @@ export const io = new serverSocket(httpServer, {
 socketHandler(io);
 
 const PORT = process.env.PORT || 3000;
-console.log(`Configured PORT: ${PORT}`);
 httpServer.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
