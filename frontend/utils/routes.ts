@@ -1,4 +1,5 @@
 "use client"
+import { useEffect, useState } from "react";
 
 const protectedRoutes = new Set(["/profile", "/chat", "/bookingSucessful", "/myTrips", "/wallet"]);
 
@@ -70,8 +71,14 @@ export function toBeRedirectedCompanyRoutes(pathname: string): boolean {
 
 
 export function exportToken() {
-  if (typeof window !== "undefined") {
-    return localStorage.getItem('token');
-  }
-  return null;  // Or handle it accordingly for server-side
+  const [token, setToken] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const storedToken = localStorage.getItem('token');
+      setToken(storedToken);
+    }
+  }, []);  // Empty dependency array to run only once on mount
+
+  return token;
 }
