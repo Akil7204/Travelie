@@ -36,7 +36,7 @@ const Login: React.FC = () => {
 
         localStorage.setItem("companyToken", result.companyToken);
         localStorage.setItem("company", JSON.stringify(result.company));
-        document.cookie = `TokenCompany=${result.token}`
+        document.cookie = `TokenCompany=${result.companyToken}`
         toast.success("Login Successful!");
         router.push("/company/dashboard");
       } else {

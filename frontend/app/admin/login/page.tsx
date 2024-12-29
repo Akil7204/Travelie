@@ -32,7 +32,7 @@ const Login: React.FC = () => {
       if (result && result.admin && result.adminToken) {
         localStorage.setItem("adminToken", result.adminToken);
         localStorage.setItem("admin", JSON.stringify(result.admin));
-        document.cookie = `TokenAdmin=${result.token}`
+        document.cookie = `TokenAdmin=${result.adminToken}`
         toast.success("Login Successful!");
           router.replace("/admin/dashboard");
       } else {
