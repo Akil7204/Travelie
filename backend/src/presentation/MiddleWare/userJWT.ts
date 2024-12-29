@@ -11,6 +11,7 @@ export async function verifyUser(req: any, res: Response, next: NextFunction) {
   }
 
   const secret = process.env.JWT_SECRET_KEY || "";
+  
   if (!secret) {
     return res.status(500).json("JWT secret not found in the env");
   }

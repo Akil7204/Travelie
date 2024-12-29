@@ -99,7 +99,7 @@ export const login = async (req: Request, res: Response) => {
     res.cookie("token", token, {
       httpOnly: true,       // Prevents JavaScript from accessing the cookie (security measure)
       secure: true,         // Ensures the cookie is sent only over HTTPS
-      sameSite: "none",     // Allows cross-site requests
+      sameSite: "strict",     // Allows cross-site requests
       path: "/",            // Makes the cookie available for all paths on the domain
     });
     // console.log('Cookie set:', req.cookies['token']);
