@@ -23,7 +23,7 @@ const nextConfig = {
   // }
   experimental: {
     serverActions: {
-      allowedOrigins: ['travelie.life', '*.travelie.life', 'test.payu.in'],
+      allowedOrigins: ['travelie.life', "https://www.travelie.life", 'test.payu.in', "https://travelie.onrender.com"],
     },
   },
 };
