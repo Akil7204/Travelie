@@ -100,7 +100,6 @@ export const login = async (req: Request, res: Response) => {
       httpOnly: true,       // Prevents JavaScript access
       secure: true,         // Ensures HTTPS only
       sameSite: "none",
-      domain: ".travelie.life",
     });
     // res.setHeader('Set-Cookie', `token=${token}; Path=/; HttpOnly; Secure; SameSite=None`);
     // console.log('Cookie set:', req.cookies['token']);
