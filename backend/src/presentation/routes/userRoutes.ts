@@ -55,7 +55,7 @@ router.get("/wallet/:userId", verifyUser, fetchWalletDetails);
 
 router.post("/report", verifyUser, handleReportSubmit);
 
-router.get('/unread-count',verifyUser, getUnreadMessagesCount);
+router.get('/unread-count', getUnreadMessagesCount);
 
 // Payment Routes;
 router.post('/payment', verifyUser, payment);
