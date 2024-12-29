@@ -1,3 +1,5 @@
+"use client"
+
 const protectedRoutes = new Set(["/profile", "/chat", "/bookingSucessful", "/myTrips", "/wallet"]);
 
 const paymentRoute = /^\/payment\/[^/]+\/?.*$/;
@@ -64,4 +66,8 @@ export function toBeRedirectedCompanyRoutes(pathname: string): boolean {
     !EditCategoryRoutePattern.test(pathname) &&
     !bookingRoutePattern.test(pathname)
   );
+}
+
+export function exportToken(){
+  return localStorage.getItem('token');
 }

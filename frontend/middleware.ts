@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { jwtVerify } from "jose";
 import {
+  exportToken,
   isProtectedAdminRoute,
   isProtectedCompanyRoute,
   isProtectedRoute,
@@ -10,6 +11,7 @@ import {
   toBeRedirectedRoutes,
 } from "./utils/routes";
 import { parse } from 'cookie';
+import { log } from "console";
 
 export async function middleware(req: NextRequest) {
   const pathname = req.nextUrl.pathname;
@@ -86,10 +88,10 @@ async function verifyToken(
   
   const token = req.cookies.get(companyToken);
   console.log("token was", token);
-  const cookieHeader = req.headers.get('token');
-  console.log("cookie header: ", cookieHeader);
+  // const cookieHeader = req.headers.get('token');
+  // console.log("cookie header: ", cookieHeader);
+  console.log("export token", exportToken());
   
-  const cookies = cookieHeader ? parse(cookieHeader) : {};
   
   if (!token?.value) {
     return false;
