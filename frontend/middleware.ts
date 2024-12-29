@@ -83,7 +83,7 @@ async function verifyToken(
   req: NextRequest
 ): Promise<boolean> {
   const token = req.cookies.get(companyToken);
-  console.log(token);
+  console.log("token was", token);
   
   if (!token?.value) {
     return false;
