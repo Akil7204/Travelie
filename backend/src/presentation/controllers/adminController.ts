@@ -26,7 +26,11 @@ export const adminlogin = async (
     console.log(result);
 
     if (result) {
-      res.cookie("adminToken", result.adminToken);
+      res.cookie("adminToken", result.adminToken, {
+        httpOnly: true,       // Prevents JavaScript access
+        secure: true,         // Ensures HTTPS only
+        sameSite: "none",
+      });
       res.json({ adminToken: result.adminToken, admin: result.admin });
     } else {
       res.status(401).json({ message: "Login failed" });

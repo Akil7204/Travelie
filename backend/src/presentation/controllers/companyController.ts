@@ -92,7 +92,11 @@ export const login = async (req: Request, res: Response) => {
     const { email, password } = req.body;
     const { company, companyToken } = await loginCompany(email, password);
     if (company.adminVerified) {
-      res.cookie("companyToken", companyToken);
+      res.cookie("companyToken", companyToken, {
+        httpOnly: true,       // Prevents JavaScript access
+        secure: true,         // Ensures HTTPS only
+        sameSite: "none",
+      });
       res.status(200).json({ company, companyToken });
     } else {
       res.status(200).json({ company });
