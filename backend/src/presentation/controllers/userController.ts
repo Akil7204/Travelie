@@ -215,7 +215,10 @@ export const bookingSeat = async (req: any, res: Response) => {
     const userId = req.userId;
     const bookedSeatId = await fetchbookingSeat(tripId, seatCount, userId);
     res.status(200).json({ bookedSeatId });
-  } catch (error) {}
+  } catch (error) {
+    console.log(error);
+    
+  }
 };
 
 export const fetchBookedData = async (req: Request, res: Response) => {

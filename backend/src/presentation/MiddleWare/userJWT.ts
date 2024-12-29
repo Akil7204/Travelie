@@ -18,7 +18,8 @@ export async function verifyUser(req: any, res: Response, next: NextFunction) {
   try {
     const decoded: any = jwt.verify(Token, secret);
     req.userId = decoded?.userId;
-
+    console.log("user Id: ", req.userId);
+    
    
     const user = await UserModel.findById(req.userId);
 
