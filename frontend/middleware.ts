@@ -2,7 +2,6 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { jwtVerify } from "jose";
 import {
-  exportToken,
   isProtectedAdminRoute,
   isProtectedCompanyRoute,
   isProtectedRoute,
@@ -90,7 +89,6 @@ async function verifyToken(
   console.log("token was", token);
   // const cookieHeader = req.headers.get('token');
   // console.log("cookie header: ", cookieHeader);
-  console.log("export token", exportToken());
   
   
   if (!token?.value) {

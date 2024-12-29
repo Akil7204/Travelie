@@ -1,6 +1,3 @@
-"use client"
-import { useEffect, useState } from "react";
-
 const protectedRoutes = new Set(["/profile", "/chat", "/bookingSucessful", "/myTrips", "/wallet"]);
 
 const paymentRoute = /^\/payment\/[^/]+\/?.*$/;
@@ -67,18 +64,4 @@ export function toBeRedirectedCompanyRoutes(pathname: string): boolean {
     !EditCategoryRoutePattern.test(pathname) &&
     !bookingRoutePattern.test(pathname)
   );
-}
-
-
-export function exportToken() {
-  const [token, setToken] = useState<string | null>(null);
-
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      const storedToken = localStorage.getItem('token');
-      setToken(storedToken);
-    }
-  }, []);  // Empty dependency array to run only once on mount
-
-  return token;
 }
