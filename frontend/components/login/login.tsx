@@ -42,7 +42,7 @@ const Login: React.FC = () => {
           localStorage.setItem("user", JSON.stringify(result.user));
           document.cookie = `userToken=${result.token}`
           toast.success("Login Successful!");
-          router.push("/");
+          router.replace("/");
         }
         // navigate("/");
       } else {

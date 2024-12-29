@@ -69,7 +69,7 @@ const Navbar: React.FC = () => {
     deleteCookie("token");
     document.cookie = `userToken=;`
     setIsAuthorized(false);
-    router.push("/");
+    router.replace("/");
   };
 
   const isActive = (path: string) => currentPath === path;

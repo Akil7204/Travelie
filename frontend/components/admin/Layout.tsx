@@ -18,7 +18,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     localStorage.removeItem("adminToken");
     deleteCookie("adminToken");
     document.cookie = `TokenAdmin=;`
-    router.push("/admin/login"); // Redirect to the home page or login page
+    router.replace("/admin/login"); // Redirect to the home page or login page
   };
 
   useEffect(() => {
