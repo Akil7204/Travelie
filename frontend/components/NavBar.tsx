@@ -67,6 +67,7 @@ const Navbar: React.FC = () => {
     localStorage.removeItem("user");
     localStorage.removeItem("token");
     deleteCookie("token");
+    deleteCookie("userToken");
     setIsAuthorized(false);
     router.push("/");
   };

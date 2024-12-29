@@ -74,6 +74,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     localStorage.removeItem("company");
     localStorage.removeItem("companyToken");
     deleteCookie("companyToken");
+    deleteCookie("TokenCompany");
     router.push("/company/signin"); 
   };
 

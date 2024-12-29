@@ -17,7 +17,7 @@ export async function middleware(req: NextRequest) {
     return NextResponse.next();
   }
 
-    const adminTokenVerified = await verifyToken("adminToken", req);
+    const adminTokenVerified = await verifyToken("TokenAdmin", req);
 
     const isProtectedAdmin = isProtectedAdminRoute(pathname);
     
@@ -33,7 +33,7 @@ export async function middleware(req: NextRequest) {
     }
     
     // company side
-    const CompanyTokenVerified = await verifyToken("companyToken", req);
+    const CompanyTokenVerified = await verifyToken("TokenCompany", req);
 
     const isProtectedCompany = isProtectedCompanyRoute(pathname);
     if(isProtectedCompany && !CompanyTokenVerified){
