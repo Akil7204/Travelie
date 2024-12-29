@@ -100,10 +100,9 @@ export const login = async (req: Request, res: Response) => {
       httpOnly: true,       // Prevents JavaScript from accessing the cookie (security measure)
       secure: true,         // Ensures the cookie is sent only over HTTPS
       sameSite: "none", 
-      domain: ".travelie.onrender.com",
-      path: "/",            // Makes the cookie available for all paths on the domain
+      domain: ".travelie.onrender.com",          // Makes the cookie available for all paths on the domain
     });
-    res.setHeader('Set-Cookie', `token=${token}; Path=/; HttpOnly; Secure; SameSite=None`);
+    // res.setHeader('Set-Cookie', `token=${token}; Path=/; HttpOnly; Secure; SameSite=None`);
     // console.log('Cookie set:', req.cookies['token']);
     res.status(200).json({ user, token });
   } catch (error: any) {
