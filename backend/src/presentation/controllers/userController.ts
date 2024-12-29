@@ -103,6 +103,7 @@ export const login = async (req: Request, res: Response) => {
       domain: ".travelie.onrender.com",
       path: "/",            // Makes the cookie available for all paths on the domain
     });
+    res.setHeader('Set-Cookie', `token=${token}; Path=/; HttpOnly; Secure; SameSite=None`);
     // console.log('Cookie set:', req.cookies['token']);
     res.status(200).json({ user, token });
   } catch (error: any) {

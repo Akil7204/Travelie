@@ -20,6 +20,11 @@ app.use(morgan('dev'));
 
 connectToDatabase();
 
+// app.use((req, res, next) => {
+//   res.setHeader('Set-Cookie', 'token=your-token-value; Path=/; HttpOnly; Secure; SameSite=None');
+//   next();
+// });
+
 const allowedOrigins = [
   "https://www.travelie.life",
   "https://travelie.life",
