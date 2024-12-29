@@ -100,7 +100,6 @@ export const login = async (req: Request, res: Response) => {
       httpOnly: true,       // Prevents JavaScript access
       secure: true,         // Ensures HTTPS only
       sameSite: "none",     // Allows cross-site cookies
-      domain: "travelie.onrender.com", // Or remove for the default domain
     });
     // res.setHeader('Set-Cookie', `token=${token}; Path=/; HttpOnly; Secure; SameSite=None`);
     // console.log('Cookie set:', req.cookies['token']);

@@ -56,38 +56,42 @@ const allowedOrigins = [
   "https://test.payu.in",
 ];
 
+// app.use(
+//   cors({
+//     origin: (origin, callback) => {
+//       console.log(`Origin: ${origin}`);
+//       if (!origin || allowedOrigins.includes(origin) || origin === null) {
+//         callback(null, true); 
+//       } else {
+//         callback(new Error("Not allowed by CORS")); 
+//       }
+//     },
+//     credentials: true, // Allow credentials (cookies)
+//     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Allow specific HTTP methods
+//     allowedHeaders: ['Content-Type', 'Authorization'], // Allow specific headers
+//   })
+// );
+
+// // Handle Preflight Requests
+// app.options('*', cors()); // Respond to preflight with CORS headers
+
+
 app.use(
   cors({
     origin: (origin, callback) => {
       console.log(`Origin: ${origin}`);
-      if (!origin || allowedOrigins.includes(origin) || origin === null) {
-        callback(null, true); 
+      // Allow requests with no origin (like Postman or curl) or from allowed origins
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true); // Accept the origin
       } else {
-        callback(new Error("Not allowed by CORS")); 
+        callback(new Error("Not allowed by CORS")); // Reject the origin
       }
     },
     credentials: true, // Allow credentials (cookies)
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Allow specific HTTP methods
-    allowedHeaders: ['Content-Type', 'Authorization'], // Allow specific headers
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Allowed HTTP methods
+    allowedHeaders: ['Content-Type', 'Authorization'], // Allowed headers
   })
 );
-
-// Handle Preflight Requests
-app.options('*', cors()); // Respond to preflight with CORS headers
-
-
-// app.use(cors({
-//   origin: (origin, callback) => {
-//     console.log("Incoming Origin:", origin); // Debug log
-//     if (!origin || allowedOrigins.includes(origin)) {
-//       callback(null, true); // Allow request
-//     } else {
-//       console.error("Blocked by CORS:", origin); // Log blocked origin
-//       callback(new Error("Not allowed by CORS")); // Reject request
-//     }
-//   },
-//   credentials: true,
-// }));
 
 app.use(express.json());
 app.use(cookieParser());

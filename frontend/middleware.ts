@@ -9,8 +9,6 @@ import {
   toBeRedirectedCompanyRoutes,
   toBeRedirectedRoutes,
 } from "./utils/routes";
-import { parse } from 'cookie';
-import { log } from "console";
 
 export async function middleware(req: NextRequest) {
   const pathname = req.nextUrl.pathname;
