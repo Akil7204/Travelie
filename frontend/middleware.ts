@@ -49,7 +49,7 @@ export async function middleware(req: NextRequest) {
 
 
 
-  const tokenVerified = await verifyToken("token", req);
+  const tokenVerified = await verifyToken("userToken", req);
 
  
   const isProtected = isProtectedRoute(pathname);
