@@ -21,9 +21,12 @@ app.use(morgan('dev'));
 connectToDatabase();
 
 const allowedOrigins = [
-  "https://www.travelie.life",  
+  "https://www.travelie.life",
+  "https://travelie.life",
+  "https://travelie.vercel.app/",
   "http://localhost:3000",
-  "https://test.payu.in", 
+  "https://test.payu.in",
+  "*"
 ];
 
 app.use(
