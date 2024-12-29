@@ -25,28 +25,56 @@ connectToDatabase();
 //   next();
 // });
 
+// const allowedOrigins = [
+//   "https://www.travelie.life",
+//   "https://travelie.life",
+//   "https://travelie.vercel.app/",
+//   "http://localhost:3000",
+//   "https://test.payu.in",
+//   "*"
+// ];
+
+// app.use(
+//   cors({
+//     origin: (origin, callback) => {
+//       console.log(origin);
+//       if (!origin || allowedOrigins.includes(origin)) {
+//         callback(null, true); 
+//       } else {
+//         callback(new Error("Not allowed by CORS")); 
+//       }
+//     },
+//     credentials: true, 
+//   })
+// );
+
 const allowedOrigins = [
   "https://www.travelie.life",
   "https://travelie.life",
-  "https://travelie.vercel.app/",
+  "https://travelie.vercel.app",
   "http://localhost:3000",
   "https://test.payu.in",
-  "*"
 ];
 
 app.use(
   cors({
     origin: (origin, callback) => {
-      console.log(origin);
-      if (!origin || allowedOrigins.includes(origin)) {
+      console.log(`Origin: ${origin}`);
+      if (!origin || allowedOrigins.includes(origin) || origin === null) {
         callback(null, true); 
       } else {
         callback(new Error("Not allowed by CORS")); 
       }
     },
-    credentials: true, 
+    credentials: true, // Allow credentials (cookies)
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Allow specific HTTP methods
+    allowedHeaders: ['Content-Type', 'Authorization'], // Allow specific headers
   })
 );
+
+// Handle Preflight Requests
+app.options('*', cors()); // Respond to preflight with CORS headers
+
 
 // app.use(cors({
 //   origin: (origin, callback) => {
