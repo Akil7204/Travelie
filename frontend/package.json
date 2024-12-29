@@ -20,6 +20,7 @@
     "@types/react-datepicker": "^7.0.0",
     "axios": "^1.7.4",
     "chart.js": "^4.4.4",
+    "cookie": "^1.0.2",
     "date-fns": "^3.6.0",
     "firebase": "^10.13.0",
     "formidable": "^3.5.1",

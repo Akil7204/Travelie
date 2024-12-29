@@ -9,6 +9,7 @@ import {
   toBeRedirectedCompanyRoutes,
   toBeRedirectedRoutes,
 } from "./utils/routes";
+import { parse } from 'cookie';
 
 export async function middleware(req: NextRequest) {
   const pathname = req.nextUrl.pathname;
@@ -85,6 +86,10 @@ async function verifyToken(
   
   const token = req.cookies.get(companyToken);
   console.log("token was", token);
+  const cookieHeader = req.headers.get('token');
+  console.log("cookie header: ", cookieHeader);
+  
+  const cookies = cookieHeader ? parse(cookieHeader) : {};
   
   if (!token?.value) {
     return false;
