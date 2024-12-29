@@ -68,6 +68,10 @@ export function toBeRedirectedCompanyRoutes(pathname: string): boolean {
   );
 }
 
-export function exportToken(){
-  return localStorage.getItem('token');
+
+export function exportToken() {
+  if (typeof window !== "undefined") {
+    return localStorage.getItem('token');
+  }
+  return null;  // Or handle it accordingly for server-side
 }
