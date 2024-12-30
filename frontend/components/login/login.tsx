@@ -76,9 +76,10 @@ const Login: React.FC = () => {
       ) {
         localStorage.setItem("token", googleLoginResult.token);
         localStorage.setItem("user", JSON.stringify(googleLoginResult.user));
+        document.cookie = `userToken=${googleLoginResult.token}`
         toast.success("Login Successful!");
 
-        router.push("/");
+        router.replace("/");
       } else {
         toast.error("Google authentication failed. Please try again.");
       }

@@ -97,8 +97,8 @@ export const login = async (req: Request, res: Response) => {
 
     // res.cookie("token", token);
     res.cookie("token", token, {
-      httpOnly: true,       // Prevents JavaScript access
-      secure: true,         // Ensures HTTPS only
+      httpOnly: true,       
+      secure: true,         
       sameSite: "none",
     });
     // res.setHeader('Set-Cookie', `token=${token}; Path=/; HttpOnly; Secure; SameSite=None`);
@@ -120,7 +120,11 @@ export const googleLoginHandler = async (req: Request, res: Response) => {
       phone,
     })
       .then((loginResult) => {
-        res.cookie("token", loginResult.token);
+        res.cookie("token", loginResult.token, {
+          httpOnly: true,       
+          secure: true,        
+          sameSite: "none",
+        });
         res.status(200).json(loginResult);
       })
       .catch((error: any) => {
