@@ -14,7 +14,11 @@ interface LayoutProps {
   children: React.ReactNode;
 }
 
-const socket = io("https://travelie.life");
+// const socket = io("https://travelie.life");
+const socket = io("https://travelie.onrender.com", {
+  transports: ["polling", "websocket"],
+  withCredentials: true, 
+})
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {
   const [activePath, setActivePath] = useState<string | null>(null);

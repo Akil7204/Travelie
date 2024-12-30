@@ -11,7 +11,10 @@ import { Badge, Avatar } from "@mui/material";
 import { io } from "socket.io-client";
 
 // const socket = io("https://travelie.life"); // Your server URL
-const socket = io("https://travelie.onrender.com");
+const socket = io("https://travelie.onrender.com", {
+  transports: ["polling", "websocket"],
+  withCredentials: true,
+});
 // const socket = io("http://localhost:3000");
 
 const Navbar: React.FC = () => {

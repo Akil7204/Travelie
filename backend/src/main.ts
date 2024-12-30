@@ -70,6 +70,19 @@ app.use(cors({
   allowedHeaders: ['Content-Type', 'Authorization'],
 }));
 
+const httpServer = createServer(app);
+
+export const io = new serverSocket(httpServer, {
+  cors: {
+    origin: allowedOrigins,
+    methods: ['GET', 'POST'],
+    credentials: true, // Include credentials for WebSocket connections
+  },
+});
+
+
+socketHandler(io);
+
 app.use(express.json());
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
@@ -87,18 +100,6 @@ app.use('/v1/api/message', messageRoutes);
 // app.use('/chat', chatRoutes);
 // app.use('/message', messageRoutes);
 
-const httpServer = createServer(app);
-
-export const io = new serverSocket(httpServer, {
-  cors: {
-    origin: allowedOrigins,
-    methods: ['GET', 'POST'],
-    credentials: true, // Include credentials for WebSocket connections
-  },
-});
-
-
-socketHandler(io);
 
 const PORT = process.env.PORT || 3000;
 httpServer.listen(PORT, () => {

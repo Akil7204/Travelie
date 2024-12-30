@@ -9,7 +9,11 @@ interface LayoutProps {
   children: React.ReactNode;
 }
 
-const socket = io("https://travelie.life");
+// const socket = io("https://travelie.life");
+const socket = io("https://travelie.onrender.com", {
+  transports: ["polling", "websocket"], // Recommended for flexibility
+  withCredentials: true, // Important for CORS
+});
 
 const Profile: React.FC<LayoutProps> = ({ children }) => {
   const [activePath, setActivePath] = useState<string>("profile");
