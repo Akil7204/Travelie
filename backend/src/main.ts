@@ -56,42 +56,19 @@ const allowedOrigins = [
   "https://test.payu.in",
 ];
 
-// app.use(
-//   cors({
-//     origin: (origin, callback) => {
-//       console.log(`Origin: ${origin}`);
-//       if (!origin || allowedOrigins.includes(origin) || origin === null) {
-//         callback(null, true); 
-//       } else {
-//         callback(new Error("Not allowed by CORS")); 
-//       }
-//     },
-//     credentials: true, // Allow credentials (cookies)
-//     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Allow specific HTTP methods
-//     allowedHeaders: ['Content-Type', 'Authorization'], // Allow specific headers
-//   })
-// );
-
-// // Handle Preflight Requests
-// app.options('*', cors()); // Respond to preflight with CORS headers
-
-
-app.use(
-  cors({
-    origin: (origin, callback) => {
-      console.log(`Origin: ${origin}`);
-      // Allow requests with no origin (like Postman or curl) or from allowed origins
-      if (!origin || allowedOrigins.includes(origin)) {
-        callback(null, true); // Accept the origin
-      } else {
-        callback(new Error("Not allowed by CORS")); // Reject the origin
-      }
-    },
-    credentials: true, // Allow credentials (cookies)
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Allowed HTTP methods
-    allowedHeaders: ['Content-Type', 'Authorization'], // Allowed headers
-  })
-);
+app.use(cors({
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true); // Accept the origin
+    } else {
+      console.error(`Blocked by CORS: ${origin}`);
+      callback(new Error("Not allowed by CORS")); // Reject the origin
+    }
+  },
+  credentials: true, // Enable cookies and credentials
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+}));
 
 app.use(express.json());
 app.use(cookieParser());
@@ -114,8 +91,9 @@ const httpServer = createServer(app);
 
 export const io = new serverSocket(httpServer, {
   cors: {
-    origin: allowedOrigins, 
+    origin: allowedOrigins,
     methods: ['GET', 'POST'],
+    credentials: true, // Include credentials for WebSocket connections
   },
 });
 
