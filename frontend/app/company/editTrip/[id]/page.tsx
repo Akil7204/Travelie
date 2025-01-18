@@ -479,7 +479,7 @@ const EditTrip = () => {
             </div>
 
             {/* Locations */}
-            <div className="p-4 bg-white rounded-lg shadow-md">
+            {/* <div className="p-4 bg-white rounded-lg shadow-md">
               <h2 className="text-lg font-semibold mb-4">Locations</h2>
               {locationFields.map((field, index) => (
                 <div
@@ -515,7 +515,7 @@ const EditTrip = () => {
               >
                 + Add Location
               </button>
-            </div>
+            </div> */}
           </div>
 
           <div className="col-span-4 space-y-6">
