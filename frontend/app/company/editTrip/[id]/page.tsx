@@ -89,7 +89,11 @@ const EditTrip = () => {
           return `${year}-${month}-${day}`; 
         }; 
         console.log(tripData.locations);
-        tripData.locations = tripData.locations.map((item: any) => ({location: item}))
+        // tripData.locations = tripData.locations.map((item: any) => ({location: item}))
+        if (tripData.locations?.[0]?.location) {
+          const parsedLocations = JSON.parse(tripData.locations[0].location);
+          tripData.locations = parsedLocations.map((item: string) => ({ location: item }));
+        }
         
         setValue("tripName", tripData.tripName);
         setValue("description", tripData.description);
