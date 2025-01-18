@@ -256,14 +256,14 @@ const TripPage: React.FC = () => {
                 </ul>
               </div>
 
-              <div>
+              {/* <div>
                 <h3 className="text-xl font-semibold">Things to See & Do</h3>
                 <ul className="list-disc list-inside text-gray-700 mt-2">
                   {tripData?.locations.map((thing: string, index: number) => (
                     <li key={index}>{thing}</li>
                   ))}
                 </ul>
-              </div>
+              </div> */}
             </div>
 
             {/* <div className="mt-8">

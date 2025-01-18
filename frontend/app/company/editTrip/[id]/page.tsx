@@ -141,10 +141,10 @@ const EditTrip = () => {
     formData.append("startingDate", data.startingDate);
     formData.append("endingDate", data.endingDate);
     formData.append("basePrice", data.basePrice.toString());
-    let location = data.locations.map((val) => val.location);
-    console.log("form data", data.locations);
-    console.log(location);
-    formData.append("locations", JSON.stringify(location));
+    // let location = data.locations.map((val) => val.location);
+    // console.log("form data", data.locations);
+    // console.log(location);
+    // formData.append("locations", JSON.stringify(location));
     // formData.append(
     //   "locations",
     //   JSON.stringify(data.locations.map((loc) => loc.location))
