@@ -86,7 +86,7 @@ const MyTrips: React.FC = () => {
       }
 
       // const result = await response.json();
-      if (response.statusText == "OK") {
+      if (response?.status == 200) {
         router.push("/myTrips");
         console.log("Trip cancelled:", response);
         closeModal();
