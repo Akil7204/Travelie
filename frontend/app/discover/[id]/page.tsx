@@ -254,7 +254,6 @@ const TripPage: React.FC = () => {
                     </li>
                   )}
                 </ul>
-                7
               </div>
 
               <div>
