@@ -42,7 +42,7 @@ const TripPage: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [tripData, setTripData] = useState<Trip | undefined>();
   const [loading, setLoading] = useState<boolean>(true);
-  const params = useParams(); // Access the dynamic parameters
+  const params = useParams();
   const [seatCount, setSeatCount] = React.useState(1);
   const [mainImgInd, setMainImgInd] = React.useState(0);
   const [isReportModalOpen, setIsReportModalOpen] = useState(false);
@@ -105,7 +105,7 @@ const TripPage: React.FC = () => {
         router.push("/login");
       }
     } finally {
-      setPaymentLoading(false); 
+      setPaymentLoading(false);
     }
   };
 
@@ -248,12 +248,13 @@ const TripPage: React.FC = () => {
                   {tripData && (
                     <li>
                       <strong>Available Seats:</strong>{" "}
-                      {tripData?.seats - (tripData?.bookedSeats || 0) === 0
+                      {tripData?.seats - (tripData?.bookedSeats || 0) <= 0
                         ? "Seat full"
                         : tripData?.seats - (tripData?.bookedSeats || 0)}
                     </li>
                   )}
                 </ul>
+                7
               </div>
 
               <div>
@@ -266,14 +267,31 @@ const TripPage: React.FC = () => {
               </div>
             </div>
 
-            <div className="mt-8">
+            {/* <div className="mt-8">
               <button
                 onClick={handleBookClick}
                 className="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600"
               >
                 Book
               </button>
-            </div>
+            </div> */}
+            {tripData && (
+              <div className="mt-8">
+                <button
+                  disabled={tripData?.seats - (tripData?.bookedSeats || 0) <= 0}
+                  onClick={handleBookClick}
+                  className={`py-2 px-4 rounded-md ${
+                    tripData?.seats - (tripData?.bookedSeats || 0) <= 0
+                      ? "bg-gray-400 cursor-not-allowed"
+                      : "bg-blue-500 text-white hover:bg-blue-600"
+                  }`}
+                >
+                  {tripData?.seats - (tripData?.bookedSeats || 0) <= 0
+                    ? "Booking Full"
+                    : "Book"}
+                </button>
+              </div>
+            )}
           </>
         )}
       </div>
