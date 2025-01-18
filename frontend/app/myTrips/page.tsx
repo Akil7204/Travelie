@@ -80,7 +80,7 @@ const MyTrips: React.FC = () => {
       console.log(bookingId);
 
       const response = await cancelBooking(bookingId);
-
+      console.log(response);
       if (!response) {
         throw new Error("Failed to cancel trip");
       }
